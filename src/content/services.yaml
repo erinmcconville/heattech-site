@@ -2,10 +2,12 @@
 # Each job's "id" is used for the "Ask about this" link (/contact/?job=id)
 # and for the enquiry form dropdown. "home: true" shows the job on the homepage.
 # "order" sets the order of the four sections.
+# "review" is the id of a Google review in reviews.yaml shown as proof under the section.
 
 - id: not-working
   order: 1
   title: Something's not working
+  review: lena-bruning
   jobs:
     - id: no-heating
       label: No heating or hot water
@@ -25,6 +27,7 @@
 - id: everyday-plumbing
   order: 2
   title: Everyday plumbing
+  review: jenna-mccosh
   jobs:
     - id: plumbing
       label: Leaks, taps, toilets and pipework
@@ -34,6 +37,7 @@
 - id: replacing-upgrading
   order: 3
   title: Replacing or upgrading
+  review: stewart-hunter
   jobs:
     - id: repair-or-replace
       label: "Repair or replace: advice on which makes sense"
@@ -72,6 +76,7 @@
 - id: servicing-safety
   order: 4
   title: Servicing and safety checks
+  review: r
   jobs:
     - id: boiler-service
       label: Annual boiler service

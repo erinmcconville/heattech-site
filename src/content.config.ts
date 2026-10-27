@@ -22,6 +22,7 @@ const services = defineCollection({
   schema: z.object({
     order: z.number(),
     title: z.string(),
+    review: z.string().optional(),
     jobs: z.array(job),
     explainer: z
       .object({

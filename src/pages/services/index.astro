@@ -2,6 +2,7 @@
 import { getEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Text from '../../components/Text.astro';
+import ReviewCard from '../../components/ReviewCard.astro';
 import { getSite, getServices } from '../../lib/site';
 
 const site = await getSite();
@@ -27,6 +28,7 @@ const services = await getServices();
     const ex = s.data.explainer;
     const exStory = ex ? await getEntry('stories', ex.story) : undefined;
     const exStoryLive = exStory && exStory.data.published && exStory.data.permission_recorded;
+    const proof = s.data.review ? await getEntry('reviews', s.data.review) : undefined;
     return (
       <section class="section" id={s.id} aria-labelledby={`${s.id}-title`}>
         <h2 id={`${s.id}-title`}>{s.data.title}</h2>
@@ -46,6 +48,8 @@ const services = await getServices();
             </li>
           ))}
         </ul>
+
+        {proof && proof.data.complete && <div class="proof"><ReviewCard review={proof.data} /></div>}
 
         {ex && (
           <details class="explainer card">
@@ -96,6 +100,7 @@ const services = await getServices();
   }
   .ask:hover { text-decoration: underline; }
 
+  .proof { margin-top: var(--s2); max-width: 46rem; }
   .explainer { margin-top: var(--s3); max-width: 46rem; padding: 0; }
   .explainer summary {
     display: flex; align-items: center; justify-content: space-between; gap: var(--s2);
