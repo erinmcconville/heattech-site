@@ -25,3 +25,4 @@ Decisions made during the build. This file overrides `research/`. Newest at the 
 | 2026-10-27 | On the homepage, reviews may be shortened to their strongest line, with "…" marking cuts. Words are never changed, and each excerpt links to the full review. | |
 | 2026-10-27 | Photos must be real (from Ryan or Erin). Until then the photo slot is a grey box naming the shot needed. | |
 | 2026-10-27 | Gas Safe Register logo only once Ryan supplies the official artwork; until then a plain "Gas Safe registered" label. | Only registered businesses may use it, under Gas Safe's rules. |
+| 2026-10-27 | Ryan has consent from all of his Google reviewers to use their reviews on the website. Reviews can go live. | Stated by Erin. Google requires reviewer consent for website use. Review-request replies for future reviews should ask for consent too. |
