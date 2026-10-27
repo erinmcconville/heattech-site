@@ -33,4 +33,15 @@ A small website for Heattech Gas Services Ltd, a Gas Safe gas and heating busine
 7. **No identifiable customer details:** no names, addresses or photos that show house numbers or people, unless `decisions.md` says permission exists.
 
 ## Banned phrases
-<!-- Paste your banned-phrases list here. -->
+"no job too small", "peace of mind", "look no further", "your trusted local", "passionate about", "second to none", "we pride ourselves", "hassle-free", "one-stop shop", "you can count on us", "we'll keep you updated", "your satisfaction", "we go the extra mile", "don't hesitate to", and any heating pun.
+
+Wording rules (carried over from the previous CLAUDE.md):
+- Written as the company: Heattech Gas Services, "we". Never first person.
+- Ryan is named on the About page and in stories. He is not the voice of the site.
+- State how the work is done as plain facts, not promises or reassurances.
+  - Right: "Every job gets a written quote before work starts."
+  - Wrong: "We'll keep you updated every step of the way."
+- Let reviews and stories do the persuading. Copy never pleads, over-explains or tries to win the reader over.
+- No exclamation marks, no puns, no rhetorical questions.
+- Shorter is better. If a line can be cut without losing a fact, cut it.
+- Customer quotes in reviews and stories stay in the customer's own words.

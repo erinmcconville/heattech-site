@@ -16,4 +16,4 @@ published: false
 permission_recorded: false
 ---
 
-Template: hidden until Erin and Ryan sign it off. Source: docs/02c-my-case-study.md.
+Template: hidden until Erin and Ryan sign it off. Source: research/02c-owner-case-study.md.
