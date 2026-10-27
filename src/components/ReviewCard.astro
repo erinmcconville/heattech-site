@@ -3,14 +3,16 @@ import Text from './Text.astro';
 import { getSite } from '../lib/site';
 
 // One Google review, in the customer's own words, linking to Google.
-interface Props { review: { name: string; text: string; link?: string } }
-const { review } = Astro.props;
+// With short, shows the hand-picked excerpt (exact words, "…" marks cuts) when there is one.
+interface Props { review: { name: string; text: string; excerpt?: string; link?: string }; short?: boolean }
+const { review, short = false } = Astro.props;
+const text = short && review.excerpt ? review.excerpt : review.text;
 const { links } = await getSite();
 const href = review.link ?? links.google_reviews;
 ---
 <figure class="review card">
-  <blockquote><Text value={review.text} /></blockquote>
-  <figcaption><a href={href}>{review.name}, Google review</a></figcaption>
+  <blockquote><Text value={text} /></blockquote>
+  <figcaption><a href={href}>{review.name}, review on Google</a></figcaption>
 </figure>
 
 <style>

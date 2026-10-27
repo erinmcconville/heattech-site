@@ -16,8 +16,14 @@ export async function getServices() {
   return services.sort((a, b) => a.data.order - b.data.order);
 }
 
-// Complete reviews only, with the hand-picked first six ("order") at the front
+// Complete reviews only, with the hand-picked first six ("order") at the front.
+// Stops the build if an excerpt isn't the customer's exact words.
 export async function getReviews() {
   const reviews = await getCollection('reviews', ({ data }) => data.complete);
+  for (const r of reviews) {
+    const parts = (r.data.excerpt ?? '').split('…').map((p) => p.trim()).filter(Boolean);
+    const missing = parts.find((p) => !r.data.text.includes(p));
+    if (missing) throw new Error(`Review excerpt for "${r.id}" isn't word for word: "${missing}"`);
+  }
   return reviews.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 }

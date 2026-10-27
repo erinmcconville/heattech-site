@@ -1,106 +1,141 @@
 ---
 import Base from '../layouts/Base.astro';
-import Text from '../components/Text.astro';
+import Icon from '../components/Icon.astro';
 import ReviewCard from '../components/ReviewCard.astro';
-import WorkCard from '../components/WorkCard.astro';
-import { getSite, getServices, getReviews, getPublishedWork } from '../lib/site';
+import { getSite, getServices, getReviews } from '../lib/site';
 
 const site = await getSite();
 const { business, contact, credentials, links } = site;
 const services = await getServices();
-const reviews = await getReviews();
-const firstSix = reviews.slice(0, 6);
-const theRest = reviews.slice(6);
-const work = await getPublishedWork();
+const reviews = (await getReviews()).slice(0, 6);
 ---
 <Base
   title="Heattech Gas Services | Boilers, heating and plumbing in Edinburgh"
-  description={`Gas Safe registered gas, heating and plumbing in Edinburgh and the Lothians, based in ${business.based_in}. Boiler repairs, new boilers, servicing and landlord gas safety certificates.`}
+  description={`Gas Safe registered gas, heating and plumbing in Edinburgh and the Lothians, based in ${business.based_in}. Boiler repairs, new boilers, servicing and gas safety checks.`}
 >
-  <section class="hero" aria-labelledby="hero-title">
-    <h1 id="hero-title">Gas, heating and plumbing in Edinburgh and the Lothians</h1>
-    <div class="actions" data-hero-actions>
-      <a class="button" href="/contact/">Send an enquiry</a>
-      <a class="button button--plain" href={`tel:${contact.phone_link}`}>Call {contact.phone}</a>
+  <section slot="hero" class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero__inner">
+      <div class="hero__text">
+        <h1 id="hero-title">Gas, heating and plumbing across Edinburgh</h1>
+        <p class="hero__line">Boiler repairs, new boilers, servicing and gas safety checks. Based in {business.based_in}.</p>
+        <div class="actions" data-hero-actions>
+          <a class="button" href="/contact/">Send an enquiry</a>
+          <a class="button button--on-dark" href={`tel:${contact.phone_link}`}>Call {contact.phone}</a>
+        </div>
+      </div>
+      <!-- [PLACEHOLDER: real photo from Ryan or Erin. Alt text names the job and place, never a house number.] -->
+      <div class="hero__photo photo-slot"><span><Icon name="photo" size={28} />Photo needed: Ryan's van, or a finished boiler install</span></div>
     </div>
-    <p class="quiet">
-      <a href={credentials.gas_safe_register_url}>Gas Safe registered</a> <Text value={credentials.gas_safe_number} />
-      {' · '}
-      <a href={links.google_reviews}>{links.google_review_count} reviews on Google</a>
-    </p>
   </section>
 
-  <section class="section" aria-labelledby="jobs">
-    <h2 id="jobs">Jobs we do</h2>
+  <ul slot="hero" class="strip" aria-label="Credentials">
+    <li>
+      <a href={links.google_reviews}>
+        <span><strong>{links.google_rating}</strong> from {links.google_review_count} reviews on Google <span class="as-of">as of {links.google_reviews_as_of}</span></span>
+      </a>
+    </li>
+    <li>
+      <a href={credentials.gas_safe_register_url}>
+        <Icon name="shield-check" size={20} />
+        <span>Gas Safe registered</span>
+      </a>
+    </li>
+    <li>
+      <Icon name="map-pin" size={20} />
+      <span>{business.area_served}</span>
+    </li>
+  </ul>
+
+  <section class="section" aria-labelledby="help">
+    <h2 id="help">How we can help</h2>
     <ul class="tiles">
       {services.map((s) => (
         <li class="tile card">
-          <a href={`/services/#${s.id}`}>{s.data.tile}</a>
-          <span>{s.data.keywords}</span>
+          <span class="tile__icon"><Icon name={s.data.icon} size={26} /></span>
+          <span>
+            <a href={`/services/#${s.id}`}>{s.data.tile}</a>
+            <span class="tile__keywords">{s.data.keywords}</span>
+          </span>
         </li>
       ))}
     </ul>
   </section>
 
   <section class="section" aria-labelledby="reviews">
-    <h2 id="reviews"><a href={links.google_reviews}>{links.google_review_count} reviews on Google</a></h2>
-    <div class="reviews">
-      {firstSix.map((r) => <ReviewCard review={r.data} />)}
+    <div class="section-head">
+      <h2 id="reviews">What customers say</h2>
+      <a href="/reviews/">Read all reviews <Icon name="arrow-right" size={18} /></a>
     </div>
-    {theRest.length > 0 && (
-      <details class="more-reviews">
-        <summary>Show more reviews</summary>
-        <div class="reviews">
-          {theRest.map((r) => <ReviewCard review={r.data} />)}
-        </div>
-      </details>
-    )}
+    <div class="reviews">
+      {reviews.map((r) => <ReviewCard review={r.data} short />)}
+    </div>
   </section>
 
-  {work.length > 0 && (
-    <section class="section" aria-labelledby="recent-work">
-      <h2 id="recent-work">Recent work</h2>
-      <div class="grid">
-        {work.map((w) => <WorkCard entry={w} />)}
-      </div>
-    </section>
-  )}
-
-  <section class="section close" aria-labelledby="close">
-    <h2 id="close">Tell us what's happening. Photos help.</h2>
+  <section class="section contact-band" aria-labelledby="get-in-touch">
+    <div>
+      <h2 id="get-in-touch">Get in touch</h2>
+      <p>
+        <a href={`tel:${contact.phone_link}`}>{contact.phone}</a>{' · '}
+        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+      </p>
+    </div>
     <a class="button" href="/contact/">Send an enquiry</a>
   </section>
 </Base>
 
 <style>
-  .hero { padding-block: var(--s3) 0; }
-  .hero h1 { max-width: 20ch; }
-  .hero .actions { margin-top: var(--s3); }
-  .quiet { font-size: var(--small); color: var(--muted); margin: 0; }
-  .quiet a { color: var(--muted); }
+  /* Top section: continues the charcoal header */
+  .hero { background: var(--charcoal); color: var(--on-dark); }
+  .hero__inner {
+    display: grid; gap: var(--s4); align-items: center;
+    padding-block: var(--s4) var(--s5);
+  }
+  .hero h1 { max-width: 16ch; margin: 0; }
+  .hero__line { margin: var(--s2) 0 var(--s3); color: var(--on-dark-muted); font-size: var(--step-1); max-width: 30rem; }
+  .hero .actions { margin: 0; }
+  .hero .button:focus-visible { outline-color: var(--on-dark); }
+  .hero__photo { background: #67676a; color: var(--on-dark-muted); aspect-ratio: 16 / 9; }
+  .hero__photo span { display: grid; justify-items: center; gap: var(--s1); }
+  @media (min-width: 48rem) {
+    .hero__inner { grid-template-columns: 1.15fr 1fr; padding-block: var(--s5) var(--s6); }
+    .hero__photo { aspect-ratio: 4 / 3; }
+  }
 
-  .tiles { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); list-style: none; padding: 0; margin: 0; max-width: none; }
-  /* Each tile is one tap target */
-  .tile { position: relative; display: flex; flex-direction: column; gap: 0.25rem; padding: var(--s3); }
+  /* Credibility strip */
+  .strip {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s1) var(--s4);
+    margin: 0; max-width: none; padding: var(--s2) var(--gutter); list-style: none;
+    background: var(--surface); border-bottom: 1px solid var(--line);
+    font-family: var(--font-brand); font-weight: 600; font-size: var(--label);
+  }
+  .strip li, .strip a { display: flex; align-items: center; gap: var(--s1); color: var(--ink); text-decoration: none; }
+  .strip a:hover span { text-decoration: underline; }
+  .strip :global(.icon) { color: var(--copper-deep); flex: none; }
+  .as-of { font-weight: 500; color: var(--muted); }
+
+  .section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--s1) var(--s2); margin-bottom: var(--s2); }
+  .section-head h2 { margin: 0; }
+  .section-head a { display: inline-flex; align-items: center; gap: 0.25rem; font-family: var(--font-brand); font-weight: 600; font-size: var(--small); text-decoration: none; }
+  .section-head a:hover { text-decoration: underline; }
+
+  /* Service tiles: each is one tap target */
+  .tiles { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); list-style: none; padding: 0; margin: 0; max-width: none; }
+  .tile { position: relative; display: flex; align-items: center; gap: var(--s2); padding: var(--s2) 1.25rem; }
   .tile:hover { border-color: var(--line-strong); }
-  .tile a { color: var(--ink); text-decoration: none; font-family: var(--font-brand); font-weight: 700; font-size: var(--step-1); line-height: 1.25; }
+  .tile__icon { display: grid; place-items: center; width: 3rem; height: 3rem; flex: none; border-radius: 50%; background: var(--bg); color: var(--copper-deep); }
+  .tile a { display: block; color: var(--ink); text-decoration: none; font-family: var(--font-brand); font-weight: 700; line-height: 1.3; }
   .tile a::after { content: ''; position: absolute; inset: 0; }
   .tile:hover a { text-decoration: underline; }
-  .tile span { color: var(--muted); font-size: var(--small); }
+  .tile__keywords { display: block; color: var(--muted); font-size: var(--small); }
 
-  #reviews a { color: var(--ink); text-decoration: none; }
-  #reviews a:hover { text-decoration: underline; }
-  /* Masonry-style columns so short and long reviews sit together without gaps */
-  .reviews { columns: 18rem; column-gap: var(--s2); }
-  .reviews > :global(*) { break-inside: avoid; margin-bottom: var(--s2); }
-  .more-reviews summary {
-    display: inline-flex; align-items: center; min-height: var(--tap); cursor: pointer; list-style: none;
-    font-family: var(--font-brand); font-weight: 700; font-size: var(--small); color: var(--copper-deep);
+  .reviews { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+
+  .contact-band {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s2) var(--s3);
+    padding: var(--s3); background: var(--charcoal); color: var(--on-dark); border-radius: var(--radius);
   }
-  .more-reviews summary::-webkit-details-marker { display: none; }
-  .more-reviews[open] summary { display: none; }
-
-  .close { padding: var(--s4) var(--s3); background: var(--charcoal); color: var(--on-dark); border-radius: var(--radius); }
-  .close h2 { margin-bottom: var(--s3); }
-  .close .button:focus-visible { outline-color: var(--on-dark); }
+  .contact-band h2 { margin: 0 0 0.25rem; }
+  .contact-band p { margin: 0; color: var(--on-dark-muted); }
+  .contact-band a:not(.button) { color: var(--on-dark); }
+  .contact-band a:focus-visible { outline-color: var(--on-dark); }
 </style>

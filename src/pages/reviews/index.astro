@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import ReviewCard from '../../components/ReviewCard.astro';
+import { getSite, getReviews } from '../../lib/site';
+
+const { links } = await getSite();
+const reviews = await getReviews();
+---
+<Base
+  title="Reviews | Heattech Gas Services, Edinburgh"
+  description={`Reviews of Heattech Gas Services from customers in Edinburgh and the Lothians: boiler repairs, new boilers, servicing and plumbing.`}
+>
+  <h1>Reviews</h1>
+  <p class="lede">
+    {links.google_rating} from {links.google_review_count} reviews on Google, as of {links.google_reviews_as_of}.
+    {' '}<a href={links.google_reviews}>See them on Google</a>
+  </p>
+  <div class="reviews">
+    {reviews.map((r) => <ReviewCard review={r.data} />)}
+  </div>
+</Base>
+
+<style>
+  /* Columns so short and long reviews sit together without gaps */
+  .reviews { columns: 20rem; column-gap: var(--s2); margin-top: var(--s4); }
+  .reviews > :global(*) { break-inside: avoid; margin-bottom: var(--s2); }
+</style>

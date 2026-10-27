@@ -1,0 +1,16 @@
+---
+// A Tabler line icon (MIT licence, src/icons/LICENSE.txt), drawn inline so it takes the text colour.
+// Decorative only: hidden from screen readers.
+const icons = import.meta.glob('../icons/*.svg', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+
+interface Props { name: string; size?: number }
+const { name, size = 24 } = Astro.props;
+const raw = icons[`../icons/${name}.svg`];
+if (!raw) throw new Error(`Unknown icon: ${name}`);
+const svg = raw
+  .replace(/class="[^"]*"/, 'class="icon"')
+  .replace(/width="24"/, `width="${size}"`)
+  .replace(/height="24"/, `height="${size}"`)
+  .replace('<svg', '<svg aria-hidden="true" focusable="false"');
+---
+<Fragment set:html={svg} />

@@ -23,7 +23,7 @@ photos:
   - "[PHOTO: the roof flue from outside]"
   - "[PHOTO: the untouched floors]"
   - "[PHOTO: the thermostat]"
-published: true
+published: false
 permission_recorded: true
 ryan_check: "[CONFIRM: happy to be featured, and the technical description is accurate]"
 gas_supply_already_there: "[PLACEHOLDER: was there already a gas supply to the flat?]"

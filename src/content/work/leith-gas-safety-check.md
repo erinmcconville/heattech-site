@@ -9,7 +9,7 @@ what_ryan_did: During the check, Ryan noticed the gas fire could become a proble
 quotes: []
 photos:
   - "[PHOTO: the disconnected gas fire]"
-published: true
+published: false
 permission_recorded: true
 ryan_check: "[CONFIRM: happy to be featured, and the description is accurate]"
 ---

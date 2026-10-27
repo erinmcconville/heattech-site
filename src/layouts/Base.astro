@@ -57,8 +57,9 @@ const businessLd = {
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <Header site={site} />
-    <main id="main" class="wrap">
-      <slot />
+    <main id="main">
+      <slot name="hero" />
+      <div class="wrap page"><slot /></div>
     </main>
     <Footer site={site} />
     <MobileBar site={site} />

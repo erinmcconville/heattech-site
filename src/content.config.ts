@@ -23,6 +23,7 @@ const services = defineCollection({
     order: z.number(),
     title: z.string(),
     tile: z.string(),
+    icon: z.string(),
     keywords: z.string(),
     review: z.string().optional(),
     jobs: z.array(job),
@@ -45,6 +46,7 @@ const reviews = defineCollection({
   schema: z.object({
     name: z.string(),
     text: z.string(),
+    excerpt: z.string().optional(),
     link: z.url().optional(),
     complete: z.boolean().default(true),
     order: z.number().optional(),

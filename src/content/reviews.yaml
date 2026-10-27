@@ -4,6 +4,7 @@
 # name:      first name as shown on Google (decisions.md, 27 Oct 2026)
 # order:     the first six on the homepage, in this order. They're chosen to quietly cover quality,
 #            honesty, tidiness, explaining, coming back again and speed. Everything else follows.
+# excerpt:   the strongest line, used on the homepage. Must be the customer's exact words; "…" marks cuts.
 # complete:  false means Google cut the text off ("… More"). These stay off the site until the full text is pasted in.
 # link:      a link to this review on Google. Leave it out to link to the Google profile instead.
 
@@ -16,12 +17,14 @@
 
 - id: arabella-gilchrist
   order: 2
+  excerpt: "…an old boiler that others had told us could not be repaired. Calm, professional and solutions orientated."
   name: Arabella
   text: |-
     Heatech were recommended to us when we had an issue with an old boiler that others had told us could not be repaired. Calm, professional and solutions orientated. Highly recommend.
 
 - id: steve-mcqueen
   order: 3
+  excerpt: "…Clean and tidy throughout the whole fitting of my new boiler…"
   name: Steve
   text: |-
     Excellent service. Great communication from Ryan and the team. Clean and tidy throughout the whole fitting of my new boiler. Well priced as well. First class job.
@@ -33,6 +36,7 @@
 
 - id: lena-bruning
   order: 4
+  excerpt: "…we went from no heating at all to everything working in a few hours."
   name: Lena
   text: |-
     Ryan came and did the diagnostics and Brett did our job and both were fantastic! Great at communicating and we went from no heating at all to everything working in a few hours. Can’t recommend them enough they were super thorough.
@@ -44,12 +48,14 @@
 
 - id: matt-inglis
   order: 6
+  excerpt: "…diagnosed the fault and replaced our boiler within 4 days."
   name: Matt
   text: |-
     Fantastic service, can round at short notice, diagnosed the fault and replaced our boiler within 4 days. They went out their way to ensure we had heating again before the weekend. Couldn't rate highly enough.
 
 - id: stephen-wotherspoon
   order: 1
+  excerpt: "…Ryan was very easy to deal with and explained everything that needed done. He arrived on time everyday…"
   name: Stephen
   text: |-
     I used Heattech to carry out a full Central Heating install in my flat. Ryan was very easy to deal with and explained everything that needed done. He arrived on time everyday and all the work was carried out within the timescale and to a very high standard. Would highly recommend and will definitely use again 5 🌟
@@ -76,6 +82,7 @@
 
 - id: lena-cowie
   order: 5
+  excerpt: "…he is consistently reliable, reasonably priced and always excellent communication."
   name: Lena
   text: |-
     Have been using Ryan's services for a couple of years now and he is consistently reliable, reasonably priced and always excellent communication. Wouldn't hesitate to (and often do) recommend him to others.

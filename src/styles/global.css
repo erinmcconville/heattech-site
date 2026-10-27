@@ -149,7 +149,7 @@ img { max-width: 100%; height: auto; display: block; }
 .pending { background: var(--pending); outline: 1px dashed var(--pending-line); color: var(--ink); }
 
 /* Page building blocks */
-main { padding-top: var(--s4); padding-bottom: var(--s5); }
+.page { padding-top: var(--s4); padding-bottom: var(--s5); }
 .lede { font-size: var(--step-1); color: var(--muted); }
 .section { margin-top: var(--s6); }
 .section > h2 { margin-top: 0; }
