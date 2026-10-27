@@ -1,0 +1,35 @@
+---
+import Text from './Text.astro';
+
+interface Props { site: Record<string, Record<string, any>> }
+const { site } = Astro.props;
+const { business, contact, credentials, safety } = site;
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="emergency">
+      Smell gas? Call the Gas Emergency number,{' '}
+      <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>.
+    </p>
+
+    <p>
+      <strong>{business.legal_name}</strong><br />
+      {contact.address_line_1}, {contact.town} {contact.postcode}
+    </p>
+    <p>
+      <a href={`tel:${contact.phone_link}`}>{contact.phone}</a>{' · '}
+      <a href={`mailto:${contact.email}`}>{contact.email}</a>
+    </p>
+    <p class="small">
+      <a href={credentials.gas_safe_register_url}>Gas Safe</a> <Text value={credentials.gas_safe_number} /> ·
+      Company {business.company_number}
+    </p>
+    <p class="small"><a href="/privacy/">Privacy</a></p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { margin-top: 4rem; padding-block: 2rem; background: var(--surface); border-top: 1px solid var(--border); }
+  .emergency { font-weight: 600; color: var(--emergency); }
+  .emergency a { color: inherit; }
+</style>

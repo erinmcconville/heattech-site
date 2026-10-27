@@ -1,0 +1,81 @@
+# The four Services sections and their job lines. Source: docs/build-plan.md.
+# Each job's "id" is used for the "Ask about this" link (/contact/?job=id)
+# and for the enquiry form dropdown. "home: true" shows the job on the homepage.
+
+- id: not-working
+  title: Something's not working
+  jobs:
+    - id: no-heating
+      label: No heating or hot water
+      home: true
+    - id: boiler-fault
+      label: Boiler cutting out or showing a fault code
+      home: true
+    - id: radiators
+      label: Radiators cold, noisy or won't switch off
+      home: true
+    - id: gas-smell
+      label: Smell of gas or carbon monoxide alarm
+      note: "Call the Gas Emergency number, 0800 111 999, first. [CONFIRM WITH RYAN: follow-up once the emergency service has made it safe]"
+      emergency: true
+      home: true
+
+- id: everyday-plumbing
+  title: Everyday plumbing
+  jobs:
+    - id: plumbing
+      label: Leaks, taps, toilets and pipework
+      note: "[CONFIRM WITH RYAN: scope of everyday plumbing]"
+      home: true
+
+- id: replacing-upgrading
+  title: Replacing or upgrading
+  jobs:
+    - id: repair-or-replace
+      label: "Repair or replace: advice on which makes sense"
+      home: true
+    - id: new-boiler
+      label: New boiler
+      home: true
+    - id: electric-to-gas
+      label: Electric or storage heaters to gas central heating
+      home: true
+    - id: controls
+      label: Thermostats and smart controls
+    - id: hobs-cookers
+      label: Gas hobs and cookers
+    - id: gas-fires
+      label: Gas fires serviced or safely disconnected
+  # Short expanding block on the Services page. Links only, no figures restated.
+  explainer:
+    title: Electric heating to gas central heating
+    intro: Three things decide whether it can be done. Each links to the official source.
+    points:
+      - label: An existing gas supply
+        text: SGN can check for free whether your building already has a gas supply.
+        link: https://www.sgn.co.uk/gas-connections/household-customers/find-out-if-you-have-gas-supply
+        link_text: SGN's free gas supply check
+      - label: Pipe routes and flue position
+        text: If your building is listed, check the Council's guidance on where a flue can go.
+        link: https://www.edinburgh.gov.uk/conservation-2/listed-buildings
+        link_text: City of Edinburgh Council on listed buildings
+      - label: Funding
+        text: Check what funding you might get before you decide.
+        link: https://www.homeenergyscotland.org/find-funding
+        link_text: Home Energy Scotland funding
+    story: stockbridge-gas-central-heating
+
+- id: servicing-safety
+  title: Servicing and safety checks
+  jobs:
+    - id: boiler-service
+      label: Annual boiler service
+      home: true
+    - id: landlord-certificate
+      label: Landlord gas safety certificate
+      home: true
+    - id: sale-check
+      label: Gas safety check before selling
+      home: true
+    - id: several-properties
+      label: "Several properties: letting agents and short-let hosts"

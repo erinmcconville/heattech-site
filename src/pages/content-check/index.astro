@@ -1,0 +1,118 @@
+---
+// Build checkpoint: shows the layout and everything in the content files.
+// Replaced by the real homepage in build step 4.
+import { getCollection } from 'astro:content';
+import { getSite } from '../../lib/site';
+import Base from '../../layouts/Base.astro';
+
+const site = await getSite();
+const services = await getCollection('services');
+const reviews = await getCollection('reviews');
+const stories = await getCollection('stories');
+
+const isPending = (v: unknown) => typeof v === 'string' && /\[(PLACEHOLDER|CONFIRM WITH RYAN|PHOTO)/.test(v);
+---
+<Base title="Content check | Heattech Gas Services" noindex>
+    <h1>Content check</h1>
+    <p class="note">This page shows the type and everything in the content files. It isn't linked from the site. Yellow means a placeholder or something to confirm with Ryan.</p>
+
+    <h2>Type and buttons</h2>
+    <h3>Heading level 3</h3>
+    <p>Body text is 18px with a short line length. Every job gets a written quote before work starts.</p>
+    <p class="small">Small text, used for secondary details such as the company number.</p>
+    <p class="buttons">
+      <a class="button" href="/contact/">Send an enquiry</a>
+      <a class="button button--plain" href="tel:+447506042175">Call 07506 042175</a>
+    </p>
+    <div class="photo-grid">
+      <div class="photo-slot">[PHOTO: Ryan, head-and-shoulders]</div>
+      <div class="photo-slot">[PHOTO: the van with the logo]</div>
+    </div>
+
+    <h2>site.yaml</h2>
+    {Object.entries(site).map(([group, fields]) => (
+      <>
+        <h3>{group}</h3>
+        <dl>
+          {Object.entries(fields).map(([k, v]) => (
+            <>
+              <dt>{k}</dt>
+              <dd class={isPending(v) ? 'pending' : ''}>{v === '' ? '(empty)' : String(v)}</dd>
+            </>
+          ))}
+        </dl>
+      </>
+    ))}
+
+    <h2>services.yaml</h2>
+    {services.map((s) => (
+      <section id={s.id}>
+        <h3>{s.title} <small>(#{s.id})</small></h3>
+        <ul>
+          {s.data.jobs.map((j) => (
+            <li>
+              {j.label} {j.home && <small>· on homepage</small>} · <small>/contact/?job={j.id}</small>
+              {j.note && <div class={isPending(j.note) ? 'pending' : ''}>{j.note}</div>}
+            </li>
+          ))}
+        </ul>
+        {s.data.explainer && (
+          <div class="card">
+            <strong>{s.data.explainer.title}</strong>
+            <p>{s.data.explainer.intro}</p>
+            <ul>
+              {s.data.explainer.points.map((p) => (
+                <li><strong>{p.label}.</strong> {p.text} <a href={p.link}>{p.link_text}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+    ))}
+
+    <h2>reviews.yaml ({reviews.length})</h2>
+    {reviews.map((r) => (
+      <div class="card">
+        <strong>{r.data.name}</strong> · proves: <span class={isPending(r.data.proves) ? 'pending' : ''}>{r.data.proves}</span>
+        <p class={isPending(r.data.text) ? 'pending' : ''}>{r.data.text}</p>
+      </div>
+    ))}
+
+    <h2>stories/ ({stories.length})</h2>
+    {stories.map((s) => {
+      const live = s.data.published && s.data.permission_recorded;
+      return (
+        <div class={live ? 'card' : 'card hidden'}>
+          <p><strong>{live ? 'Will be published' : 'Hidden (template or awaiting permission)'}</strong></p>
+          <h3 class={isPending(s.data.title) ? 'pending' : ''}>{s.data.title}</h3>
+          <dl>
+            {(['area', 'property', 'job_type', 'problem', 'usual_approach', 'what_ryan_did', 'result', 'ryan_check', 'gas_supply_already_there'] as const).map((k) =>
+              s.data[k] ? (
+                <>
+                  <dt>{k.replaceAll('_', ' ')}</dt>
+                  <dd class={isPending(s.data[k]) ? 'pending' : ''}>{s.data[k]}</dd>
+                </>
+              ) : null,
+            )}
+          </dl>
+          {s.data.quotes.map((q) => (
+            <blockquote class={isPending(q.text) ? 'pending' : ''}>"{q.text}" <small>({q.who})</small></blockquote>
+          ))}
+          {s.data.photos.map((p) => <div class="photo-slot">{p}</div>)}
+          {s.body && <p>{s.body}</p>}
+        </div>
+      );
+    })}
+</Base>
+
+<style>
+  .note { background: var(--surface); border-left: 4px solid var(--border); padding: 0.75rem 1rem; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem; max-width: var(--measure); }
+  dl { display: grid; grid-template-columns: minmax(8rem, max-content) 1fr; gap: 0.25rem 1rem; }
+  dt { font-weight: 600; }
+  dd { margin: 0; overflow-wrap: anywhere; }
+  .card { background: var(--surface); border: 1px solid var(--border); padding: 0.75rem 1rem; margin: 1rem 0; max-width: var(--measure); }
+  .hidden { color: var(--muted); border-style: dashed; }
+  .card .photo-slot { aspect-ratio: auto; margin: 0.5rem 0; }
+</style>

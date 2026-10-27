@@ -1,0 +1,7 @@
+# Netlify reads these settings when the site is imported.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"

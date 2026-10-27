@@ -1,0 +1,68 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Text from '../../components/Text.astro';
+import { getPublishedStories } from '../../lib/site';
+
+// Only published stories with permission recorded get a page.
+export async function getStaticPaths() {
+  const stories = await getPublishedStories();
+  return stories.map((story) => ({ params: { slug: story.id }, props: { story } }));
+}
+
+const { story } = Astro.props;
+const d = story.data;
+const { Content } = await render(story);
+
+const fields = [
+  { heading: 'The problem', value: d.problem },
+  { heading: 'What was usually suggested', value: d.usual_approach },
+  { heading: 'What Ryan did', value: d.what_ryan_did },
+  { heading: 'The result', value: d.result },
+];
+---
+<Base title={`${d.title} | Heattech Gas Services`} description={`${d.area}, ${d.property.toLowerCase()}. ${d.what_ryan_did}`}>
+  <p class="small"><a href="/stories/">Real stories</a></p>
+  <h1><Text value={d.title} /></h1>
+  <p class="small">{d.area} · {d.property}</p>
+  {d.ryan_check && <p class="small"><Text value={d.ryan_check} /></p>}
+
+  {fields.map((f) => (
+    <>
+      <h2>{f.heading}</h2>
+      <p><Text value={f.value} /></p>
+    </>
+  ))}
+
+  <div class="content"><Content /></div>
+
+  {d.quotes.length > 0 && (
+    <>
+      <h2>In the customer's words</h2>
+      <div class="stack">
+        {d.quotes.map((q) => (
+          <figure class="quote">
+            <blockquote><Text value={`"${q.text}"`} /></blockquote>
+            <figcaption><Text value={q.who} /></figcaption>
+          </figure>
+        ))}
+      </div>
+    </>
+  )}
+
+  <h2>Photos</h2>
+  <div class="grid photos">
+    {d.photos.map((p) => <div class="photo-slot">{p}</div>)}
+  </div>
+
+  <div class="section actions">
+    <a class="button" href={`/contact/?job=${d.job_type}`}>Ask about a job like this</a>
+  </div>
+</Base>
+
+<style>
+  .quote { margin: 0; padding: 1rem 1.25rem; background: var(--surface); border-left: 4px solid var(--border); max-width: var(--measure); }
+  .quote blockquote { margin: 0 0 0.5rem; }
+  .quote figcaption { font-size: var(--small); color: var(--muted); }
+  .photos { max-width: 48rem; }
+</style>

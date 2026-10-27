@@ -1,0 +1,178 @@
+---
+import { getCollection } from 'astro:content';
+
+// Netlify Forms reads this form from the built HTML (build plan, "Enquiry form").
+// Works without JavaScript; with it, photos are shrunk and the email subject is filled in.
+interface Props { emergencyNumber: string; emergencyLink: string; phone: string }
+const { emergencyNumber, emergencyLink, phone } = Astro.props;
+const services = await getCollection('services');
+---
+<form
+  name="enquiry"
+  method="POST"
+  action="/contact/thanks/"
+  enctype="multipart/form-data"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+  class="enquiry"
+  id="enquiry"
+  data-phone={phone}
+>
+  <input type="hidden" name="form-name" value="enquiry" />
+  <input type="hidden" name="subject" value="Website enquiry" />
+  <p class="bot-field" aria-hidden="true">
+    <label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+  </p>
+
+  <div class="field">
+    <label for="f-name">Name</label>
+    <input id="f-name" name="name" type="text" autocomplete="name" required />
+  </div>
+  <div class="field">
+    <label for="f-email">Email</label>
+    <input id="f-email" name="email" type="email" autocomplete="email" required />
+  </div>
+  <div class="field">
+    <label for="f-phone">Phone</label>
+    <input id="f-phone" name="phone" type="tel" autocomplete="tel" required />
+  </div>
+  <div class="field">
+    <label for="f-area">Postcode or area</label>
+    <input id="f-area" name="area" type="text" autocomplete="postal-code" required />
+  </div>
+
+  <div class="field">
+    <label for="f-job">The job <span class="optional">(optional)</span></label>
+    <select id="f-job" name="job">
+      <option value="">Choose a job</option>
+      {services.map((s) => (
+        <optgroup label={s.data.title}>
+          {s.data.jobs.map((j) => <option value={j.label} data-id={j.id}>{j.label}</option>)}
+        </optgroup>
+      ))}
+      <option value="Something else" data-id="other">Something else</option>
+    </select>
+  </div>
+  <p class="emergency-note gas-warning" id="gas-warning" hidden>
+    If you smell gas now, call the Gas Emergency number first: <a href={`tel:${emergencyLink}`}>{emergencyNumber}</a>.
+  </p>
+
+  <div class="field">
+    <label for="f-message">Describe the problem <span class="optional">(optional)</span></label>
+    <textarea id="f-message" name="message" rows="5"></textarea>
+  </div>
+
+  <fieldset class="field">
+    <legend>Photos <span class="optional">(optional, up to 3)</span></legend>
+    <input name="photo1" type="file" accept="image/*" aria-label="Photo 1" />
+    <input name="photo2" type="file" accept="image/*" aria-label="Photo 2" />
+    <input name="photo3" type="file" accept="image/*" aria-label="Photo 3" />
+  </fieldset>
+
+  <p class="small">Your details are used to reply to this enquiry. See the <a href="/privacy/">privacy page</a>.</p>
+
+  <p class="form-error emergency-note" id="form-error" role="alert" hidden></p>
+  <button class="button" type="submit">Send enquiry</button>
+</form>
+
+<style>
+  .enquiry { max-width: var(--measure); }
+  .field { display: grid; gap: 0.35rem; margin: 0 0 1.25rem; padding: 0; border: 0; }
+  .field legend { padding: 0; margin-bottom: 0.35rem; font-weight: 600; }
+  label { font-weight: 600; }
+  .optional { font-weight: 400; color: var(--muted); }
+  input, select, textarea {
+    font: inherit; color: var(--text); background: var(--surface);
+    border: 1px solid var(--muted); border-radius: var(--radius);
+    padding: 0.6rem 0.75rem; min-height: 3rem; width: 100%;
+  }
+  input[type='file'] { padding: 0.5rem; }
+  .bot-field { position: absolute; left: -9999px; }
+  .gas-warning { margin-top: -0.5rem; }
+</style>
+
+<script>
+  const MAX_TOTAL = 7.5 * 1024 * 1024; // Netlify allows 8 MB per enquiry
+  const MAX_SIDE = 1600;
+
+  const form = document.getElementById('enquiry') as HTMLFormElement;
+  const job = form.querySelector('#f-job') as HTMLSelectElement;
+  const gasWarning = document.getElementById('gas-warning')!;
+  const errorBox = document.getElementById('form-error')!;
+  const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+
+  const selectedId = () => job.selectedOptions[0]?.dataset.id ?? '';
+  const showGasWarning = () => { gasWarning.hidden = selectedId() !== 'gas-smell'; };
+
+  // "Ask about this" links arrive as /contact/?job=new-boiler
+  const fromLink = new URLSearchParams(location.search).get('job');
+  if (fromLink) {
+    const match = [...job.options].find((o) => o.dataset.id === fromLink);
+    if (match) match.selected = true;
+  }
+  showGasWarning();
+  job.addEventListener('change', showGasWarning);
+
+  // Shrinks a photo to fit within MAX_SIDE. Keeps the original if the browser can't read it.
+  async function shrink(file: File): Promise<File> {
+    if (!file.type.startsWith('image/')) return file;
+    try {
+      const img = await createImageBitmap(file);
+      const scale = Math.min(1, MAX_SIDE / Math.max(img.width, img.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext('2d')!.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, 'image/jpeg', 0.8));
+      if (!blob || blob.size >= file.size) return file;
+      return new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' });
+    } catch {
+      return file;
+    }
+  }
+
+  function showError(message: string) {
+    errorBox.textContent = message;
+    errorBox.hidden = false;
+    button.disabled = false;
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    errorBox.hidden = true;
+    button.disabled = true;
+
+    const data = new FormData(form);
+
+    // Subject Ryan can triage from his inbox: "No heating – EH6 – Sarah"
+    const subject = [data.get('job') || 'Enquiry', data.get('area'), data.get('name')]
+      .map((v) => String(v ?? '').trim())
+      .filter(Boolean)
+      .join(' – ');
+    data.set('subject', subject);
+
+    let total = 0;
+    for (const field of ['photo1', 'photo2', 'photo3']) {
+      const file = data.get(field);
+      if (file instanceof File && file.size > 0) {
+        const small = await shrink(file);
+        total += small.size;
+        data.set(field, small, small.name);
+      }
+    }
+    if (total > MAX_TOTAL) {
+      showError('The photos are too large to send together. Please remove one and try again.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/', { method: 'POST', body: data });
+      if (!response.ok) throw new Error(String(response.status));
+      const next = selectedId() === 'gas-smell' ? '/contact/thanks/?gas=1' : '/contact/thanks/';
+      location.assign(next);
+    } catch {
+      showError(`The enquiry did not send. Please try again, or call ${form.dataset.phone}.`);
+    }
+  });
+</script>

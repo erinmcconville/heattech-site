@@ -1,0 +1,27 @@
+---
+import Text from './Text.astro';
+
+// One Google review, in the customer's own words. Pass no review to show an empty slot.
+interface Props { review?: { name: string; text: string; link: string }; need?: string }
+const { review, need } = Astro.props;
+const hasLink = review && /^https?:\/\//.test(review.link);
+---
+<figure class="review">
+  {review ? (
+    <>
+      <blockquote><Text value={review.text} /></blockquote>
+      <figcaption>
+        {review.name}, Google review
+        {hasLink ? <>{' · '}<a href={review.link}>Read on Google</a></> : <>{' · '}<Text value={review.link} /></>}
+      </figcaption>
+    </>
+  ) : (
+    <blockquote><Text value={`[PLACEHOLDER: a Google review that shows ${need ?? 'this'}]`} /></blockquote>
+  )}
+</figure>
+
+<style>
+  .review { margin: 0; padding: 1rem 1.25rem; background: var(--surface); border-left: 4px solid var(--border); }
+  .review blockquote { margin: 0 0 0.5rem; }
+  .review figcaption { font-size: var(--small); color: var(--muted); }
+</style>

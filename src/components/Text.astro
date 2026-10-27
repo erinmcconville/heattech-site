@@ -1,0 +1,8 @@
+---
+// Shows a content value, highlighted if it is still a placeholder.
+interface Props { value: unknown }
+const { value } = Astro.props;
+const text = String(value ?? '');
+const pending = /\[(PLACEHOLDER|CONFIRM WITH RYAN|PHOTO)/.test(text);
+---
+{pending ? <span class="pending">{text}</span> : text}

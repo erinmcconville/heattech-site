@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+import Text from '../../components/Text.astro';
+import { getSite } from '../../lib/site';
+
+const site = await getSite();
+const { contact, promises, safety } = site;
+---
+<Base title="Enquiry sent | Heattech Gas Services" noindex>
+  <div id="sent">
+    <h1>Enquiry sent</h1>
+    <p><Text value={promises.after_enquiry} /></p>
+    <p>If it's urgent, call <a href={`tel:${contact.phone_link}`}>{contact.phone}</a>.</p>
+  </div>
+
+  <div id="gas" hidden>
+    <h1>Enquiry sent</h1>
+    <p class="emergency-note">
+      If you smell gas now, call the Gas Emergency number:{' '}
+      <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>.
+    </p>
+  </div>
+
+  <p><a href="/">Back to the homepage</a></p>
+</Base>
+
+<script>
+  if (new URLSearchParams(location.search).get('gas') === '1') {
+    document.getElementById('sent')!.hidden = true;
+    document.getElementById('gas')!.hidden = false;
+  }
+</script>

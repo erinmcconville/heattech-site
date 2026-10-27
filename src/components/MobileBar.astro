@@ -1,0 +1,18 @@
+---
+interface Props { site: Record<string, Record<string, any>> }
+const { contact } = Astro.props.site;
+---
+<nav class="mobile-bar" aria-label="Quick contact">
+  <a class="button" href="/contact/">Enquire</a>
+  <a class="button button--plain" href={`tel:${contact.phone_link}`}>Call</a>
+</nav>
+
+<style>
+  .mobile-bar {
+    position: fixed; inset: auto 0 0 0; z-index: 10;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+    padding: 0.625rem var(--gutter) calc(0.625rem + env(safe-area-inset-bottom));
+    background: var(--surface); border-top: 1px solid var(--border);
+  }
+  @media (min-width: 900px) { .mobile-bar { display: none; } }
+</style>

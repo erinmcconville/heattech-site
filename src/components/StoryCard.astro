@@ -1,0 +1,18 @@
+---
+import Text from './Text.astro';
+
+interface Props { story: { id: string; data: { title: string; area: string; property: string; what_ryan_did: string } } }
+const { story } = Astro.props;
+---
+<article class="story-card">
+  <h3><a href={`/stories/${story.id}/`}>{story.data.title}</a></h3>
+  <p class="small">{story.data.area} · {story.data.property}</p>
+  <p><Text value={story.data.what_ryan_did} /></p>
+  <p><a href={`/stories/${story.id}/`}>Read the full story</a></p>
+</article>
+
+<style>
+  .story-card { padding: 1rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); max-width: var(--measure); }
+  .story-card h3 { margin-top: 0; }
+  .story-card p:last-child { margin-bottom: 0; }
+</style>

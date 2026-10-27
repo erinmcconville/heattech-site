@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import Text from '../../components/Text.astro';
+import EnquiryForm from '../../components/EnquiryForm.astro';
+import { getSite } from '../../lib/site';
+
+const site = await getSite();
+const { business, contact, promises, safety } = site;
+---
+<Base
+  title="Contact | Heattech Gas Services, Edinburgh"
+  description={`Send an enquiry or call ${contact.phone}. ${business.area_served}, based in ${business.based_in}.`}
+>
+  <h1>Contact</h1>
+  <p class="lede">Send an enquiry, or call for urgent jobs.</p>
+
+  <p class="emergency-note">
+    If you smell gas, call the Gas Emergency number, <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>, first.
+  </p>
+
+  <h2>Send an enquiry</h2>
+  <EnquiryForm emergencyNumber={safety.gas_emergency_number} emergencyLink={safety.gas_emergency_link} phone={contact.phone} />
+
+  <h2>What happens next</h2>
+  <p><Text value={promises.after_enquiry} /></p>
+
+  <h2>Phone and email</h2>
+  <p>
+    <a href={`tel:${contact.phone_link}`}>{contact.phone}</a><br />
+    <a href={`mailto:${contact.email}`}>{contact.email}</a>
+  </p>
+
+  <h2>Area covered</h2>
+  <p>{business.area_served}. Based in {business.based_in}.</p>
+</Base>

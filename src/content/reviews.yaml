@@ -1,0 +1,66 @@
+# Hand-picked Google reviews (six to eight on the homepage).
+# Ryan's real review text isn't in the research yet, so every "text" is a placeholder.
+# Copy each review exactly as it appears on Google, with the first name as shown there.
+# Never use other firms' reviews.
+#
+# "proves" links a review to one of the four "How I work" promises:
+#   reply-and-turn-up, repair-first, tidy, comes-back
+# Notes come from docs/01-plumber.md.
+
+- id: anya
+  name: Anya
+  text: "[PLACEHOLDER: full review text. Known detail: guest-reported gas leak at a short-let, arrived \"within less than an hour\"]"
+  proves: reply-and-turn-up
+  link: "[PLACEHOLDER: link to this review on Google]"
+  featured: true
+
+- id: nicky
+  name: nicky
+  text: "[PLACEHOLDER: full review text. Known detail: weekend emergency]"
+  proves: reply-and-turn-up
+  link: "[PLACEHOLDER: link to this review on Google]"
+  featured: true
+
+- id: ailsa
+  name: ailsa
+  text: "[PLACEHOLDER: full review text. Known detail: two Airbnbs]"
+  proves: "[PLACEHOLDER: which promise this review proves]"
+  link: "[PLACEHOLDER: link to this review on Google]"
+  featured: true
+
+- id: gregor
+  name: Gregor
+  text: "[PLACEHOLDER: full review text. Known detail: came via a letting agency]"
+  proves: "[PLACEHOLDER: which promise this review proves]"
+  link: "[PLACEHOLDER: link to this review on Google]"
+  featured: true
+
+- id: stephen
+  name: Stephen
+  text: "[PLACEHOLDER: full review text. Known detail: full central heating install in a flat]"
+  proves: "[PLACEHOLDER: which promise this review proves]"
+  link: "[PLACEHOLDER: link to this review on Google]"
+  featured: true
+
+- id: merchimike
+  name: MerchiMike
+  text: "[PLACEHOLDER: full review text. Known detail: Vaillant boiler]"
+  proves: "[PLACEHOLDER: which promise this review proves]"
+  link: "[PLACEHOLDER: link to this review on Google]"
+  featured: true
+
+- id: samuel
+  name: Samuel
+  text: "[PLACEHOLDER: full review text. Known detail: Brett did the job]"
+  proves: "[PLACEHOLDER: which promise this review proves]"
+  link: "[PLACEHOLDER: link to this review on Google]"
+  featured: true
+
+- id: kate
+  name: Kate
+  text: "[PLACEHOLDER: full review text. Known detail: Brett did the job]"
+  proves: "[PLACEHOLDER: which promise this review proves]"
+  link: "[PLACEHOLDER: link to this review on Google]"
+  featured: true
+
+# Still needed: a review for each of "repair-first", "tidy" and "comes-back".

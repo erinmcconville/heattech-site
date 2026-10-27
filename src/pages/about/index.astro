@@ -1,0 +1,57 @@
+---
+import Base from '../../layouts/Base.astro';
+import Text from '../../components/Text.astro';
+import { getSite } from '../../lib/site';
+
+const site = await getSite();
+const { business, contact, credentials, links } = site;
+---
+<Base
+  title={`About | ${business.legal_name}, Portobello, Edinburgh`}
+  description={`${business.legal_name}, a Gas Safe registered heating and plumbing company based in ${business.based_in}, Edinburgh. Run by ${business.engineer}.`}
+>
+  <h1>About Heattech Gas Services</h1>
+  <p class="lede">{business.legal_name} is a heating and plumbing company based in {business.based_in}, run by {business.engineer}.</p>
+
+  <div class="grid photos">
+    <div class="photo-slot">[PHOTO: Ryan, head-and-shoulders]</div>
+    <div class="photo-slot">[PHOTO: Ryan and Brett together]</div>
+  </div>
+
+  <h2>Ryan Duncan</h2>
+  <p><Text value="[PLACEHOLDER: a few lines about Ryan, from his voice note]" /></p>
+
+  <h2>{business.colleague_name}</h2>
+  <p><Text value={business.colleague_role} /></p>
+
+  <h2>The company</h2>
+  <dl class="facts">
+    <dt>Registered name</dt><dd>{business.legal_name}</dd>
+    <dt>Company number</dt><dd>{business.company_number}</dd>
+    <dt>Gas Safe</dt>
+    <dd><Text value={credentials.gas_safe_number} /> · <a href={credentials.gas_safe_register_url}>Check it on the Gas Safe Register</a></dd>
+    <dt>Insurance</dt><dd><Text value={credentials.insurance} /></dd>
+    <dt>Brand approvals</dt><dd><Text value={credentials.brand_approvals} /></dd>
+    <dt>Address</dt><dd>{contact.address_line_1}, {contact.town} {contact.postcode}</dd>
+    <dt>Area covered</dt><dd>{business.area_served}</dd>
+  </dl>
+
+  <h2>Portobello</h2>
+  <p>{business.community.replace(/^Sponsors/, 'Heattech sponsors')}</p>
+  <div class="photo-slot van">[PHOTO: the van with the logo]</div>
+
+  <p class="section">
+    <a href={links.google_reviews}>Reviews on Google</a>{' · '}
+    <a href={links.facebook}>Facebook</a>{' · '}
+    <a href={links.mybuilder}>MyBuilder</a>
+  </p>
+</Base>
+
+<style>
+  .photos { max-width: 48rem; }
+  .facts { display: grid; grid-template-columns: minmax(9rem, max-content) 1fr; gap: 0.5rem 1rem; }
+  .facts dt { font-weight: 600; }
+  .facts dd { margin: 0; }
+  .van { max-width: 24rem; }
+  @media (max-width: 30rem) { .facts { grid-template-columns: 1fr; } .facts dd { margin-bottom: 0.5rem; } }
+</style>

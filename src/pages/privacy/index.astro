@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import Text from '../../components/Text.astro';
+import { getSite } from '../../lib/site';
+
+const site = await getSite();
+const { business, contact } = site;
+---
+<Base title="Privacy | Heattech Gas Services">
+  <h1>Privacy</h1>
+  <p class="lede">What the enquiry form collects and where it goes.</p>
+
+  <h2>What the form collects</h2>
+  <ul>
+    <li>Name, email, phone number, and postcode or area</li>
+    <li>The type of job, a description and up to three photos, if you add them</li>
+  </ul>
+
+  <h2>Why</h2>
+  <p>To reply to your enquiry and arrange the job.</p>
+
+  <h2>Where it goes</h2>
+  <p>The form is handled by Netlify, the company that hosts this website. Netlify emails each enquiry to {business.legal_name} and keeps a copy, including any photos, in the website's account. <a href="https://www.netlify.com/privacy/">Netlify's privacy policy</a>.</p>
+  <p><Text value="[PLACEHOLDER: where Netlify stores form data, checked on its own pages before launch]" /></p>
+
+  <h2>How long it is kept</h2>
+  <p><Text value="[CONFIRM WITH RYAN: how long enquiry details are kept, in email and in the Netlify account]" /></p>
+
+  <h2>Website statistics</h2>
+  <p><Text value="[PLACEHOLDER: analytics provider and what it records, added in step 6]" /></p>
+
+  <h2>Your rights</h2>
+  <p>
+    To see, correct or delete your details, email <a href={`mailto:${contact.email}`}>{contact.email}</a>.
+    You can also contact the <a href="https://ico.org.uk/make-a-complaint/">Information Commissioner's Office</a>.
+  </p>
+
+  <h2>Who is responsible</h2>
+  <p>{business.legal_name}, {contact.address_line_1}, {contact.town} {contact.postcode}. Company {business.company_number}.</p>
+  <p><Text value="[PLACEHOLDER: ICO registration number, if registered]" /></p>
+</Base>
