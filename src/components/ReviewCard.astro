@@ -1,10 +1,12 @@
 ---
 import Text from './Text.astro';
+import { getSite } from '../lib/site';
 
 // One Google review, in the customer's own words. Pass no review to show an empty slot.
-interface Props { review?: { name: string; text: string; link: string }; need?: string }
+interface Props { review?: { name: string; text: string; link?: string }; need?: string }
 const { review, need } = Astro.props;
-const hasLink = review && /^https?:\/\//.test(review.link);
+const { links } = await getSite();
+const href = review?.link ?? links.google_reviews;
 ---
 <figure class="review card">
   {review ? (
@@ -12,8 +14,7 @@ const hasLink = review && /^https?:\/\//.test(review.link);
       <p class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</p>
       <blockquote><Text value={review.text} /></blockquote>
       <figcaption>
-        <strong>{review.name}</strong> · Google review
-        {hasLink ? <>{' · '}<a href={review.link}>Read on Google</a></> : <>{' · '}<Text value={review.link} /></>}
+        <strong>{review.name}</strong> · <a href={href}>Google review</a>
       </figcaption>
     </>
   ) : (

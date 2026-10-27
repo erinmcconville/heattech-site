@@ -1,66 +1,269 @@
-# Hand-picked Google reviews (six to eight on the homepage).
-# Ryan's real review text isn't in the research yet, so every "text" is a placeholder.
-# Copy each review exactly as it appears on Google, with the first name as shown there.
-# Never use other firms' reviews.
+# Google reviews, copied exactly as they appear on Ryan's Google profile (pasted by Erin, 27 Oct 2026).
+# Keep the customer's own words, spelling and punctuation. Never use other firms' reviews.
 #
-# "proves" links a review to one of the four "How I work" promises:
-#   reply-and-turn-up, repair-first, tidy, comes-back
-# Notes come from docs/01-plumber.md.
+# name:      first name as shown on Google
+# proves:    links a review to one "What to expect" point on the homepage:
+#            reply-and-turn-up, repair-first, tidy, comes-back
+# featured:  shown in the homepage reviews section (six to eight)
+# complete:  false means Google cut the text off ("… More"). Don't feature these until the full text is pasted in.
+# link:      a link to this review on Google. Leave it out to link to the Google profile instead.
+# order:     the order featured reviews appear in
 
-- id: anya
-  name: Anya
-  text: "[PLACEHOLDER: full review text. Known detail: guest-reported gas leak at a short-let, arrived \"within less than an hour\"]"
+# --- Paired with "What to expect" on the homepage ---
+
+- id: yvonne-olver
+  name: Yvonne
   proves: reply-and-turn-up
-  link: "[PLACEHOLDER: link to this review on Google]"
-  featured: true
+  text: |-
+    Absolutely fantastic service from Ryan when he came to fit our new boiler . Very professional arrived when he said he would and just got on with the job. Always available to answer any questions that you need answering. We would not have anyone else but Ryan doing work for us very reliable and trustworthy.
 
-- id: nicky
-  name: nicky
-  text: "[PLACEHOLDER: full review text. Known detail: weekend emergency]"
-  proves: reply-and-turn-up
-  link: "[PLACEHOLDER: link to this review on Google]"
-  featured: true
+- id: arabella-gilchrist
+  name: Arabella
+  proves: repair-first
+  text: |-
+    Heatech were recommended to us when we had an issue with an old boiler that others had told us could not be repaired. Calm, professional and solutions orientated. Highly recommend.
 
-- id: ailsa
-  name: ailsa
-  text: "[PLACEHOLDER: full review text. Known detail: two Airbnbs]"
-  proves: "[PLACEHOLDER: which promise this review proves]"
-  link: "[PLACEHOLDER: link to this review on Google]"
-  featured: true
+- id: steve-mcqueen
+  name: Steve
+  proves: tidy
+  text: |-
+    Excellent service. Great communication from Ryan and the team. Clean and tidy throughout the whole fitting of my new boiler. Well priced as well. First class job.
 
-- id: gregor
+# --- Featured in the homepage reviews section ---
+
+- id: jenna-mccosh
+  name: Jenna
+  featured: true
+  order: 1
+  text: |-
+    Excellent service - we needed a replacement kitchen tap and water filter fitted and broken bathroom sink plug replaced. Very speedy resolution to all issues and great communication - would highly recommend.
+
+- id: lena-bruning
+  name: Lena
+  featured: true
+  order: 2
+  text: |-
+    Ryan came and did the diagnostics and Brett did our job and both were fantastic! Great at communicating and we went from no heating at all to everything working in a few hours. Can’t recommend them enough they were super thorough.
+
+- id: gregor-fortune
   name: Gregor
-  text: "[PLACEHOLDER: full review text. Known detail: came via a letting agency]"
-  proves: "[PLACEHOLDER: which promise this review proves]"
-  link: "[PLACEHOLDER: link to this review on Google]"
   featured: true
+  order: 3
+  text: |-
+    We have recently starting using Ryan from Heattech within our letting agency, Ryan is very reliable, neat and tidy, feeds back clearly after his work which is great for someone in our role. Highly recommend.
 
-- id: stephen
-  name: Stephen
-  text: "[PLACEHOLDER: full review text. Known detail: full central heating install in a flat]"
-  proves: "[PLACEHOLDER: which promise this review proves]"
-  link: "[PLACEHOLDER: link to this review on Google]"
+- id: matt-inglis
+  name: Matt
   featured: true
+  order: 4
+  text: |-
+    Fantastic service, can round at short notice, diagnosed the fault and replaced our boiler within 4 days. They went out their way to ensure we had heating again before the weekend. Couldn't rate highly enough.
+
+- id: stephen-wotherspoon
+  name: Stephen
+  featured: true
+  order: 5
+  text: |-
+    I used Heattech to carry out a full Central Heating install in my flat. Ryan was very easy to deal with and explained everything that needed done. He arrived on time everyday and all the work was carried out within the timescale and to a very high standard. Would highly recommend and will definitely use again 5 🌟
 
 - id: merchimike
   name: MerchiMike
-  text: "[PLACEHOLDER: full review text. Known detail: Vaillant boiler]"
-  proves: "[PLACEHOLDER: which promise this review proves]"
-  link: "[PLACEHOLDER: link to this review on Google]"
   featured: true
+  order: 6
+  text: |-
+    We called Heattech about an intermittent problem with water heating on a Vaillant boiler. Ryan visited promptly, diagnosed the cause and recommended an effective course of action. He also carried out the annual service carefully & with mininum disruption
 
-- id: samuel
+- id: naomi-hastings
+  name: Naomi
+  featured: true
+  order: 7
+  text: |-
+    Ryan was fantastic from start to finish. Friendly, professional and incredibly efficient. His communication was spot on, with timely responses every step of the way, and the job itself was carried out to a high standard. Highly recommended.
+
+- id: stewart-hunter
+  name: Stewart
+  featured: true
+  order: 8
+  text: |-
+    Boiler and four new radiators fitted. Work was carried out within the time quoted in a very tidy and efficient manner. Delighted with the results !!!!
+
+# --- Complete reviews, not currently featured ---
+
+- id: alastair-philp
+  name: Alastair
+  text: |-
+    Great service, boiler broke, Ryan had everything sorted and replaced in a couple of days. Would definitely use again.
+
+- id: lena-cowie
+  name: Lena
+  text: |-
+    Have been using Ryan's services for a couple of years now and he is consistently reliable, reasonably priced and always excellent communication. Wouldn't hesitate to (and often do) recommend him to others.
+
+- id: daisy-tewari
+  name: Daisy
+  text: |-
+    Highly recommend Ryan. Quickly identifying the issue with my mums boiler. Friendly and reliable. We will be using his services for any future problems
+
+- id: lesley-murray
+  name: Lesley
+  text: |-
+    Many thanks to Ryan who came and fixed and serviced my central heating boiler. Very friendly and knowledgeable. Will definitely use again for any plumbing issues in the future. Highly recommend 👌
+
+- id: katharine-mccullough
+  name: Katharine
+  text: |-
+    Ryan is always very friendly, helpful and efficient. He was recommended to me by a friend and I'm very glad to have his help and expertise.
+
+- id: r
+  name: R
+  text: |-
+    Ryan has been in my flat making a gas inspection and checking the boiler a few times. I would strongly recommend using Heattech. Excellent service. He is very nice, reliable and highly efficient. Truly professional. Great thanks Ryan!
+
+- id: kyrsta-macdonald-scott
+  name: Kyrsta
+  text: |-
+    Heattech Gas Services were highly efficient, very tidy, great value, very knowledgeable, and reassuring in dealing with issues that occurred. I would highly recommend and will be using them in the future. Many thanks! A warm happy home with new boiler and tech in place, even the pipe work is great to look at!
+
+- id: mayur-lalithraj
+  name: Mayur
+  text: |-
+    Great Job. Had a urgent boiler issues, Ryan understood the urgency and got the boiler up and running within 5 hours of me calling him. Very professional, friendly and clean job. Pricing was reasonable.
+
+- id: stephanie-kirkham
+  name: Stephanie
+  text: |-
+    Ryan fitted a radiator for us and we will be using him for all plumbing services from here on in - all round 5 star service. Great communication and work, super professional and quick. Would highly recommend. Thanks Ryan!
+
+- id: dawid-granacki
+  name: Dawid
+  text: |-
+    Great service! Fast response, and the issue with my boiler was fixed within 30 minutes. Highly recommend.
+
+- id: lesley-cameron
+  name: Lesley
+  text: |-
+    Great service, attended very quickly for a heating issue. Previously had new boiler fitted by Ryan, service is fantastic, polite, friendly professional. Highly recommend.
+
+- id: rab-hayworth
+  name: Rab
+  text: |-
+    Highly recommend! Very competitive in price and very easy to deal with. Did a great job too!
+
+- id: rodger-redpath
+  name: Rodger
+  text: |-
+    Ryan was very professional and thorough. He committed to come back in a short time with a quote for replacement parts.
+
+- id: sarah-rychel
+  name: Sarah
+  text: |-
+    Great service from Ryan, he's very knowledgeable, professional, easy to deal with and punctual. I'll definitely be reccommending him to friends and family.
+
+- id: maria-gowans
+  name: Maria
+  text: |-
+    Very impressed with the service. Ryan carried out a repair really quickly. Excellent value for money. Would definitely recommend using HeatTech.
+
+- id: kim-mcfarlane
+  name: Kim
+  text: |-
+    I would give 10 stars if I could 🌟! Ryan came out, quoted for the job & had it completed before I even received the other quotes in! Very professional & excellent quality of work - highly recommend 🌟🌟🌟🌟🌟
+
+- id: andrew-love
+  name: Andrew
+  text: |-
+    Ryan was totally professional & extremely timely in getting back to me - very impressed.
+
+- id: callum-leslie
+  name: Callum
+  text: |-
+    Really good service from Ryan, helped us with a complicated issue and got us back up and running as soon as he could. Will be coming back to him for routine and ad-hoc jobs in the future.
+
+- id: donald-mcintyre
+  name: Donald
+  text: |-
+    After finding I had a gas leak outside my back door they started work in the afternoon and carried on working till everything was done and working until 7.30 that night. Brilliant job, everything clean and tidy can fully recommend them
+
+# --- Cut off by Google ("… More"): paste the full text before using ---
+
+- id: ebru-ustun
+  name: Ebru
+  complete: false
+  text: |-
+    Heattech Gas Services Ltd responded very quickly and booked a visit one day later I texted. Ryan is a professional gas engineer. For years, two other companies serviced our boiler but never identified why some of our radiators weren’t …
+
+- id: fi-adams
+  name: Fi
+  complete: false
+  text: |-
+    Second time using Heattech and would not hesitate to using them again!
+    A professional company who deliver a quality service and give sound constructive advice. …
+
+- id: anne-crosbie
+  name: Anne
+  complete: false
+  text: |-
+    I have had both Brett and Ryan visit on separate issues with my boiler.
+    They responded very quickly to my requests for a visit and fitted me in at very short notice . …
+
+- id: samuel-booth
   name: Samuel
-  text: "[PLACEHOLDER: full review text. Known detail: Brett did the job]"
-  proves: "[PLACEHOLDER: which promise this review proves]"
-  link: "[PLACEHOLDER: link to this review on Google]"
-  featured: true
+  complete: false
+  text: |-
+    Absolutely top notch. Brett was a great guy. Drain was blocked for 3 or so months, visits from other plumbers and no luck. Two visits from him and it was fixed with no complaints! Great at explaining where the issue was, left the flat in good nick! Can’t recommend them enough. Thank you again!!!!!!!! (Life savers)…
 
-- id: kate
+- id: j-n-adams
+  name: j n adams
+  complete: false
+  text: |-
+    Fantastic job carried out by Ryan and Brett who are so pleasant and professional. They replaced the boiler,added new gas pipe work and fitted new radiators.
+    Despite the challenges of an older house they rose to them all and still kept …
+
+- id: kate-stevenson
   name: Kate
-  text: "[PLACEHOLDER: full review text. Known detail: Brett did the job]"
-  proves: "[PLACEHOLDER: which promise this review proves]"
-  link: "[PLACEHOLDER: link to this review on Google]"
-  featured: true
+  complete: false
+  text: |-
+    Ryan from Heattech carried out a gas inspection due to a CO leak. Following this, it was found to be a faulty boiler and I needed a replacement. I was offered a choice of boilers with different budgets and Brett came and fitted the new …
 
-# Still needed: a review for each of "repair-first", "tidy" and "comes-back".
+- id: atelier-twenty-three
+  name: Atelier Twenty Three
+  complete: false
+  text: |-
+    Ryan used to service the boiler in my rental flat for the letting agency on an annual basis. I luckily had his contact details saved from then for arranging visits, so when the boiler went in my commercial premises in the depths of winter I …
+
+- id: anya-bell
+  name: Anya
+  complete: false
+  text: |-
+    We had an emergency at one of our properties, when a guest reported a gas leak. We immediately contacted HeatTech Gas Services, and within less than an hour, Ryan arrived and expertly handled the situation. …
+
+- id: ali-calder
+  name: Ali
+  complete: false
+  text: |-
+    Used Ryan a few times recently for an ageing system.
+    He is polite, friendly, he takes the time to explain what’s going on and he’s reasonably priced. …
+
+- id: callum-bishop
+  name: Callum
+  complete: false
+  text: |-
+    I've used Heattech for a boiler replacement in previous property, where Ryan gave me great advice on what kind of boiler would be sufficient for my 2 bed flat. Installation without any hassle, clean and tidy job. Continued to use Heattech …
+
+- id: nicky-friedland
+  name: nicky
+  complete: false
+  text: |-
+    I would highly recommend Ryan - he first helped me out with an emergency on the weekend- his company had been recommended on a Facebook page. He came back to fix the problem as we arranged and he explained things clearly and was very …
+
+- id: ailsa-rollo
+  name: ailsa
+  complete: false
+  text: |-
+    100 % brilliant over all service hands down !
+    I own a restaurant and have 2 air bnb property’s and have been dealing with boiler issues for many years and I have to say I’ve never had such incredible …
+
+# Left out on purpose:
+# - Erin Mc Conville: rating only, no text (and Erin is building the site).
+# - Julian Blake: a complaint about a missed thermostat quote over Christmas. Ryan replied publicly.
+#   Not shown on the site, but it's the reason reply-time promises stay as [CONFIRM WITH RYAN].

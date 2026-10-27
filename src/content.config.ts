@@ -41,9 +41,11 @@ const reviews = defineCollection({
   schema: z.object({
     name: z.string(),
     text: z.string(),
-    proves: z.string(),
-    link: z.string(),
+    proves: z.enum(['reply-and-turn-up', 'repair-first', 'tidy', 'comes-back']).optional(),
+    link: z.url().optional(),
     featured: z.boolean().default(false),
+    complete: z.boolean().default(true),
+    order: z.number().optional(),
   }),
 });
 

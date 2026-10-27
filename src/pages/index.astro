@@ -10,11 +10,14 @@ const site = await getSite();
 const { business, contact, credentials, links, promises } = site;
 const services = await getServices();
 const reviews = await getCollection('reviews');
-const featured = reviews.filter((r) => r.data.featured).slice(0, 8);
+const featured = reviews
+  .filter((r) => r.data.featured && r.data.complete)
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99))
+  .slice(0, 8);
 const stockbridge = await getEntry('stories', 'stockbridge-gas-central-heating');
 const stockbridgeLive = stockbridge && stockbridge.data.published && stockbridge.data.permission_recorded;
 
-const reviewFor = (promise: string) => reviews.find((r) => r.data.proves === promise)?.data;
+const reviewFor = (promise: string) => reviews.find((r) => r.data.proves === promise && r.data.complete)?.data;
 
 // "How we work": each line sits next to its proof (a review or a job detail).
 const howWeWork = [
@@ -34,7 +37,7 @@ const howWeWork = [
   {
     title: 'Tidy work',
     text: 'The Stockbridge conversion took about three days, with no floors lifted.',
-    quote: { text: "He doesn't leave a mess.", who: 'Erin, Stockbridge flat owner' },
+    quote: undefined as { text: string; who: string } | undefined,
     review: reviewFor('tidy'),
     need: 'tidy work',
   },
