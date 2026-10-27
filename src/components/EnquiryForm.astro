@@ -1,11 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
+import { getServices } from '../lib/site';
 
 // Netlify Forms reads this form from the built HTML (build plan, "Enquiry form").
 // Works without JavaScript; with it, photos are shrunk and the email subject is filled in.
 interface Props { emergencyNumber: string; emergencyLink: string; phone: string }
 const { emergencyNumber, emergencyLink, phone } = Astro.props;
-const services = await getCollection('services');
+const services = await getServices();
 ---
 <form
   name="enquiry"
@@ -82,7 +82,7 @@ const services = await getCollection('services');
   label { font-weight: 600; }
   .optional { font-weight: 400; color: var(--muted); }
   input, select, textarea {
-    font: inherit; color: var(--text); background: var(--surface);
+    font: inherit; color: var(--ink); background: var(--surface);
     border: 1px solid var(--muted); border-radius: var(--radius);
     padding: 0.6rem 0.75rem; min-height: 3rem; width: 100%;
   }

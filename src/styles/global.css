@@ -1,99 +1,166 @@
-/* Colours, type scale and base styles.
-   The palette is temporary until the logo file arrives: [PLACEHOLDER: logo colours].
-   One neutral background, one accent reserved for buttons. All pairs meet WCAG AA. */
+/* Heattech style guide.
+   Colours are sampled from the HeatTech logo. Contrast ratios are noted where text sits on a colour;
+   every text pair meets WCAG AA. */
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url('/fonts/montserrat-latin-variable.woff2') format('woff2');
+}
+
 :root {
-  --bg: #f7f5f2;
+  /* Brand */
+  --charcoal: #4f4f51;      /* logo background: header, footer, phone bar. White on it 8.2:1 */
+  --copper: #cc7e2e;        /* logo flame: main buttons only, with --ink text 5.3:1 */
+  --copper-hover: #d88f43;
+  --copper-deep: #9a5b17;   /* labels and links on light backgrounds 5.1:1 */
+
+  /* Neutrals */
+  --bg: #faf8f5;
   --surface: #ffffff;
-  --text: #1c1c1c;
-  --muted: #4a4a4a;
-  --border: #cfcac2;
-  --accent: #1f4e79;        /* buttons only; white text on it is 8.6:1 */
-  --accent-hover: #163a5b;
-  --on-accent: #ffffff;
-  --photo: #d9d6d1;         /* grey photo placeholder boxes */
+  --ink: #1c1c1e;           /* body text 16:1 */
+  --muted: #5c5c60;         /* secondary text 6.3:1 */
+  --line: #e4ded5;          /* card borders and dividers */
+  --line-strong: #c9c1b5;
+  --on-dark: #ffffff;
+  --on-dark-muted: #d9d4cc; /* secondary text on charcoal 5.5:1 */
+
+  /* Roles */
+  --emergency: #8a1c1c;     /* gas emergency lines only 8.8:1 */
+  --emergency-bg: #fcebeb;
+  --photo: #dedad3;         /* grey photo placeholder boxes */
   --pending: #fff1b8;       /* highlights placeholders in previews */
   --pending-line: #a37a00;
-  --emergency: #8a1c1c;
 
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
-  /* Type scale: 18px body, headings step up gently and grow a little on wider screens */
-  --step-0: 1.125rem;
+  /* Type */
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-brand: 'Montserrat', var(--font-body);
+  --step-0: 1.125rem;                                  /* 18px body */
   --step-1: 1.25rem;
-  --step-2: clamp(1.4rem, 1.2rem + 0.8vw, 1.75rem);
-  --step-3: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+  --step-2: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+  --step-3: clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem);
   --small: 1rem;
+  --label: 0.8125rem;
+
+  /* Space: one 8px-based scale */
+  --s1: 0.5rem;
+  --s2: 1rem;
+  --s3: 1.5rem;
+  --s4: 2rem;
+  --s5: 3rem;
+  --s6: 4.5rem;
 
   --measure: 38rem;
   --page: 70rem;
   --gutter: 1rem;
-  --space: 1.5rem;
-  --radius: 4px;
-  --bar-height: 4.25rem;
+  --radius: 6px;
+  --tap: 3rem;              /* minimum tap target */
+  --bar-height: 4.5rem;
 }
+
+@media (min-width: 48rem) { :root { --gutter: 1.5rem; } }
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 5rem; }
 
 body {
   margin: 0;
   background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
+  color: var(--ink);
+  font-family: var(--font-body);
   font-size: var(--step-0);
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
-h1, h2, h3 { line-height: 1.2; margin: 0 0 0.5em; text-wrap: balance; }
+h1, h2, h3 {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
+  text-wrap: balance;
+}
 h1 { font-size: var(--step-3); }
 h2 { font-size: var(--step-2); margin-top: 2em; }
 h3 { font-size: var(--step-1); margin-top: 1.5em; }
 p, ul, ol, dl, blockquote { margin: 0 0 1em; max-width: var(--measure); }
 small, .small { font-size: var(--small); }
 
-a { color: var(--text); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a { color: var(--copper-deep); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 a:hover { text-decoration-thickness: 2px; }
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--copper-deep); outline-offset: 2px; }
 
-img { max-width: 100%; height: auto; }
+img { max-width: 100%; height: auto; display: block; }
 
 .wrap { max-width: var(--page); margin: 0 auto; padding: 0 var(--gutter); }
 
 .skip-link { position: absolute; left: -999px; top: 0; }
-.skip-link:focus { left: var(--gutter); top: 0.5rem; background: var(--surface); padding: 0.5rem 1rem; z-index: 20; }
+.skip-link:focus { left: var(--gutter); top: var(--s1); background: var(--surface); color: var(--ink); padding: var(--s1) var(--s2); z-index: 30; }
 
-/* Buttons: the only place the accent colour is used */
-.button {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-height: 3rem; padding: 0.6rem 1.25rem;
-  border-radius: var(--radius); border: 2px solid var(--accent);
-  background: var(--accent); color: var(--on-accent);
-  font: inherit; font-weight: 600; text-decoration: none;
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Small spaced capitals, echoing "GAS SERVICES LTD" under the logo */
+.eyebrow {
+  display: block;
+  margin: 0 0 var(--s1);
+  font-family: var(--font-brand);
+  font-weight: 600;
+  font-size: var(--label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--copper-deep);
 }
-.button:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
-.button--plain { background: var(--surface); color: var(--text); border-color: var(--text); }
-.button--plain:hover { background: var(--bg); }
+
+/* Buttons. Copper is the main action; use one per screen area. */
+.button {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s1);
+  min-height: var(--tap); padding: 0.65rem 1.4rem;
+  border-radius: var(--radius); border: 2px solid var(--copper);
+  background: var(--copper); color: var(--ink);
+  font-family: var(--font-brand); font-weight: 700; font-size: var(--small);
+  text-decoration: none; cursor: pointer;
+}
+.button:hover { background: var(--copper-hover); border-color: var(--copper-hover); }
+.button--plain { background: transparent; color: var(--ink); border-color: var(--charcoal); }
+.button--plain:hover { background: var(--surface); border-color: var(--ink); }
+.button--on-dark { background: transparent; color: var(--on-dark); border-color: var(--on-dark); }
+.button--on-dark:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--on-dark); }
+
+/* Cards: white on the warm background, thin border, no shadow */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--s2) 1.25rem;
+}
 
 /* Grey photo slots, labelled with the shot needed */
 .photo-slot {
   display: grid; place-items: center; text-align: center;
-  aspect-ratio: 4 / 3; padding: 1rem;
-  background: var(--photo); color: var(--text);
+  aspect-ratio: 4 / 3; padding: var(--s2);
+  background: var(--photo); color: var(--ink);
   font-size: var(--small); border-radius: var(--radius);
 }
 
 /* Placeholders stand out in previews. The placeholder check (build step 8) stops them going live. */
-.pending { background: var(--pending); outline: 1px dashed var(--pending-line); }
+.pending { background: var(--pending); outline: 1px dashed var(--pending-line); color: var(--ink); }
 
 /* Page building blocks */
-main { padding-top: 1.5rem; }
-.lede { font-size: var(--step-1); }
-.section { margin-top: 3rem; }
+main { padding-top: var(--s4); padding-bottom: var(--s5); }
+.lede { font-size: var(--step-1); color: var(--muted); }
+.section { margin-top: var(--s6); }
 .section > h2 { margin-top: 0; }
-.stack > * + * { margin-top: 1rem; }
-.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
-.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+.stack > * + * { margin-top: var(--s2); }
+.actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: var(--s2); }
+.grid { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
 .plain-list { list-style: none; padding: 0; }
-.plain-list li { padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+.plain-list li { padding: var(--s1) 0; border-bottom: 1px solid var(--line); }
 .emergency-note { color: var(--emergency); font-weight: 600; }
+.emergency-note a { color: inherit; }
+
+/* Five copper stars on Google reviews (all of Ryan's reviews are five-star) */
+.stars { color: var(--copper); letter-spacing: 0.15em; font-size: var(--small); line-height: 1; }
+.grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); }

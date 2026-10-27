@@ -4,15 +4,20 @@ import Text from './Text.astro';
 interface Props { story: { id: string; data: { title: string; area: string; property: string; what_ryan_did: string } } }
 const { story } = Astro.props;
 ---
-<article class="story-card">
+<article class="story-card card">
+  <span class="eyebrow">{story.data.area} · {story.data.property}</span>
   <h3><a href={`/stories/${story.id}/`}>{story.data.title}</a></h3>
-  <p class="small">{story.data.area} · {story.data.property}</p>
   <p><Text value={story.data.what_ryan_did} /></p>
-  <p><a href={`/stories/${story.id}/`}>Read the full story</a></p>
+  <p class="more" aria-hidden="true">Read the full story →</p>
 </article>
 
 <style>
-  .story-card { padding: 1rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); max-width: var(--measure); }
+  /* The whole card is one tap target, via the title link */
+  .story-card { position: relative; max-width: var(--measure); padding: var(--s3); }
+  .story-card:hover { border-color: var(--line-strong); }
   .story-card h3 { margin-top: 0; }
-  .story-card p:last-child { margin-bottom: 0; }
+  .story-card h3 a { color: var(--ink); text-decoration: none; }
+  .story-card h3 a::after { content: ''; position: absolute; inset: 0; }
+  .story-card:hover h3 a { text-decoration: underline; }
+  .more { margin: 0; color: var(--copper-deep); font-weight: 600; }
 </style>

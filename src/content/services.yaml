@@ -1,8 +1,10 @@
 # The four Services sections and their job lines. Source: docs/build-plan.md.
 # Each job's "id" is used for the "Ask about this" link (/contact/?job=id)
 # and for the enquiry form dropdown. "home: true" shows the job on the homepage.
+# "order" sets the order of the four sections.
 
 - id: not-working
+  order: 1
   title: Something's not working
   jobs:
     - id: no-heating
@@ -21,6 +23,7 @@
       home: true
 
 - id: everyday-plumbing
+  order: 2
   title: Everyday plumbing
   jobs:
     - id: plumbing
@@ -29,6 +32,7 @@
       home: true
 
 - id: replacing-upgrading
+  order: 3
   title: Replacing or upgrading
   jobs:
     - id: repair-or-replace
@@ -66,6 +70,7 @@
     story: stockbridge-gas-central-heating
 
 - id: servicing-safety
+  order: 4
   title: Servicing and safety checks
   jobs:
     - id: boiler-service

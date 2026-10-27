@@ -6,30 +6,55 @@ const { site } = Astro.props;
 const { business, contact, credentials, safety } = site;
 ---
 <footer class="site-footer">
-  <div class="wrap">
-    <p class="emergency">
+  <div class="emergency-band">
+    <p class="wrap">
       Smell gas? Call the Gas Emergency number,{' '}
       <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>.
     </p>
+  </div>
 
-    <p>
-      <strong>{business.legal_name}</strong><br />
-      {contact.address_line_1}, {contact.town} {contact.postcode}
-    </p>
-    <p>
-      <a href={`tel:${contact.phone_link}`}>{contact.phone}</a>{' · '}
-      <a href={`mailto:${contact.email}`}>{contact.email}</a>
-    </p>
-    <p class="small">
-      <a href={credentials.gas_safe_register_url}>Gas Safe</a> <Text value={credentials.gas_safe_number} /> ·
-      Company {business.company_number}
-    </p>
-    <p class="small"><a href="/privacy/">Privacy</a></p>
+  <div class="wrap footer-grid">
+    <div>
+      <img class="footer-logo" src="/brand/logo-header.png" width="532" height="308" alt="HeatTech Gas Services Ltd" loading="lazy" />
+    </div>
+    <div>
+      <p class="footer-heading">Contact</p>
+      <p>
+        <a href={`tel:${contact.phone_link}`}>{contact.phone}</a><br />
+        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+      </p>
+      <p class="muted">{contact.address_line_1}, {contact.town} {contact.postcode}</p>
+    </div>
+    <div>
+      <p class="footer-heading">Company</p>
+      <p class="muted">
+        {business.legal_name}<br />
+        Company {business.company_number}<br />
+        <a href={credentials.gas_safe_register_url}>Gas Safe</a> <Text value={credentials.gas_safe_number} />
+      </p>
+      <p><a href="/privacy/">Privacy</a></p>
+    </div>
   </div>
 </footer>
 
 <style>
-  .site-footer { margin-top: 4rem; padding-block: 2rem; background: var(--surface); border-top: 1px solid var(--border); }
-  .emergency { font-weight: 600; color: var(--emergency); }
-  .emergency a { color: inherit; }
+  .site-footer { background: var(--charcoal); color: var(--on-dark); font-size: var(--small); }
+  .site-footer a { color: var(--on-dark); }
+  .site-footer a:focus-visible { outline-color: var(--on-dark); }
+  .emergency-band { background: var(--emergency-bg); color: var(--emergency); font-weight: 700; }
+  .emergency-band p { margin: 0 auto; padding-block: var(--s2); max-width: var(--page); }
+  .emergency-band a { color: inherit; }
+  .footer-grid {
+    display: grid; gap: var(--s3);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    padding-block: var(--s4) var(--s5);
+  }
+  .footer-logo { height: 3.5rem; width: auto; }
+  .footer-heading {
+    margin-bottom: var(--s1);
+    font-family: var(--font-brand); font-weight: 600; font-size: var(--label);
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--on-dark-muted);
+  }
+  .muted { color: var(--on-dark-muted); }
+  .site-footer :global(.pending) { color: var(--ink); }
 </style>

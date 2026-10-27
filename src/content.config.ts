@@ -20,6 +20,7 @@ const job = z.object({
 const services = defineCollection({
   loader: file('src/content/services.yaml'),
   schema: z.object({
+    order: z.number(),
     title: z.string(),
     jobs: z.array(job),
     explainer: z

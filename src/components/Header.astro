@@ -15,12 +15,13 @@ const path = Astro.url.pathname;
 ---
 <header class="site-header">
   <div class="wrap site-header__inner">
-    <a href="/" class="logo" aria-label="Heattech Gas Services, home">
-      <span class="logo__slot">[PLACEHOLDER: HeatTech logo with flame]</span>
+    <a href="/" class="logo">
+      <!-- [PLACEHOLDER: logo as PNG with transparent background, or SVG, from Ryan] -->
+      <img src="/brand/logo-header.png" width="532" height="308" alt="HeatTech Gas Services Ltd, home" />
     </a>
 
-    <nav aria-label="Main">
-      <ul class="nav">
+    <nav aria-label="Main" class="nav">
+      <ul>
         {nav.map((item) => (
           <li><a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>{item.label}</a></li>
         ))}
@@ -28,7 +29,7 @@ const path = Astro.url.pathname;
     </nav>
 
     <div class="header-actions">
-      <a class="header-call" href={`tel:${contact.phone_link}`}>Urgent: call {contact.phone}</a>
+      <a class="button button--on-dark" href={`tel:${contact.phone_link}`}>Call {contact.phone}</a>
       <a class="button" href="/contact/">Send an enquiry</a>
     </div>
   </div>
@@ -39,26 +40,39 @@ const path = Astro.url.pathname;
 </header>
 
 <style>
-  .site-header { background: var(--surface); border-bottom: 1px solid var(--border); }
+  .site-header { background: var(--charcoal); color: var(--on-dark); }
   .site-header__inner {
     display: flex; flex-wrap: wrap; align-items: center;
-    gap: 0.75rem 1.5rem; padding-block: 0.75rem;
+    gap: var(--s1) var(--s4); padding-block: 0.75rem var(--s1);
   }
-  .logo { text-decoration: none; color: var(--text); }
-  .logo__slot {
-    display: inline-flex; align-items: center; min-height: 3rem; padding: 0.25rem 0.75rem;
-    background: var(--photo); border-radius: var(--radius); font-size: var(--small);
+  .logo { display: block; flex: none; }
+  .logo img { height: 3.5rem; width: auto; }
+
+  .nav { flex-basis: 100%; }
+  .nav ul { display: flex; gap: var(--s3); list-style: none; margin: 0; padding: 0; max-width: none; }
+  .nav a {
+    display: inline-flex; align-items: center; min-height: var(--tap);
+    color: var(--on-dark); text-decoration: none;
+    font-family: var(--font-brand); font-weight: 600; font-size: var(--small);
+    border-bottom: 3px solid transparent;
   }
-  .nav { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; list-style: none; margin: 0; padding: 0; }
-  .nav a { display: inline-block; padding: 0.5rem 0; text-decoration: none; }
-  .nav a:hover, .nav a[aria-current='page'] { text-decoration: underline; text-decoration-thickness: 2px; }
+  .nav a:hover { border-bottom-color: var(--on-dark-muted); }
+  .nav a[aria-current='page'] { border-bottom-color: var(--copper); }
+  .nav a:focus-visible, .header-actions a:focus-visible { outline-color: var(--on-dark); }
+
   .header-actions { display: none; }
-  .availability { margin: 0; max-width: none; background: var(--bg); border-top: 1px solid var(--border); padding-block: 0.5rem; }
+
+  .availability {
+    margin: 0; max-width: none; padding-block: var(--s1);
+    background: var(--copper); color: var(--ink); font-weight: 600; font-size: var(--small);
+  }
   .availability .wrap { display: block; }
 
-  /* Phones use the bottom bar instead of these buttons */
-  @media (min-width: 900px) {
-    .header-actions { display: flex; align-items: center; gap: 1.25rem; margin-left: auto; }
-    .header-call { font-size: var(--small); }
+  /* Wider screens: one row, with the actions on the right. Phones use the bottom bar instead. */
+  @media (min-width: 60rem) {
+    .site-header__inner { flex-wrap: nowrap; padding-block: var(--s2); }
+    .logo img { height: 4rem; }
+    .nav { flex-basis: auto; }
+    .header-actions { display: flex; align-items: center; gap: 0.75rem; margin-left: auto; }
   }
 </style>

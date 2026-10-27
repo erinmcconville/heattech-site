@@ -15,6 +15,8 @@ const site = await getSite();
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <link rel="preload" href="/fonts/montserrat-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#4f4f51" />
     {description && <meta name="description" content={description} />}
     {noindex && <meta name="robots" content="noindex" />}
   </head>
@@ -31,5 +33,5 @@ const site = await getSite();
 
 <style is:global>
   /* Room for the fixed bottom bar on phones */
-  @media (max-width: 899px) { body { padding-bottom: var(--bar-height); } }
+  @media (max-width: 59.99rem) { body { padding-bottom: var(--bar-height); } }
 </style>

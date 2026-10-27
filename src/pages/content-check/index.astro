@@ -106,13 +106,13 @@ const isPending = (v: unknown) => typeof v === 'string' && /\[(PLACEHOLDER|CONFI
 </Base>
 
 <style>
-  .note { background: var(--surface); border-left: 4px solid var(--border); padding: 0.75rem 1rem; }
+  .note { background: var(--surface); border-left: 4px solid var(--line); padding: 0.75rem 1rem; }
   .buttons { display: flex; flex-wrap: wrap; gap: 0.75rem; }
   .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem; max-width: var(--measure); }
   dl { display: grid; grid-template-columns: minmax(8rem, max-content) 1fr; gap: 0.25rem 1rem; }
   dt { font-weight: 600; }
   dd { margin: 0; overflow-wrap: anywhere; }
-  .card { background: var(--surface); border: 1px solid var(--border); padding: 0.75rem 1rem; margin: 1rem 0; max-width: var(--measure); }
+  .card { background: var(--surface); border: 1px solid var(--line); padding: 0.75rem 1rem; margin: 1rem 0; max-width: var(--measure); }
   .hidden { color: var(--muted); border-style: dashed; }
   .card .photo-slot { aspect-ratio: auto; margin: 0.5rem 0; }
 </style>

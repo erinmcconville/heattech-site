@@ -9,3 +9,9 @@ export async function getSite() {
 export async function getPublishedStories() {
   return getCollection('stories', ({ data }) => data.published && data.permission_recorded);
 }
+
+// The four Services sections, in the order set in services.yaml
+export async function getServices() {
+  const services = await getCollection('services');
+  return services.sort((a, b) => a.data.order - b.data.order);
+}

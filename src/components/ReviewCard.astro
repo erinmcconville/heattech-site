@@ -6,12 +6,13 @@ interface Props { review?: { name: string; text: string; link: string }; need?: 
 const { review, need } = Astro.props;
 const hasLink = review && /^https?:\/\//.test(review.link);
 ---
-<figure class="review">
+<figure class="review card">
   {review ? (
     <>
+      <p class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</p>
       <blockquote><Text value={review.text} /></blockquote>
       <figcaption>
-        {review.name}, Google review
+        <strong>{review.name}</strong> · Google review
         {hasLink ? <>{' · '}<a href={review.link}>Read on Google</a></> : <>{' · '}<Text value={review.link} /></>}
       </figcaption>
     </>
@@ -21,7 +22,9 @@ const hasLink = review && /^https?:\/\//.test(review.link);
 </figure>
 
 <style>
-  .review { margin: 0; padding: 1rem 1.25rem; background: var(--surface); border-left: 4px solid var(--border); }
-  .review blockquote { margin: 0 0 0.5rem; }
-  .review figcaption { font-size: var(--small); color: var(--muted); }
+  .review { margin: 0; display: flex; flex-direction: column; gap: var(--s1); }
+  .review .stars { margin: 0; }
+  .review blockquote { margin: 0; }
+  .review figcaption { margin-top: auto; font-size: var(--small); color: var(--muted); }
+  .review figcaption strong { color: var(--ink); }
 </style>

@@ -1,22 +1,23 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Text from '../../components/Text.astro';
-import { getSite } from '../../lib/site';
+import { getSite, getServices } from '../../lib/site';
 
 const site = await getSite();
 const { promises, call_out_fee, safety } = site;
-const services = await getCollection('services');
+const services = await getServices();
 ---
 <Base
   title="Boiler repairs, servicing and gas safety in Edinburgh | Services | Heattech Gas Services"
   description="Heating, boiler and plumbing jobs in Edinburgh and the Lothians, from repairs and new boilers to landlord gas safety certificates."
 >
-  <h1>Services</h1>
+  <span class="eyebrow">Services</span>
+  <h1>Heating, gas and plumbing jobs</h1>
   <p class="lede">{promises.written_quote}</p>
   {call_out_fee.show && call_out_fee.text && <p><Text value={call_out_fee.text} /></p>}
 
-  <nav aria-label="On this page">
+  <nav aria-label="On this page" class="jump-bar">
     <ul class="jump">
       {services.map((s) => <li><a href={`#${s.id}`}>{s.data.title}</a></li>)}
     </ul>
@@ -41,13 +42,13 @@ const services = await getCollection('services');
               ) : (
                 j.note && <p class="small"><Text value={j.note} /></p>
               )}
-              {!j.emergency && <a class="ask" href={`/contact/?job=${j.id}`}>Ask about this<span class="visually-hidden">: {j.label}</span></a>}
+              {!j.emergency && <a class="ask" href={`/contact/?job=${j.id}`}>Ask about this<span class="visually-hidden">: {j.label}</span> <span aria-hidden="true">→</span></a>}
             </li>
           ))}
         </ul>
 
         {ex && (
-          <details class="explainer">
+          <details class="explainer card">
             <summary>{ex.title}</summary>
             <p>{ex.intro}</p>
             <ul>
@@ -66,13 +67,44 @@ const services = await getCollection('services');
 </Base>
 
 <style>
-  .jump { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; padding: 0; list-style: none; }
-  .jobs li { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 1rem; }
+  /* Section links stay pinned at the top while scrolling */
+  .jump-bar {
+    position: sticky; top: 0; z-index: 10;
+    margin: var(--s3) calc(-1 * var(--gutter)) 0; padding: var(--s1) var(--gutter);
+    background: var(--bg); border-bottom: 1px solid var(--line);
+  }
+  .jump { display: flex; gap: var(--s1); padding: 0; margin: 0; list-style: none; max-width: none; overflow-x: auto; scrollbar-width: none; }
+  .jump a {
+    display: inline-flex; align-items: center; min-height: 2.5rem; padding: 0 0.9rem; white-space: nowrap;
+    border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface);
+    color: var(--ink); text-decoration: none; font-family: var(--font-brand); font-weight: 600; font-size: var(--label);
+  }
+  .jump a:hover { border-color: var(--charcoal); }
+
+  .section { margin-top: var(--s5); }
+  .jobs { max-width: 46rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .jobs li {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: var(--s1) var(--s2); min-height: 3.5rem; padding: 0.75rem var(--s2);
+  }
+  .jobs li:last-child { border-bottom: 0; }
   .jobs li p { flex-basis: 100%; margin: 0; order: 3; }
-  .job { flex: 1 1 16rem; }
-  .ask { font-size: var(--small); white-space: nowrap; }
-  .explainer { margin-top: 1.5rem; padding: 1rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); max-width: var(--measure); }
-  .explainer summary { font-weight: 600; cursor: pointer; }
-  .explainer[open] summary { margin-bottom: 0.75rem; }
-  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .job { flex: 1 1 16rem; font-weight: 500; }
+  .ask {
+    display: inline-flex; align-items: center; min-height: var(--tap); white-space: nowrap;
+    font-family: var(--font-brand); font-weight: 600; font-size: var(--label); text-decoration: none;
+  }
+  .ask:hover { text-decoration: underline; }
+
+  .explainer { margin-top: var(--s3); max-width: 46rem; padding: 0; }
+  .explainer summary {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--s2);
+    min-height: var(--tap); padding: var(--s2) 1.25rem; cursor: pointer; list-style: none;
+    font-family: var(--font-brand); font-weight: 700;
+  }
+  .explainer summary::-webkit-details-marker { display: none; }
+  .explainer summary::after { content: '+'; font-size: 1.5rem; line-height: 1; color: var(--copper-deep); }
+  .explainer[open] summary::after { content: '−'; }
+  .explainer > :not(summary) { margin-inline: 1.25rem; }
+  .explainer > :last-child { margin-bottom: var(--s2); }
 </style>

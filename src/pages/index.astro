@@ -4,11 +4,11 @@ import Base from '../layouts/Base.astro';
 import Text from '../components/Text.astro';
 import ReviewCard from '../components/ReviewCard.astro';
 import StoryCard from '../components/StoryCard.astro';
-import { getSite } from '../lib/site';
+import { getSite, getServices } from '../lib/site';
 
 const site = await getSite();
 const { business, contact, credentials, links, promises } = site;
-const services = await getCollection('services');
+const services = await getServices();
 const reviews = await getCollection('reviews');
 const featured = reviews.filter((r) => r.data.featured).slice(0, 8);
 const stockbridge = await getEntry('stories', 'stockbridge-gas-central-heating');
@@ -51,43 +51,47 @@ const howWeWork = [
   description={`${business.description} Based in ${business.based_in}.`}
 >
   <section class="hero">
-    <h1>{business.description}</h1>
-    <p class="lede">Heattech Gas Services, based in {business.based_in}. Run by {business.engineer}.</p>
+    <span class="eyebrow">{business.based_in} · Edinburgh</span>
+    <h1>{business.description.replace(/\.$/, '')}</h1>
+    <p class="lede">Heattech Gas Services, run by {business.engineer}.</p>
     <div class="actions">
       <a class="button" href="/contact/">Send an enquiry</a>
       <a class="button button--plain" href={`tel:${contact.phone_link}`}>Urgent: call {contact.phone}</a>
     </div>
-    <p class="small">
-      <a href={links.google_reviews}>Read our reviews on Google</a>{' · '}
-      <a href={credentials.gas_safe_register_url}>Gas Safe</a> <Text value={credentials.gas_safe_number} /> (check it on the register)
-    </p>
-    <p class="small">{promises.written_quote}</p>
+    <ul class="trust">
+      <li><a href={credentials.gas_safe_register_url}>Gas Safe</a> <Text value={credentials.gas_safe_number} /></li>
+      <li><a href={links.google_reviews}>Reviews on Google</a></li>
+      <li>{promises.written_quote}</li>
+    </ul>
   </section>
 
   <section class="section" aria-labelledby="what-we-do">
+    <span class="eyebrow">Services</span>
     <h2 id="what-we-do">What we do</h2>
-    <div class="grid">
+    <div class="grid grid--2 services">
       {services.map((s) => (
-        <div>
+        <div class="card service">
           <h3><a href={`/services/#${s.id}`}>{s.data.title}</a></h3>
           <ul>
             {s.data.jobs.filter((j) => j.home).slice(0, 4).map((j) => <li>{j.label}</li>)}
           </ul>
+          <p class="more" aria-hidden="true">See all →</p>
         </div>
       ))}
     </div>
   </section>
 
   <section class="section" aria-labelledby="how-we-work">
-    <h2 id="how-we-work">How we work</h2>
-    <div class="grid">
+    <span class="eyebrow">How we work</span>
+    <h2 id="how-we-work">What to expect</h2>
+    <div class="grid grid--2">
       {howWeWork.map((item) => (
         <div class="stack">
           <h3>{item.title}</h3>
           <p><Text value={item.text} /></p>
           {item.proofNote && <p class="small"><Text value={item.proofNote} /></p>}
           {item.quote && (
-            <figure class="quote">
+            <figure class="quote card">
               <blockquote>"{item.quote.text}"</blockquote>
               <figcaption>{item.quote.who}</figcaption>
             </figure>
@@ -100,20 +104,23 @@ const howWeWork = [
 
   {stockbridgeLive && (
     <section class="section" aria-labelledby="a-recent-job">
+      <span class="eyebrow">Real stories</span>
       <h2 id="a-recent-job">A recent job</h2>
       <StoryCard story={stockbridge} />
     </section>
   )}
 
   <section class="section" aria-labelledby="reviews">
-    <h2 id="reviews">Reviews</h2>
+    <span class="eyebrow">Google reviews</span>
+    <h2 id="reviews">What customers say</h2>
     <div class="grid">
       {featured.map((r) => <ReviewCard review={r.data} />)}
     </div>
-    <p><a href={links.google_reviews}>All reviews on Google</a></p>
+    <p class="all-reviews"><a href={links.google_reviews}>All reviews on Google</a></p>
   </section>
 
   <section class="section" aria-labelledby="where-we-work">
+    <span class="eyebrow">Area</span>
     <h2 id="where-we-work">Where we work</h2>
     <p>{business.area_served}. Based in {business.based_in}.</p>
     <p>Recent jobs include a gas central heating conversion in <a href="/stories/stockbridge-gas-central-heating/">Stockbridge</a>. <Text value="[PLACEHOLDER: other neighbourhoods with real jobs to point to]" /></p>
@@ -125,15 +132,37 @@ const howWeWork = [
     <p><Text value={promises.after_enquiry} /></p>
     <div class="actions">
       <a class="button" href="/contact/">Send an enquiry</a>
-      <a class="button button--plain" href={`tel:${contact.phone_link}`}>Call {contact.phone}</a>
+      <a class="button button--on-dark" href={`tel:${contact.phone_link}`}>Call {contact.phone}</a>
     </div>
   </section>
 </Base>
 
 <style>
-  .hero { padding-block: 1rem 0.5rem; }
-  .quote { margin: 0; padding: 1rem 1.25rem; background: var(--surface); border-left: 4px solid var(--border); }
-  .quote blockquote { margin: 0 0 0.5rem; }
+  .hero { padding-block: var(--s2) 0; }
+  .hero h1 { max-width: 22ch; }
+  .trust {
+    display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3);
+    list-style: none; padding: var(--s2) 0 0; margin: var(--s3) 0 0; max-width: none;
+    border-top: 1px solid var(--line); font-size: var(--small); color: var(--muted);
+  }
+
+  /* Each service card is one tap target, via its title link */
+  .service { position: relative; display: flex; flex-direction: column; padding: var(--s3); }
+  .service:hover { border-color: var(--line-strong); }
+  .service h3 { margin-top: 0; }
+  .service h3 a { color: var(--ink); text-decoration: none; }
+  .service h3 a::after { content: ''; position: absolute; inset: 0; }
+  .service:hover h3 a { text-decoration: underline; }
+  .service ul { padding-left: 1.1em; color: var(--muted); }
+  .more { margin: auto 0 0; color: var(--copper-deep); font-weight: 600; }
+
+  .quote { margin: 0; }
+  .quote blockquote { margin: 0 0 var(--s1); }
   .quote figcaption { font-size: var(--small); color: var(--muted); }
-  .enquire { padding: 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+  .all-reviews { margin-top: var(--s2); }
+
+  .enquire { padding: var(--s4) var(--s3); background: var(--charcoal); color: var(--on-dark); border-radius: var(--radius); }
+  .enquire a:not(.button) { color: var(--on-dark); }
+  .enquire .actions { margin: var(--s3) 0 0; }
+  .enquire .button:focus-visible { outline-color: var(--on-dark); }
 </style>
