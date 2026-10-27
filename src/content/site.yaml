@@ -26,9 +26,7 @@ contact:
   show_phone_for_urgent_jobs: "[CONFIRM: happy to show the phone number for urgent jobs in the header and mobile bar]"
 
 credentials:
-  # The certificate prints 661231 in both the business and engineer fields (01-plumber).
-  # Check it on the Gas Safe Register before it goes live.
-  gas_safe_number: "[PLACEHOLDER: verified Gas Safe number, certificate shows 661231]"
+  gas_safe_number: "661231"   # confirmed by Erin on the Gas Safe Register, 27 Oct 2026
   gas_safe_register_url: https://www.gassaferegister.co.uk/
   insurance: "[PLACEHOLDER: insurance details]"
   brand_approvals: "[PLACEHOLDER: boiler brand approvals, if any]"
@@ -37,7 +35,6 @@ links:
   google_reviews: https://share.google/kv6Y0WmNHcWzDtdGO
   google_review_count: 74   # update by hand when the Google count changes
   google_rating: '5.0'
-  google_reviews_as_of: October 2026   # Google asks for an "as of" date next to the rating and count
   google_review_request: "[PLACEHOLDER: one-tap Google review link, needs manager access]"
   facebook: https://www.facebook.com/heattechgasservices/
   mybuilder: https://www.mybuilder.com/profile/heattech_gas_services
