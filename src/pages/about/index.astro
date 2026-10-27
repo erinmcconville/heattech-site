@@ -32,7 +32,10 @@ const entity = `${business.legal_name} is a Gas Safe registered gas, heating and
     <dt>Registered name</dt><dd>{business.legal_name}</dd>
     <dt>Company number</dt><dd>{business.company_number}</dd>
     <dt>Gas Safe</dt>
-    <dd><Text value={credentials.gas_safe_number} /> · <a href={credentials.gas_safe_register_url}>Check it on the Gas Safe Register</a></dd>
+    <dd class="gas-safe">
+      <img src="/brand/gas-safe.png" width="106" height="120" alt="Gas Safe Register" />
+      <span><Text value={credentials.gas_safe_number} /> · <a href={credentials.gas_safe_register_url}>Check it on the Gas Safe Register</a></span>
+    </dd>
     <dt>Insurance</dt><dd><Text value={credentials.insurance} /></dd>
     <dt>Brand approvals</dt><dd><Text value={credentials.brand_approvals} /></dd>
     <dt>Address</dt><dd>{contact.address_line_1}, {contact.town} {contact.postcode}</dd>
@@ -55,6 +58,8 @@ const entity = `${business.legal_name} is a Gas Safe registered gas, heating and
   .facts { display: grid; grid-template-columns: minmax(9rem, max-content) 1fr; gap: 0.5rem 1rem; }
   .facts dt { font-weight: 600; }
   .facts dd { margin: 0; }
+  .gas-safe { display: flex; align-items: center; gap: var(--s2); }
+  .gas-safe img { height: 3rem; width: auto; flex: none; }
   .van { max-width: 24rem; }
   @media (max-width: 30rem) { .facts { grid-template-columns: 1fr; } .facts dd { margin-bottom: 0.5rem; } }
 </style>

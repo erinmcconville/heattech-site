@@ -12,6 +12,7 @@ const reviews = await getReviews();
 >
   <h1>Reviews</h1>
   <p class="lede">
+    <img class="google" src="/brand/google-g.png" width="192" height="192" alt="" />
     {links.google_rating} from {links.google_review_count} reviews on Google, as of {links.google_reviews_as_of}.
     {' '}<a href={links.google_reviews}>See them on Google</a>
   </p>
@@ -22,6 +23,7 @@ const reviews = await getReviews();
 
 <style>
   /* Columns so short and long reviews sit together without gaps */
+  .google { display: inline-block; height: 1.5rem; width: auto; vertical-align: -0.3rem; margin-right: 0.35rem; }
   .reviews { columns: 20rem; column-gap: var(--s2); margin-top: var(--s4); }
   .reviews > :global(*) { break-inside: avoid; margin-bottom: var(--s2); }
 </style>

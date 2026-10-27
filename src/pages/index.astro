@@ -31,12 +31,13 @@ const reviews = (await getReviews()).slice(0, 6);
   <ul slot="hero" class="strip" aria-label="Credentials">
     <li>
       <a href={links.google_reviews}>
+        <img class="badge" src="/brand/google-g.png" width="192" height="192" alt="" />
         <span><strong>{links.google_rating}</strong> from {links.google_review_count} reviews on Google <span class="as-of">as of {links.google_reviews_as_of}</span></span>
       </a>
     </li>
     <li>
       <a href={credentials.gas_safe_register_url}>
-        <Icon name="shield-check" size={20} />
+        <img class="badge" src="/brand/gas-safe.png" width="106" height="120" alt="Gas Safe Register" />
         <span>Gas Safe registered</span>
       </a>
     </li>
@@ -112,6 +113,8 @@ const reviews = (await getReviews()).slice(0, 6);
   .strip a:hover span { text-decoration: underline; }
   .strip :global(.icon) { color: var(--copper-deep); flex: none; }
   .as-of { font-weight: 500; color: var(--muted); }
+  /* Google asks for its logo at the same size as any logo beside it */
+  .badge { height: 1.75rem; width: auto; flex: none; }
 
   .section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--s1) var(--s2); margin-bottom: var(--s2); }
   .section-head h2 { margin: 0; }
