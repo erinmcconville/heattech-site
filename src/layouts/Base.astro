@@ -5,9 +5,39 @@ import Footer from '../components/Footer.astro';
 import MobileBar from '../components/MobileBar.astro';
 import { getSite } from '../lib/site';
 
-interface Props { title: string; description?: string; noindex?: boolean }
-const { title, description, noindex } = Astro.props;
+interface Props { title: string; description?: string; noindex?: boolean; jsonLd?: object }
+const { title, description, noindex, jsonLd } = Astro.props;
 const site = await getSite();
+const { business, contact, links } = site;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+// The business record for search and answer engines, on every page.
+// No review stars, opening hours or Gas Safe credential until confirmed (decisions.md, CLAUDE.md guardrails).
+const businessLd = {
+  '@context': 'https://schema.org',
+  '@type': ['Plumber', 'HVACBusiness'],
+  '@id': new URL('/#business', Astro.site).href,
+  name: 'Heattech Gas Services',
+  legalName: business.legal_name,
+  description: business.description,
+  url: new URL('/', Astro.site).href,
+  logo: new URL('/brand/logo-header.png', Astro.site).href,
+  image: new URL('/brand/logo-header.png', Astro.site).href,
+  telephone: contact.phone_link,
+  email: contact.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: contact.address_line_1,
+    addressLocality: contact.town,
+    postalCode: contact.postcode,
+    addressCountry: 'GB',
+  },
+  areaServed: [
+    { '@type': 'City', name: 'Edinburgh' },
+    { '@type': 'AdministrativeArea', name: 'Lothian' },
+  ],
+  sameAs: [links.google_reviews, links.facebook, links.mybuilder],
+};
 ---
 <!doctype html>
 <html lang="en-GB">
@@ -19,6 +49,10 @@ const site = await getSite();
     <meta name="theme-color" content="#4f4f51" />
     {description && <meta name="description" content={description} />}
     {noindex && <meta name="robots" content="noindex" />}
+    {!noindex && <link rel="canonical" href={canonical.href} />}
+    <link rel="sitemap" href="/sitemap.xml" />
+    <script type="application/ld+json" set:html={JSON.stringify(businessLd)} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

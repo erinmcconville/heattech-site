@@ -2,30 +2,20 @@
 import Text from './Text.astro';
 import { getSite } from '../lib/site';
 
-// One Google review, in the customer's own words. Pass no review to show an empty slot.
-interface Props { review?: { name: string; text: string; link?: string }; need?: string }
-const { review, need } = Astro.props;
+// One Google review, in the customer's own words, linking to Google.
+interface Props { review: { name: string; text: string; link?: string } }
+const { review } = Astro.props;
 const { links } = await getSite();
-const href = review?.link ?? links.google_reviews;
+const href = review.link ?? links.google_reviews;
 ---
 <figure class="review card">
-  {review ? (
-    <>
-      <p class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</p>
-      <blockquote><Text value={review.text} /></blockquote>
-      <figcaption>
-        <strong>{review.name}</strong> · <a href={href}>Google review</a>
-      </figcaption>
-    </>
-  ) : (
-    <blockquote><Text value={`[PLACEHOLDER: a Google review that shows ${need ?? 'this'}]`} /></blockquote>
-  )}
+  <blockquote><Text value={review.text} /></blockquote>
+  <figcaption><a href={href}>{review.name}, Google review</a></figcaption>
 </figure>
 
 <style>
   .review { margin: 0; display: flex; flex-direction: column; gap: var(--s1); }
-  .review .stars { margin: 0; }
   .review blockquote { margin: 0; }
-  .review figcaption { margin-top: auto; font-size: var(--small); color: var(--muted); }
-  .review figcaption strong { color: var(--ink); }
+  .review figcaption { font-size: var(--small); }
+  .review figcaption a { color: var(--muted); }
 </style>

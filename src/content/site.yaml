@@ -1,6 +1,6 @@
 # Business details used across the whole site.
 # Sources: research/01-plumber.md and docs/build-plan.md.
-# Anything in [PLACEHOLDER: ...] or [CONFIRM WITH RYAN: ...] must be filled before launch.
+# Anything in [PLACEHOLDER: ...] or [CONFIRM: ...] must be filled before launch.
 
 business:
   legal_name: Heattech Gas Services Ltd
@@ -8,7 +8,7 @@ business:
   trading_name: "[PLACEHOLDER: Heattech or HeatTech, one spelling everywhere]"
   engineer: Ryan Duncan
   colleague_name: Brett
-  colleague_role: "[CONFIRM WITH RYAN: Brett's role and how to name him]"
+  colleague_role: "[CONFIRM: Brett's role and how to name him]"
   description: Gas Safe heating and plumbing in Edinburgh and the Lothians.
   based_in: Portobello
   area_served: Edinburgh and the Lothians
@@ -23,7 +23,7 @@ contact:
   phone: 07506 042175
   phone_link: "+447506042175"
   email: info@heattechgas.co.uk
-  show_phone_for_urgent_jobs: "[CONFIRM WITH RYAN: happy to show the phone number for urgent jobs in the header and mobile bar]"
+  show_phone_for_urgent_jobs: "[CONFIRM: happy to show the phone number for urgent jobs in the header and mobile bar]"
 
 credentials:
   # The certificate prints 661231 in both the business and engineer fields (01-plumber).
@@ -35,6 +35,7 @@ credentials:
 
 links:
   google_reviews: https://share.google/kv6Y0WmNHcWzDtdGO
+  google_review_count: 74   # update by hand when the Google count changes
   google_review_request: "[PLACEHOLDER: one-tap Google review link, needs manager access]"
   facebook: https://www.facebook.com/heattechgasservices/
   mybuilder: https://www.mybuilder.com/profile/heattech_gas_services
@@ -44,9 +45,8 @@ safety:
   gas_emergency_link: "+448001119999"
 
 promises:
-  after_enquiry: "[CONFIRM WITH RYAN: how enquiries are handled]"
-  aftercare: "[CONFIRM WITH RYAN: aftercare or guarantee]"
-  written_quote: Every job gets a written quote before work starts.
+  after_enquiry: "[CONFIRM: how enquiries are handled]"
+  aftercare: "[CONFIRM: aftercare or guarantee]"
 
 # The two things Ryan can change himself. Leave "show" as false to hide them.
 availability:

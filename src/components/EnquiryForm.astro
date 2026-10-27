@@ -45,6 +45,7 @@ const services = await getServices();
     <label for="f-job">The job <span class="optional">(optional)</span></label>
     <select id="f-job" name="job">
       <option value="">Choose a job</option>
+      <option value="Not sure" data-id="not-sure">Not sure</option>
       {services.map((s) => (
         <optgroup label={s.data.title}>
           {s.data.jobs.map((j) => <option value={j.label} data-id={j.id}>{j.label}</option>)}
@@ -59,7 +60,7 @@ const services = await getServices();
 
   <div class="field">
     <label for="f-message">Describe the problem <span class="optional">(optional)</span></label>
-    <textarea id="f-message" name="message" rows="5"></textarea>
+    <textarea id="f-message" name="message" rows="5" placeholder="e.g. the boiler's making a banging noise and the radiators are cold"></textarea>
   </div>
 
   <fieldset class="field">

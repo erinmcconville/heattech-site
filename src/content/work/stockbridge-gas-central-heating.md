@@ -1,5 +1,6 @@
 ---
-title: Gas central heating in a Stockbridge period flat, without lifting the floors
+title: Gas central heating in a Stockbridge period flat, no floors lifted
+summary: Electric heating to gas. Roof flue, boiler in the hall. About three days.
 area: Stockbridge
 property: One-bedroom period flat, let as a short-let
 job_type: electric-to-gas
@@ -9,13 +10,13 @@ what_ryan_did: "A roof flue, pipes brought down from the roof space, the boiler 
 result: "Bills: [PLACEHOLDER: £X a month after first winter]. Guest complaints: [PLACEHOLDER: after first winter]. Until then, any bill figure must be labelled as the energy supplier's forecast."
 quotes:
   - text: "I really didn't want to do that."
-    who: Erin, the owner
+    who: The owner
   - text: "He really took his time to walk me through everything."
-    who: Erin, the owner
+    who: The owner
   - text: "I feel so much more in control with renting out my property."
-    who: Erin, the owner
+    who: The owner
   - text: "Ryan is just really easy to communicate with. He's very honest and sound. He's also really good at his job. He doesn't leave a mess. And he knows how Edinburgh flats work."
-    who: Erin, the owner
+    who: The owner
 photos:
   - "[PHOTO: before]"
   - "[PHOTO: the boiler in the hall]"
@@ -24,8 +25,8 @@ photos:
   - "[PHOTO: the thermostat]"
 published: true
 permission_recorded: true
-ryan_check: "[CONFIRM WITH RYAN: happy to be featured, and the technical description is accurate]"
+ryan_check: "[CONFIRM: happy to be featured, and the technical description is accurate]"
 gas_supply_already_there: "[PLACEHOLDER: was there already a gas supply to the flat?]"
 ---
 
-Ryan also looks after the gas safety certificates for both of Erin's flats, and deals with guest issues while Erin is in Boston.
+Ryan also looks after the gas safety certificates for both of the owner's flats, and deals with guest issues while the owner is away.

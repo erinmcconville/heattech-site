@@ -6,16 +6,28 @@ import ReviewCard from '../../components/ReviewCard.astro';
 import { getSite, getServices } from '../../lib/site';
 
 const site = await getSite();
-const { promises, call_out_fee, safety } = site;
+const { call_out_fee, safety } = site;
 const services = await getServices();
+
+// One Service record per section, provided by the business record in Base.astro
+const servicesLd = {
+  '@context': 'https://schema.org',
+  '@graph': services.map((s) => ({
+    '@type': 'Service',
+    name: s.data.title,
+    serviceType: s.data.keywords,
+    url: new URL(`/services/#${s.id}`, Astro.site).href,
+    provider: { '@id': new URL('/#business', Astro.site).href },
+    areaServed: 'Edinburgh and the Lothians',
+  })),
+};
 ---
 <Base
-  title="Boiler repairs, servicing and gas safety in Edinburgh | Services | Heattech Gas Services"
-  description="Heating, boiler and plumbing jobs in Edinburgh and the Lothians, from repairs and new boilers to landlord gas safety certificates."
+  title="Boiler repair, replacement and servicing in Edinburgh | Heattech Gas Services"
+  description="Boiler repairs, new boilers, plumbing, servicing and landlord gas safety certificates in Edinburgh and the Lothians."
+  jsonLd={servicesLd}
 >
-  <span class="eyebrow">Services</span>
-  <h1>Heating, gas and plumbing jobs</h1>
-  <p class="lede">{promises.written_quote}</p>
+  <h1>Boilers, heating and plumbing in Edinburgh</h1>
   {call_out_fee.show && call_out_fee.text && <p><Text value={call_out_fee.text} /></p>}
 
   <nav aria-label="On this page" class="jump-bar">
@@ -26,12 +38,13 @@ const services = await getServices();
 
   {services.map(async (s) => {
     const ex = s.data.explainer;
-    const exStory = ex ? await getEntry('stories', ex.story) : undefined;
+    const exStory = ex ? await getEntry('work', ex.story) : undefined;
     const exStoryLive = exStory && exStory.data.published && exStory.data.permission_recorded;
     const proof = s.data.review ? await getEntry('reviews', s.data.review) : undefined;
     return (
       <section class="section" id={s.id} aria-labelledby={`${s.id}-title`}>
         <h2 id={`${s.id}-title`}>{s.data.title}</h2>
+        <p class="keywords">{s.data.keywords}</p>
         <ul class="plain-list jobs">
           {s.data.jobs.map((j) => (
             <li id={j.id}>
@@ -60,14 +73,15 @@ const services = await getServices();
                 <li><strong>{p.label}.</strong> {p.text} <a href={p.link}>{p.link_text}</a></li>
               ))}
             </ul>
-            {exStoryLive && <p>A real example: <a href={`/stories/${exStory.id}/`}>{exStory.data.title}</a>.</p>}
+            {exStoryLive && <p>A real example: <a href={`/work/${exStory.id}/`}>{exStory.data.title}</a>.</p>}
+            <p class="small checked">Last checked {ex.last_checked}</p>
           </details>
         )}
       </section>
     );
   })}
 
-  <p class="section small"><Text value="[CONFIRM WITH RYAN: small commercial premises]" /></p>
+  <p class="section small"><Text value="[CONFIRM: small commercial premises]" /></p>
 </Base>
 
 <style>
@@ -100,6 +114,8 @@ const services = await getServices();
   }
   .ask:hover { text-decoration: underline; }
 
+  .keywords { margin: -0.25rem 0 var(--s2); color: var(--muted); font-size: var(--small); }
+  .checked { color: var(--muted); }
   .proof { margin-top: var(--s2); max-width: 46rem; }
   .explainer { margin-top: var(--s3); max-width: 46rem; padding: 0; }
   .explainer summary {

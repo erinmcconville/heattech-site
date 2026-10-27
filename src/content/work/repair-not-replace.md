@@ -9,7 +9,7 @@ what_ryan_did: He said the boiler would eventually need replacing but had a good
 result: The boiler is still fine.
 quotes:
   - text: "[PLACEHOLDER: Erin's own words about this job]"
-    who: Erin, the owner
+    who: The owner
 photos:
   - "[PHOTO: the repaired boiler]"
 published: false

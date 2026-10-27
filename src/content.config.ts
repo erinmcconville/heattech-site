@@ -22,6 +22,8 @@ const services = defineCollection({
   schema: z.object({
     order: z.number(),
     title: z.string(),
+    tile: z.string(),
+    keywords: z.string(),
     review: z.string().optional(),
     jobs: z.array(job),
     explainer: z
@@ -31,6 +33,7 @@ const services = defineCollection({
         points: z.array(
           z.object({ label: z.string(), text: z.string(), link: z.url(), link_text: z.string() }),
         ),
+        last_checked: z.string(),
         story: z.string(),
       })
       .optional(),
@@ -42,28 +45,27 @@ const reviews = defineCollection({
   schema: z.object({
     name: z.string(),
     text: z.string(),
-    proves: z.enum(['reply-and-turn-up', 'repair-first', 'tidy', 'comes-back']).optional(),
     link: z.url().optional(),
-    featured: z.boolean().default(false),
     complete: z.boolean().default(true),
     order: z.number().optional(),
   }),
 });
 
-// Every story uses the same fields (build plan, "Real stories").
-// A story only shows when published AND permission_recorded are both true.
-const stories = defineCollection({
-  loader: glob({ pattern: '*.md', base: 'src/content/stories' }),
+// Recent work: every entry uses the same fields.
+// An entry only shows when published AND permission_recorded are both true.
+const work = defineCollection({
+  loader: glob({ pattern: '*.md', base: 'src/content/work' }),
   schema: z.object({
     title: z.string(),
+    summary: z.string().optional(),
     area: z.string(),
     property: z.string(),
     job_type: z.string(),
     problem: z.string(),
-    usual_approach: z.string(),
+    usual_approach: z.string().optional(),
     what_ryan_did: z.string(),
-    result: z.string(),
-    quotes: z.array(z.object({ text: z.string(), who: z.string() })),
+    result: z.string().optional(),
+    quotes: z.array(z.object({ text: z.string(), who: z.string() })).default([]),
     photos: z.array(z.string()),
     published: z.boolean().default(false),
     permission_recorded: z.boolean().default(false),
@@ -72,4 +74,4 @@ const stories = defineCollection({
   }),
 });
 
-export const collections = { site, services, reviews, stories };
+export const collections = { site, services, reviews, work };

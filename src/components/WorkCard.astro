@@ -1,0 +1,21 @@
+---
+import Text from './Text.astro';
+
+// One short, factual "Recent work" card. The whole card links to the full write-up.
+interface Props { entry: { id: string; data: { title: string; summary?: string; what_ryan_did: string } } }
+const { entry } = Astro.props;
+---
+<article class="work-card card">
+  <h3><a href={`/work/${entry.id}/`}>{entry.data.title}</a></h3>
+  <p><Text value={entry.data.summary ?? entry.data.what_ryan_did} /></p>
+</article>
+
+<style>
+  .work-card { position: relative; padding: var(--s3); }
+  .work-card:hover { border-color: var(--line-strong); }
+  .work-card h3 { margin-top: 0; font-size: var(--step-0); }
+  .work-card h3 a { color: var(--ink); text-decoration: none; }
+  .work-card h3 a::after { content: ''; position: absolute; inset: 0; }
+  .work-card:hover h3 a { text-decoration: underline; }
+  .work-card p { margin: 0; color: var(--muted); }
+</style>

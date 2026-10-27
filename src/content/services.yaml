@@ -2,11 +2,14 @@
 # Each job's "id" is used for the "Ask about this" link (/contact/?job=id)
 # and for the enquiry form dropdown. "home: true" shows the job on the homepage.
 # "order" sets the order of the four sections.
+# "title" is the Services heading, "tile" and "keywords" the homepage tile.
 # "review" is the id of a Google review in reviews.yaml shown as proof under the section.
 
 - id: not-working
   order: 1
-  title: Something's not working
+  title: Heating or hot water not working
+  tile: No heating or hot water
+  keywords: Boiler repairs and faults
   review: lena-bruning
   jobs:
     - id: no-heating
@@ -20,23 +23,27 @@
       home: true
     - id: gas-smell
       label: Smell of gas or carbon monoxide alarm
-      note: "Call the Gas Emergency number, 0800 111 999, first. [CONFIRM WITH RYAN: follow-up once the emergency service has made it safe]"
+      note: "Call the Gas Emergency number, 0800 111 999, first. [CONFIRM: follow-up once the emergency service has made it safe]"
       emergency: true
       home: true
 
 - id: everyday-plumbing
   order: 2
-  title: Everyday plumbing
+  title: Leaks, taps and drains
+  tile: A leak or a blocked drain
+  keywords: Plumbing
   review: jenna-mccosh
   jobs:
     - id: plumbing
       label: Leaks, taps, toilets and pipework
-      note: "[CONFIRM WITH RYAN: scope of everyday plumbing]"
+      note: "[CONFIRM: scope of everyday plumbing]"
       home: true
 
 - id: replacing-upgrading
   order: 3
-  title: Replacing or upgrading
+  title: New boilers and upgrades
+  tile: A new boiler
+  keywords: Replacements, controls and electric to gas
   review: stewart-hunter
   jobs:
     - id: repair-or-replace
@@ -71,11 +78,14 @@
         text: Check what funding you might get before you decide.
         link: https://www.homeenergyscotland.org/find-funding
         link_text: Home Energy Scotland funding
+    last_checked: 27 October 2026
     story: stockbridge-gas-central-heating
 
 - id: servicing-safety
   order: 4
-  title: Servicing and safety checks
+  title: Servicing and gas safety
+  tile: Servicing and gas safety
+  keywords: Annual service, landlord certificates
   review: r
   jobs:
     - id: boiler-service

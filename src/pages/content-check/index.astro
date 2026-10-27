@@ -8,9 +8,9 @@ import Base from '../../layouts/Base.astro';
 const site = await getSite();
 const services = await getCollection('services');
 const reviews = await getCollection('reviews');
-const stories = await getCollection('stories');
+const stories = await getCollection('work');
 
-const isPending = (v: unknown) => typeof v === 'string' && /\[(PLACEHOLDER|CONFIRM WITH RYAN|PHOTO)/.test(v);
+const isPending = (v: unknown) => typeof v === 'string' && /\[(PLACEHOLDER|CONFIRM|PHOTO)/.test(v);
 ---
 <Base title="Content check | Heattech Gas Services" noindex>
     <h1>Content check</h1>
@@ -18,7 +18,7 @@ const isPending = (v: unknown) => typeof v === 'string' && /\[(PLACEHOLDER|CONFI
 
     <h2>Type and buttons</h2>
     <h3>Heading level 3</h3>
-    <p>Body text is 18px with a short line length. Every job gets a written quote before work starts.</p>
+    <p>Body text is 18px with a short line length.</p>
     <p class="small">Small text, used for secondary details such as the company number.</p>
     <p class="buttons">
       <a class="button" href="/contact/">Send an enquiry</a>
@@ -73,12 +73,12 @@ const isPending = (v: unknown) => typeof v === 'string' && /\[(PLACEHOLDER|CONFI
     <h2>reviews.yaml ({reviews.length})</h2>
     {reviews.map((r) => (
       <div class="card">
-        <strong>{r.data.name}</strong> · proves: <span class={isPending(r.data.proves) ? 'pending' : ''}>{r.data.proves}</span>
+        <strong>{r.data.name}</strong>{r.data.order && <> · homepage position {r.data.order}</>}{!r.data.complete && <> · <span class="pending">cut off by Google, hidden</span></>}
         <p class={isPending(r.data.text) ? 'pending' : ''}>{r.data.text}</p>
       </div>
     ))}
 
-    <h2>stories/ ({stories.length})</h2>
+    <h2>work/ ({stories.length})</h2>
     {stories.map((s) => {
       const live = s.data.published && s.data.permission_recorded;
       return (

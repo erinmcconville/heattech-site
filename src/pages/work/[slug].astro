@@ -2,27 +2,38 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Text from '../../components/Text.astro';
-import { getPublishedStories } from '../../lib/site';
+import { getPublishedWork } from '../../lib/site';
 
-// Only published stories with permission recorded get a page.
+// Only published work with permission recorded gets a page.
 export async function getStaticPaths() {
-  const stories = await getPublishedStories();
-  return stories.map((story) => ({ params: { slug: story.id }, props: { story } }));
+  const work = await getPublishedWork();
+  return work.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 
-const { story } = Astro.props;
-const d = story.data;
-const { Content } = await render(story);
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
 
 const fields = [
   { heading: 'The problem', value: d.problem },
   { heading: 'What was usually suggested', value: d.usual_approach },
   { heading: 'What Ryan did', value: d.what_ryan_did },
   { heading: 'The result', value: d.result },
-];
+].filter((f) => f.value);
+
+// Structured data so search and answer engines can cite the job
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: d.title,
+  about: d.job_type,
+  contentLocation: { '@type': 'Place', name: `${d.area}, Edinburgh` },
+  author: { '@id': new URL('/#business', Astro.site).href },
+  publisher: { '@id': new URL('/#business', Astro.site).href },
+};
 ---
-<Base title={`${d.title} | Heattech Gas Services`} description={`${d.area}, ${d.property.toLowerCase()}. ${d.what_ryan_did}`}>
-  <p class="small"><a href="/stories/">Real stories</a></p>
+<Base title={`${d.title} | Heattech Gas Services`} description={d.summary ?? `${d.area}, ${d.property.toLowerCase()}. ${d.what_ryan_did}`} jsonLd={article}>
+  <p class="small"><a href="/work/">Recent work</a></p>
   <h1><Text value={d.title} /></h1>
   <p class="small">{d.area} · {d.property}</p>
   {d.ryan_check && <p class="small"><Text value={d.ryan_check} /></p>}

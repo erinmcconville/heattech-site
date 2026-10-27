@@ -5,13 +5,16 @@ import { getSite } from '../../lib/site';
 
 const site = await getSite();
 const { business, contact, credentials, links } = site;
+
+// One factual sentence that search and answer engines can quote (decisions.md, 27 Oct 2026)
+const entity = `${business.legal_name} is a Gas Safe registered gas, heating and plumbing company based in ${business.based_in}, Edinburgh, covering ${business.area_served}.`;
 ---
 <Base
-  title={`About | ${business.legal_name}, Portobello, Edinburgh`}
-  description={`${business.legal_name}, a Gas Safe registered heating and plumbing company based in ${business.based_in}, Edinburgh. Run by ${business.engineer}.`}
+  title={`About | ${business.legal_name}, ${business.based_in}, Edinburgh`}
+  description={entity}
 >
   <h1>About Heattech Gas Services</h1>
-  <p class="lede">{business.legal_name} is a heating and plumbing company based in {business.based_in}, run by {business.engineer}.</p>
+  <p class="lede">{entity}</p>
 
   <div class="grid photos">
     <div class="photo-slot">[PHOTO: Ryan, head-and-shoulders]</div>

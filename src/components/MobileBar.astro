@@ -2,7 +2,7 @@
 interface Props { site: Record<string, Record<string, any>> }
 const { contact } = Astro.props.site;
 ---
-<nav class="mobile-bar" aria-label="Quick contact">
+<nav class="mobile-bar" aria-label="Quick contact" data-mobile-bar>
   <a class="button" href="/contact/">Enquire</a>
   <a class="button button--on-dark" href={`tel:${contact.phone_link}`}>Call</a>
 </nav>
@@ -15,5 +15,17 @@ const { contact } = Astro.props.site;
     background: var(--charcoal);
   }
   .mobile-bar a:focus-visible { outline-color: var(--on-dark); }
+  /* Hidden while the page's own top buttons are on screen, so they don't appear twice */
+  .mobile-bar.is-hidden { visibility: hidden; }
   @media (min-width: 60rem) { .mobile-bar { display: none; } }
 </style>
+
+<script>
+  const bar = document.querySelector('[data-mobile-bar]');
+  const heroActions = document.querySelector('[data-hero-actions]');
+  if (bar && heroActions && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      bar.classList.toggle('is-hidden', entry.isIntersecting);
+    }).observe(heroActions);
+  }
+</script>

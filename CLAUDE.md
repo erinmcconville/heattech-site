@@ -39,7 +39,7 @@ Wording rules (carried over from the previous CLAUDE.md):
 - Written as the company: Heattech Gas Services, "we". Never first person.
 - Ryan is named on the About page and in stories. He is not the voice of the site.
 - State how the work is done as plain facts, not promises or reassurances.
-  - Right: "Every job gets a written quote before work starts."
+  - Right: "Boiler fitted in the hall. No floors lifted."
   - Wrong: "We'll keep you updated every step of the way."
 - Let reviews and stories do the persuading. Copy never pleads, over-explains or tries to win the reader over.
 - No exclamation marks, no puns, no rhetorical questions.

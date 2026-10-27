@@ -3,6 +3,6 @@
 interface Props { value: unknown }
 const { value } = Astro.props;
 const text = String(value ?? '');
-const pending = /\[(PLACEHOLDER|CONFIRM WITH RYAN|PHOTO)/.test(text);
+const pending = /\[(PLACEHOLDER|CONFIRM|PHOTO)/.test(text);
 ---
 {pending ? <span class="pending">{text}</span> : text}
