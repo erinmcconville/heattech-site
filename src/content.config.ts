@@ -52,7 +52,7 @@ const reviews = defineCollection({
 });
 
 // Examples of our work: every entry uses the same fields. No dates.
-// An entry only shows when published AND permission_recorded are both true.
+// An entry only shows when published AND permission_recorded are both true, or when it's a sample.
 const work = defineCollection({
   loader: glob({ pattern: '*.md', base: 'src/content/work' }),
   schema: z.object({
@@ -78,6 +78,9 @@ const work = defineCollection({
     permission_recorded: z.boolean().default(false),
     ryan_check: z.string().optional(),
     gas_supply_already_there: z.string().optional(),
+    // A lorem ipsum stand-in that shows Ryan where more jobs go. Shows like a live job;
+    // its [PLACEHOLDER] title stops the live site building until it's replaced or deleted.
+    sample: z.boolean().default(false),
   }),
 });
 

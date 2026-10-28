@@ -39,7 +39,7 @@ test('five rows in order', () => {
 test('examples', () => {
   const h = main();
   assert.ok(h.includes('Examples of our work'));
-  assert.equal((h.match(/class="work-card[" ]/g) ?? []).length, 1);
+  assert.equal((h.match(/class="work-card[" ]/g) ?? []).length, 4);
 });
 
 test('reviews', () => {
@@ -74,6 +74,7 @@ test('first review in full, the review count said once in the section', () => {
   assert.equal((section.match(/from 74 Google reviews/g) ?? []).length, 1);
 });
 
-test('one job shows as a full-width feature', () => {
-  assert.equal((main().match(/work-card--feature/g) ?? []).length, 1);
+test('three or more jobs show as a row, not a feature', () => {
+  assert.ok(main().includes('class="work-row"'));
+  assert.ok(!main().includes('work-card--feature'));
 });

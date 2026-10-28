@@ -20,7 +20,7 @@ const [mainPhoto, ...otherPhotos] = d.photos;
 ---
 <Base title={`${d.title} | ${business.trading_name}`} description={d.summary ?? d.title}>
   <p class="back"><a href="/work/">Examples of our work</a></p>
-  <h1>{d.title}</h1>
+  <h1><Text value={d.title} /></h1>
   {d.tags.length > 0 && <ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul>}
 
   <div class="photos">

@@ -189,8 +189,13 @@ const work = await getLiveWork();
   }
 
   .work-features { display: grid; gap: var(--s2); }
-  .work-row { display: flex; gap: var(--s2); overflow-x: auto; padding-bottom: var(--s1); }
-  .work-row > :global(*) { flex: 0 0 min(80%, 20rem); }
+  /* Three or more jobs: a scrolling row on phones, a grid on desktop (rule 24) */
+  .work-row { display: flex; gap: var(--s2); overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: calc(-1 * var(--gutter)); padding: 0 var(--gutter) var(--s1); scroll-padding-inline: var(--gutter); }
+  .work-row > :global(*) { flex: 0 0 min(80%, 20rem); scroll-snap-align: start; }
+  @media (min-width: 60rem) {
+    .work-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); overflow: visible; margin-inline: 0; padding: 0; }
+    .work-row > :global(*) { max-width: none; }
+  }
 
   /* Reviews: one in full, large; two shorter beside it (rule 14) */
   .google { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; color: var(--ink); font-family: var(--font-brand); font-weight: 600; font-size: 0.9375rem; text-decoration: none; }

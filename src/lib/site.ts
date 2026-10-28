@@ -6,9 +6,11 @@ export async function getSite() {
   return Object.fromEntries(entries.map((e) => [e.id, e.data])) as Record<string, Record<string, any>>;
 }
 
-// Jobs shown on the site: published, with the customer's permission recorded
+// Jobs shown on the site: published, with the customer's permission recorded, plus any samples
 export async function getLiveWork() {
-  return getCollection('work', ({ data }) => data.published && data.permission_recorded);
+  // Real jobs first, then lorem ipsum samples (which block the live build until replaced)
+  const work = await getCollection('work', ({ data }) => (data.published && data.permission_recorded) || data.sample);
+  return work.sort((a, b) => Number(a.data.sample) - Number(b.data.sample));
 }
 
 // Complete reviews by id, in the order given. Unknown or cut-off reviews are skipped.

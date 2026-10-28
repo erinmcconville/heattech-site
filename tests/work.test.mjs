@@ -5,8 +5,21 @@ import { page, withEdit } from './helpers.mjs';
 
 const job = () => page('work/stockbridge-gas-central-heating/index.html');
 
-test('list shows only live jobs', () => {
-  assert.equal((page('work/index.html').match(/class="work-card[" ]/g) ?? []).length, 1);
+test('list shows live jobs, then the samples', () => {
+  const h = page('work/index.html');
+  assert.equal((h.match(/class="work-card[" ]/g) ?? []).length, 4);
+  assert.ok(h.indexOf('/work/stockbridge-gas-central-heating/') < h.indexOf('/work/sample-'));
+});
+
+test('samples carry a placeholder, so the live site cannot build with them', () => {
+  for (const id of ['sample-tenement-boiler', 'sample-short-let-gas-leak', 'sample-your-choice'])
+    assert.match(page(`work/${id}/index.html`), /\[PLACEHOLDER:[^\]]+\]/, id);
+});
+
+test('cards are short: no bills, no tags', () => {
+  const card = page('index.html').match(/<a class="work-card[\s\S]*?<\/a>/)[0];
+  assert.ok(!card.includes('Energy bills') && !card.includes('About 3 days'));
+  assert.ok(card.includes('See the job'));
 });
 
 test('job page', () => {
@@ -34,14 +47,8 @@ test('bills feature on the job page', () => {
   for (const s of ['Energy bills', 'Before', 'After', 'a month', '£ before', '£ after']) assert.ok(b.includes(s), s);
 });
 
-test('bills shown on the heating upgrades card', () => {
-  const h = page('heating-upgrades/index.html');
-  assert.match(h, /class="work-card__bills[^"]*"/);
-});
-
 test('no bills, no feature', { timeout: 180000 }, async () => {
   await withEdit('src/content/work/stockbridge-gas-central-heating.md', /bills:\n(  .*\n)+/, '', () => {
     assert.equal(bills(job()), '');
-    assert.doesNotMatch(page('heating-upgrades/index.html'), /class="work-card__bills/);
   });
 });

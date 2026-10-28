@@ -14,6 +14,7 @@ test('sitemap', () => {
 
 test('every ask link matches a form job', () => {
   const known = new Set([...readFileSync('src/content/services.yaml', 'utf8').matchAll(/^\s+- id: ([a-z-]+)$/gm)].map((m) => m[1]));
+  known.add('not-sure'); // the form's own "Not sure" option, used by jobs with no service
   const used = readdirSync('dist', { recursive: true })
     .filter((f) => f.endsWith('.html'))
     .flatMap((f) => [...readFileSync(join('dist', f), 'utf8').matchAll(/\?job=([a-z-]+)/g)].map((m) => m[1]));
