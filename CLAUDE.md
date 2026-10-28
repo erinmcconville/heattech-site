@@ -17,6 +17,8 @@ A small website for Heattech Gas Services Ltd, a Gas Safe gas and heating busine
 | `research/02c-owner-case-study.md` | The site owner's own customer experience with Ryan (one account) |
 | `research/03-search-landscape.md` | Competitors, search queries, official funding/law/flue/gas-supply facts |
 | `research/04-facebook-posts.md` | Ryan's Facebook job posts 2022–2025, and technical term definitions |
+| `research/05-heattech-reviews.md` | Ryan's own Google reviews coded by theme and job, with the concrete facts customers give |
+| `research/06-search-check.md` | Google suggestions, name searches and AI-style answers (28 Oct 2026) |
 
 ## Decisions
 - `decisions.md` records decisions I've made. It overrides anything in `research/`.
