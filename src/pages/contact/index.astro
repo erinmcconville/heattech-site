@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
 import Text from '../../components/Text.astro';
 import EnquiryForm from '../../components/EnquiryForm.astro';
 import { getSite } from '../../lib/site';
@@ -9,27 +10,36 @@ const { business, contact, promises, safety } = site;
 ---
 <Base
   title={`Contact | ${business.trading_name}, Edinburgh`}
-  description={`Send an enquiry or call ${contact.phone}. ${business.area_served}, based in ${business.based_in}.`}
+  description={`Send an enquiry or call ${contact.phone}. Gas, heating and plumbing in ${business.area_served}.`}
 >
   <h1>Contact</h1>
-  <p class="lede">Send an enquiry, or call for urgent jobs.</p>
 
-  <p class="emergency-note">
-    If you smell gas, call the Gas Emergency number, <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>, first.
+  <ul class="ways">
+    <li><a href={`tel:${contact.phone_link}`}><Icon name="phone" size={22} />{contact.phone}</a></li>
+    <li><a href={`mailto:${contact.email}`}><Icon name="mail" size={22} />{contact.email}</a></li>
+  </ul>
+
+  <section class="section" aria-labelledby="enquire">
+    <h2 id="enquire">Send an enquiry</h2>
+    <EnquiryForm full emergencyNumber={safety.gas_emergency_number} emergencyLink={safety.gas_emergency_link} phone={contact.phone} />
+    <p class="small"><Text value={promises.after_enquiry} /></p>
+    <p class="small">{business.area_served}</p>
+  </section>
+
+  <p class="emergency-band">
+    Smell gas? Don't send a form. Call <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>.
   </p>
-
-  <h2>Send an enquiry</h2>
-  <EnquiryForm full emergencyNumber={safety.gas_emergency_number} emergencyLink={safety.gas_emergency_link} phone={contact.phone} />
-
-  <h2>What happens next</h2>
-  <p><Text value={promises.after_enquiry} /></p>
-
-  <h2>Phone and email</h2>
-  <p>
-    <a href={`tel:${contact.phone_link}`}>{contact.phone}</a><br />
-    <a href={`mailto:${contact.email}`}>{contact.email}</a>
-  </p>
-
-  <h2>Area covered</h2>
-  <p>{business.area_served}. Based in {business.based_in}.</p>
 </Base>
+
+<style>
+  .ways { list-style: none; padding: 0; margin: var(--s3) 0 0; display: grid; gap: var(--s1); max-width: 28rem; }
+  .ways a {
+    display: flex; align-items: center; gap: var(--s2); min-height: 3.5rem; padding: 0 var(--s2);
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    color: var(--ink); font-family: var(--font-brand); font-weight: 700; text-decoration: none; word-break: break-word;
+  }
+  .ways :global(.icon) { color: var(--copper-deep); flex: none; }
+  .section { margin-top: var(--s5); }
+  .emergency-band { margin-top: var(--s4); padding: var(--s2); background: var(--emergency-bg); color: var(--emergency); font-weight: 700; border-radius: var(--radius); max-width: 46rem; }
+  .emergency-band a { color: inherit; }
+</style>

@@ -4,62 +4,67 @@ import Text from '../../components/Text.astro';
 import { getSite } from '../../lib/site';
 
 const site = await getSite();
-const { business, contact, credentials, links } = site;
+const { business, credentials, links } = site;
 
-// One factual sentence that search and answer engines can quote (decisions.md, 27 Oct 2026)
-const entity = `${business.legal_name} is a Gas Safe registered gas, heating and plumbing company based in ${business.based_in}, Edinburgh, covering ${business.area_served}.`;
+// One factual sentence that search and answer engines can quote (decisions.md)
+const entity = `${business.legal_name} is a Gas Safe registered gas, heating and plumbing company based in ${business.based_in}, covering ${business.area_served}.`;
 ---
-<Base
-  title={`About | ${business.legal_name}, ${business.based_in}, Edinburgh`}
-  description={entity}
->
-  <h1>About {business.trading_name}</h1>
+<Base title={`About | ${business.legal_name}, Edinburgh`} description={entity}>
+  <h1>About us</h1>
   <p class="lede">{entity}</p>
 
-  <div class="grid photos">
-    <div class="photo-slot">[PHOTO: Ryan, head-and-shoulders]</div>
-    <div class="photo-slot">[PHOTO: Ryan and Brett together]</div>
-  </div>
+  <div class="photo-slot team-photo">[PHOTO: Ryan and Brett with the van]</div>
 
-  <h2>Ryan Duncan</h2>
-  <p><Text value="[PLACEHOLDER: a few lines about Ryan, from his voice note]" /></p>
-
-  <h2>{business.colleague_name}</h2>
-  <p><Text value={business.colleague_role} /></p>
-
-  <h2>The company</h2>
-  <dl class="facts">
-    <dt>Registered name</dt><dd>{business.legal_name}</dd>
-    <dt>Company number</dt><dd>{business.company_number}</dd>
-    <dt>Gas Safe</dt>
-    <dd class="gas-safe">
-      <img src="/brand/gas-safe.png" width="106" height="120" alt="Gas Safe Register" />
-      <span><Text value={credentials.gas_safe_number} /> · <a href={credentials.gas_safe_register_url}>Check it on the Gas Safe Register</a></span>
-    </dd>
-    <dt>Insurance</dt><dd><Text value={credentials.insurance} /></dd>
-    <dt>Brand approvals</dt><dd><Text value={credentials.brand_approvals} /></dd>
-    <dt>Address</dt><dd>{contact.address_line_1}, {contact.town} {contact.postcode}</dd>
-    <dt>Area covered</dt><dd>{business.area_served}</dd>
+  <dl class="people">
+    <div>
+      <dt>{business.engineer}</dt>
+      <dd><Text value="[PLACEHOLDER: one or two lines about Ryan, in his words]" /></dd>
+    </div>
+    <div>
+      <dt>{business.colleague_name}</dt>
+      <dd><Text value={business.colleague_role} /></dd>
+    </div>
   </dl>
 
-  <h2>Portobello</h2>
-  <p>{business.football.line}</p>
-  <div class="photo-slot van">[PHOTO: the van with the logo]</div>
+  <table class="facts">
+    <tbody>
+      <tr>
+        <th scope="row">Gas Safe</th>
+        <td><Text value={credentials.gas_safe_number} /> · <a href={credentials.gas_safe_register_url}>Check it on the register</a></td>
+      </tr>
+      <tr><th scope="row">Company number</th><td>{business.company_number}</td></tr>
+      <tr><th scope="row">Insurance</th><td><Text value={credentials.insurance} /></td></tr>
+      <tr><th scope="row">Based in</th><td>{business.based_in}</td></tr>
+    </tbody>
+  </table>
 
-  <p class="section">
-    <a href={links.google_reviews}>Reviews on Google</a>{' · '}
+  <section class="section" aria-labelledby="football">
+    <h2 id="football">Local football</h2>
+    <p>{business.football.line}</p>
+    <div class="football-photos">
+      {business.football.photos.map((p: string) => <div class="photo-slot">{p}</div>)}
+    </div>
+  </section>
+
+  <p class="section links">
+    <a href={links.google_reviews}>Google</a>{' · '}
     <a href={links.facebook}>Facebook</a>{' · '}
     <a href={links.mybuilder}>MyBuilder</a>
   </p>
 </Base>
 
 <style>
-  .photos { max-width: 48rem; }
-  .facts { display: grid; grid-template-columns: minmax(9rem, max-content) 1fr; gap: 0.5rem 1rem; }
-  .facts dt { font-weight: 600; }
-  .facts dd { margin: 0; }
-  .gas-safe { display: flex; align-items: center; gap: var(--s2); }
-  .gas-safe img { height: 3rem; width: auto; flex: none; }
-  .van { max-width: 24rem; }
-  @media (max-width: 30rem) { .facts { grid-template-columns: 1fr; } .facts dd { margin-bottom: 0.5rem; } }
+  .team-photo { margin-top: var(--s3); max-width: 46rem; aspect-ratio: 4 / 3; }
+  .people { display: grid; gap: var(--s2); margin: var(--s4) 0 0; max-width: 46rem; }
+  .people dt { font-family: var(--font-brand); font-weight: 700; }
+  .people dd { margin: 0; color: var(--muted); }
+  .facts { margin-top: var(--s4); width: 100%; max-width: 32rem; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .facts th, .facts td { padding: 0.75rem var(--s2); text-align: left; vertical-align: top; }
+  .facts tr + tr th, .facts tr + tr td { border-top: 1px solid var(--line); }
+  .facts th { font-weight: 400; color: var(--muted); width: 40%; }
+  .facts td { font-weight: 600; }
+  .section { margin-top: var(--s5); max-width: 46rem; }
+  .football-photos { display: grid; gap: var(--s1); grid-template-columns: 1fr 1fr; }
+  .football-photos .photo-slot { aspect-ratio: 1; font-size: var(--small); }
+  .links { font-family: var(--font-brand); font-weight: 600; }
 </style>
