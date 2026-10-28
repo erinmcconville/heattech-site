@@ -1,9 +1,128 @@
 ---
-// Placeholder until the new homepage (plan Task 6)
+// Homepage: each section answers one visitor question (docs/visitor-questions.md).
 import Base from '../layouts/Base.astro';
-import { getSite } from '../lib/site';
-const { business } = await getSite();
+import Icon from '../components/Icon.astro';
+import ReviewCard from '../components/ReviewCard.astro';
+import WorkCard from '../components/WorkCard.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import { getSite, getServices, getReviews, getLiveWork } from '../lib/site';
+
+const site = await getSite();
+const { business, contact, credentials, links, safety } = site;
+const services = await getServices();
+const reviews = (await getReviews()).filter((r) => r.data.order !== undefined).slice(0, 3);
+const work = await getLiveWork();
 ---
-<Base title={`${business.trading_name} | Boilers, heating and plumbing in Edinburgh`}>
-  <h1>Gas, heating and plumbing in Edinburgh</h1>
+<Base
+  title={`${business.trading_name} | Boilers, heating and plumbing in Edinburgh`}
+  description={`Gas Safe registered gas, heating and plumbing in ${business.area_served}: boiler repairs, new boilers, heating upgrades, servicing and gas safety certificates.`}
+>
+  <section slot="hero" class="hero" aria-labelledby="hero-title">
+    <!-- [PHOTO: the van on an Edinburgh street] — real photo from Ryan; alt text names the place, never a house number -->
+    <div class="hero__photo" aria-hidden="true"><span>Photo: the van on an Edinburgh street</span></div>
+    <div class="wrap hero__text">
+      <h1 id="hero-title">Gas, heating and plumbing in Edinburgh</h1>
+      <p class="hero__line">{business.trading_name} · {business.area_served}</p>
+      <div class="actions" data-hero-actions>
+        <a class="button" href="#enquiry-form">Send an enquiry</a>
+        <a class="button button--on-dark" href={`tel:${contact.phone_link}`}>Call {contact.phone}</a>
+      </div>
+    </div>
+  </section>
+
+  <ul slot="hero" class="strip" aria-label="Credentials">
+    <li>
+      <a href={links.google_reviews}>
+        <img class="badge" src="/brand/google-g.png" width="192" height="192" alt="" />
+        <span>{links.google_rating} from {links.google_review_count} Google reviews</span>
+      </a>
+    </li>
+    <li>
+      <a href={credentials.gas_safe_register_url}>
+        <img class="badge" src="/brand/gas-safe.png" width="106" height="120" alt="Gas Safe Register" />
+        <span>Gas Safe registered</span>
+      </a>
+    </li>
+  </ul>
+
+  <section class="section" aria-labelledby="what-we-do">
+    <h2 id="what-we-do">What we do</h2>
+    <ul class="rows">
+      {services.map((s) => (
+        <li>
+          <a href={`/${s.id}/`}>
+            <Icon name={s.data.icon} size={24} />
+            <span class="rows__text">
+              <span class="rows__title">{s.data.title}</span>
+              <span class="rows__line">{s.data.line}</span>
+            </span>
+            <Icon name="chevron-right" size={20} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {work.length > 0 && (
+    <section class="section" aria-labelledby="work">
+      <h2 id="work">Examples of our work</h2>
+      <div class="work-row">{work.map((w) => <WorkCard id={w.id} />)}</div>
+    </section>
+  )}
+
+  <section class="section" aria-labelledby="reviews">
+    <h2 id="reviews">What customers say</h2>
+    <div class="review-grid">
+      {reviews.map((r) => <ReviewCard review={r.data} short />)}
+    </div>
+    <p class="more"><a href="/reviews/">Read all {links.google_review_count} reviews <span aria-hidden="true">→</span></a></p>
+  </section>
+
+  <section class="section enquiry-section" id="enquiry-form" aria-labelledby="enquire">
+    <h2 id="enquire">Send an enquiry</h2>
+    <EnquiryForm emergencyNumber={safety.gas_emergency_number} emergencyLink={safety.gas_emergency_link} phone={contact.phone} />
+  </section>
 </Base>
+
+<style>
+  /* Hero: a full-width photo with the heading over it */
+  .hero { position: relative; display: grid; min-height: 26rem; background: var(--charcoal); color: var(--on-dark); }
+  .hero__photo { position: absolute; inset: 0; background: #6d6f72; }
+  .hero__photo span { position: absolute; top: var(--s2); left: var(--gutter); font-size: var(--small); color: var(--on-dark-muted); }
+  .hero__text { position: relative; align-self: end; padding-block: var(--s5) var(--s4); }
+  .hero h1 { max-width: 14ch; margin: 0; color: var(--on-dark); }
+  .hero__line { margin: var(--s1) 0 var(--s3); color: var(--on-dark-muted); }
+  .hero .actions { margin: 0; }
+  .hero .button:focus-visible { outline-color: var(--on-dark); }
+
+  /* Proof strip */
+  .strip {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s1) var(--s4);
+    margin: 0; max-width: none; padding: var(--s2) var(--gutter); list-style: none;
+    background: var(--surface); border-bottom: 1px solid var(--line);
+    font-family: var(--font-brand); font-weight: 600; font-size: var(--label);
+  }
+  .strip a { display: flex; align-items: center; gap: var(--s1); color: var(--ink); text-decoration: none; }
+  .strip a:hover span { text-decoration: underline; }
+  .badge { height: 1.75rem; width: auto; flex: none; }
+
+  .section { margin-top: var(--s5); }
+
+  /* Service rows: one panel, one tap target per row */
+  .rows { list-style: none; padding: 0; margin: 0; max-width: 40rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .rows li + li { border-top: 1px solid var(--line); }
+  .rows a { display: flex; align-items: center; gap: var(--s2); padding: var(--s2); color: var(--ink); text-decoration: none; }
+  .rows a:hover .rows__title { text-decoration: underline; }
+  .rows :global(.icon) { color: var(--copper-deep); flex: none; }
+  .rows a > :global(.icon:last-child) { color: var(--muted); }
+  .rows__text { flex: 1; display: grid; }
+  .rows__title { font-family: var(--font-brand); font-weight: 700; }
+  .rows__line { color: var(--muted); font-size: var(--small); }
+
+  .work-row { display: flex; gap: var(--s2); overflow-x: auto; padding-bottom: var(--s1); }
+  .work-row > :global(*) { flex: 0 0 min(80%, 20rem); }
+
+  .review-grid { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+  .more a { font-family: var(--font-brand); font-weight: 600; font-size: var(--small); text-decoration: none; }
+  .more a:hover { text-decoration: underline; }
+</style>

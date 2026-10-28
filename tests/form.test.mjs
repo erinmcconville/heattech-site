@@ -28,7 +28,7 @@ test('full only on contact', () => {
   assert.ok(f.includes('name="message"') && f.includes('name="photo1"'));
 });
 
-test('short form on the homepage', { todo: 'Task 6' }, () => {
+test('short form on the homepage', () => {
   const f = form('index.html');
   assert.ok(f.includes('name="postcode"'));
   assert.ok(!f.includes('name="message"') && !f.includes('name="photo1"'));
