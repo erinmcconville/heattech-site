@@ -31,12 +31,14 @@ const serviceLd = {
 };
 ---
 <Base title={`${d.title} in Edinburgh | ${business.trading_name}`} description={d.summary} jsonLd={serviceLd}>
-  <p class="eyebrow">Services</p>
-  <h1>{d.title} in Edinburgh</h1>
-  <p class="lede">{d.line}</p>
-  <p data-hero-actions><a class="button" href={askHref}>{ask}</a></p>
-
-  <div class="photo-slot hero-photo">{d.photo}</div>
+  <div class="top">
+    <div>
+      <h1>{d.title} in Edinburgh</h1>
+      <p class="lede">{d.line}</p>
+      <p data-hero-actions><a class="button" href={askHref}>{ask}</a></p>
+    </div>
+    <div class="photo-slot hero-photo">{d.photo}</div>
+  </div>
 
   {d.includes && (
     <section class="section" aria-labelledby="included">
@@ -82,10 +84,13 @@ const serviceLd = {
 </Base>
 
 <style>
-  .eyebrow { margin: 0 0 0.25rem; color: var(--muted); font-size: var(--small); }
   h1 { margin-top: 0; }
   .lede { margin-bottom: var(--s3); }
   .hero-photo { margin-top: var(--s3); max-width: 46rem; aspect-ratio: 16 / 10; }
+  @media (min-width: 60rem) {
+    .top { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s6); align-items: center; }
+    .top .hero-photo { margin-top: 0; }
+  }
   .section { margin-top: var(--s5); max-width: 46rem; }
   .ticks { list-style: none; padding: 0; display: grid; gap: var(--s1); grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
   .ticks li { display: flex; align-items: center; gap: var(--s1); }

@@ -19,7 +19,7 @@ const quote = d.quotes[0];
 const [mainPhoto, ...otherPhotos] = d.photos;
 ---
 <Base title={`${d.title} | ${business.trading_name}`} description={d.summary ?? d.title}>
-  <p class="eyebrow"><a href="/work/">Examples of our work</a></p>
+  <p class="back"><a href="/work/">Examples of our work</a></p>
   <h1>{d.title}</h1>
   {d.tags.length > 0 && <ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul>}
 
@@ -33,7 +33,6 @@ const [mainPhoto, ...otherPhotos] = d.photos;
       <h2 id="bills-title">Energy bills</h2>
       <div class="bills__pair">
         <div><span class="bills__label">Before</span><span class="bills__value"><Text value={d.bills.before} /></span><span class="bills__unit">a month</span></div>
-        <span class="bills__arrow" aria-hidden="true">→</span>
         <div><span class="bills__label">After</span><span class="bills__value"><Text value={d.bills.after} /></span><span class="bills__unit">a month</span></div>
       </div>
       <p class="small">{d.bills.note}</p>
@@ -49,7 +48,7 @@ const [mainPhoto, ...otherPhotos] = d.photos;
   {d.ryan_check && <p class="small"><Text value={d.ryan_check} /></p>}
 
   {quote && (
-    <figure class="quote">
+    <figure class="quote job-quote">
       <blockquote>{quote.text}</blockquote>
       <figcaption>{quote.who}</figcaption>
     </figure>
@@ -62,28 +61,28 @@ const [mainPhoto, ...otherPhotos] = d.photos;
 </Base>
 
 <style>
-  .eyebrow { margin: 0 0 0.25rem; font-size: var(--small); }
-  .eyebrow a { color: var(--muted); }
+  .back { margin: -0.75rem 0 0; font-size: var(--small); }
+  .back a { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--muted); }
   h1 { margin-top: 0; max-width: 24ch; }
-  .tags { display: flex; flex-wrap: wrap; gap: var(--s1); list-style: none; padding: 0; margin: var(--s2) 0 0; }
-  .tags li { padding: 0.25rem 0.75rem; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: var(--small); }
+  .tags { list-style: none; padding: 0; margin: var(--s1) 0 0; color: var(--muted); font-size: var(--small); }
+  .tags li { display: inline; }
+  /* The no-break space keeps each dot on the line before it when the tags wrap */
+  .tags li + li::before { content: '\00a0\00b7  '; }
   .photos { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s1); margin-top: var(--s3); max-width: 46rem; }
   .photos .photo-slot { aspect-ratio: 1; }
   .photos__main { grid-column: 1 / -1; aspect-ratio: 4 / 3 !important; }
-  .bills { margin-top: var(--s4); max-width: 46rem; padding: var(--s3); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .bills { margin-top: var(--s4); max-width: 46rem; padding: var(--s3); background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); }
   .bills h2 { margin: 0 0 var(--s2); font-size: var(--step-1); }
-  .bills__pair { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s3); }
-  .bills__pair > div { display: grid; }
+  .bills__pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
+  .bills__pair > div { display: grid; align-content: start; }
+  .bills__pair > div + div { padding-left: var(--s2); border-left: 1px solid var(--line); }
   .bills__label { font-family: var(--font-brand); font-weight: 600; font-size: var(--small); color: var(--muted); }
-  .bills__value { font-family: var(--font-brand); font-weight: 700; font-size: 2rem; line-height: 1.1; }
+  .bills__value { font-family: var(--font-brand); font-weight: 700; font-size: var(--step-2); line-height: 1.15; overflow-wrap: anywhere; }
   .bills__unit { color: var(--muted); font-size: var(--small); }
-  .bills__arrow { font-size: 1.5rem; color: var(--copper-deep); }
   .bills .small { margin: var(--s2) 0 0; color: var(--muted); }
   .story { max-width: 46rem; margin: var(--s4) 0 0; display: grid; gap: 0.25rem; }
   .story dt { margin-top: var(--s2); font-family: var(--font-brand); font-weight: 600; font-size: var(--small); color: var(--copper-deep); }
   .story dd { margin: 0; }
-  .quote { margin: var(--s4) 0 0; max-width: 46rem; }
-  .quote blockquote { margin: 0; padding-left: var(--s2); border-left: 3px solid var(--copper); font-size: var(--step-1); }
-  .quote figcaption { margin-top: 0.25rem; color: var(--muted); font-size: var(--small); }
+  .job-quote { margin-top: var(--s4); max-width: 46rem; }
   .next { margin-top: var(--s5); }
 </style>

@@ -3,7 +3,7 @@ interface Props { site: Record<string, Record<string, any>> }
 const { contact } = Astro.props.site;
 ---
 <nav class="mobile-bar" aria-label="Quick contact" data-mobile-bar>
-  <a class="button" href="/contact/">Enquire</a>
+  <a class="button" href="/contact/">Send an enquiry</a>
   <a class="button button--on-dark" href={`tel:${contact.phone_link}`}>Call</a>
 </nav>
 
@@ -14,18 +14,26 @@ const { contact } = Astro.props.site;
     padding: 0.75rem var(--gutter) calc(0.75rem + env(safe-area-inset-bottom));
     background: var(--charcoal);
   }
+  .mobile-bar .button { padding-inline: 0.5rem; }
   .mobile-bar a:focus-visible { outline-color: var(--on-dark); }
-  /* Hidden while the page's own top buttons are on screen, so they don't appear twice */
+  /* Hidden while the same buttons are already on screen, so they don't appear twice */
   .mobile-bar.is-hidden { visibility: hidden; }
   @media (min-width: 60rem) { .mobile-bar { display: none; } }
 </style>
 
 <script>
+  // Hidden while the page's top buttons (or the header's Call button) are on screen,
+  // and while the enquiry form is on screen.
   const bar = document.querySelector('[data-mobile-bar]');
-  const heroActions = document.querySelector('[data-hero-actions]');
-  if (bar && heroActions && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([entry]) => {
-      bar.classList.toggle('is-hidden', entry.isIntersecting);
-    }).observe(heroActions);
+  const top = document.querySelector('[data-hero-actions]') ?? document.querySelector('.site-header');
+  const form = document.getElementById('enquiry');
+  if (bar && top && 'IntersectionObserver' in window) {
+    const onScreen = new Map<Element, boolean>();
+    const observer = new IntersectionObserver((entries) => {
+      for (const e of entries) onScreen.set(e.target, e.isIntersecting);
+      bar.classList.toggle('is-hidden', [...onScreen.values()].some(Boolean));
+    });
+    observer.observe(top);
+    if (form) observer.observe(form);
   }
 </script>

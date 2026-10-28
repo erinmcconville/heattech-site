@@ -10,37 +10,47 @@
   src: url('/fonts/montserrat-latin-variable.woff2') format('woff2');
 }
 
+/* Body text. Source Sans 3, latin subset, from Google Fonts, self-hosted (SIL Open Font License) */
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/source-sans-3-latin-variable.woff2') format('woff2');
+}
+
 :root {
   /* Brand */
-  --charcoal: #4f4f51;      /* logo background: header, footer, phone bar. White on it 8.2:1 */
+  --charcoal: #2a2a2c;      /* header, hero, footer, phone bar. White on it 14.5:1 */
   --copper: #cc7e2e;        /* logo flame: main buttons only, with --ink text 5.3:1 */
   --copper-hover: #d88f43;
-  --copper-deep: #9a5b17;   /* labels and links on light backgrounds 5.1:1 */
+  --copper-deep: #9a5b17;   /* labels and links on light backgrounds 4.9:1 */
+  --copper-tint: #f6e9da;   /* soft circle behind service icons */
 
   /* Neutrals */
-  --bg: #faf8f5;
+  --bg: #f3efe9;            /* a touch deeper than white, so white panels stand out without borders */
   --surface: #ffffff;
   --ink: #1c1c1e;           /* body text 16:1 */
   --muted: #5c5c60;         /* secondary text 6.3:1 */
-  --line: #e4ded5;          /* card borders and dividers */
-  --line-strong: #c9c1b5;
+  --line: #ebe6de;          /* dividers inside panels */
+  --line-strong: #cfc8bd;   /* form field borders */
   --on-dark: #ffffff;
-  --on-dark-muted: #d9d4cc; /* secondary text on charcoal 5.5:1 */
+  --on-dark-muted: #c9c5be; /* secondary text on charcoal 9.6:1 */
 
   /* Roles */
   --emergency: #8a1c1c;     /* gas emergency lines only 8.8:1 */
   --emergency-bg: #fcebeb;
-  --photo: #dedad3;         /* grey photo placeholder boxes */
+  --photo: #dcd6cd;         /* grey photo placeholder boxes */
   --pending: #fff1b8;       /* highlights placeholders in previews */
   --pending-line: #a37a00;
 
   /* Type */
-  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-brand: 'Montserrat', var(--font-body);
   --step-0: 1.125rem;                                  /* 18px body */
   --step-1: 1.25rem;
-  --step-2: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
-  --step-3: clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem);
+  --step-2: clamp(1.5rem, 1.2rem + 1.2vw, 2.125rem);
+  --step-3: clamp(2.375rem, 1.6rem + 3vw, 3.75rem);
   --small: 1rem;
   --label: 0.8125rem;
 
@@ -53,14 +63,15 @@
   --s6: 4.5rem;
 
   --measure: 38rem;
-  --page: 70rem;
-  --gutter: 1rem;
-  --radius: 6px;
-  --tap: 3rem;              /* minimum tap target */
+  --page: 72rem;
+  --gutter: 1.25rem;
+  --radius: 10px;
+  --tap: 3.25rem;           /* button and field height */
+  --shadow: 0 1px 2px rgba(42, 42, 44, 0.06);
   --bar-height: 4.5rem;
 }
 
-@media (min-width: 48rem) { :root { --gutter: 1.5rem; } }
+@media (min-width: 60rem) { :root { --gutter: 2rem; } }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -72,18 +83,19 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
   font-size: var(--step-0);
-  line-height: 1.6;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3 {
   font-family: var(--font-brand);
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
   margin: 0 0 0.5em;
   text-wrap: balance;
 }
-h1 { font-size: var(--step-3); }
+h1 { font-size: var(--step-3); line-height: 1.05; letter-spacing: -0.03em; }
 h2 { font-size: var(--step-2); margin-top: 2em; }
 h3 { font-size: var(--step-1); margin-top: 1.5em; }
 p, ul, ol, dl, blockquote { margin: 0 0 1em; max-width: var(--measure); }
@@ -91,6 +103,7 @@ small, .small { font-size: var(--small); }
 
 a { color: var(--copper-deep); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
 a:hover { text-decoration-thickness: 2px; }
+a[href^='tel:'] { white-space: nowrap; } /* phone numbers never break across lines */
 :focus-visible { outline: 3px solid var(--copper-deep); outline-offset: 2px; }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -102,40 +115,39 @@ img { max-width: 100%; height: auto; display: block; }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-/* Small spaced capitals, echoing "GAS SERVICES LTD" under the logo */
-.eyebrow {
-  display: block;
-  margin: 0 0 var(--s1);
-  font-family: var(--font-brand);
-  font-weight: 600;
-  font-size: var(--label);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--copper-deep);
-}
-
-/* Buttons. Copper is the main action; use one per screen area. */
+/* Buttons. Copper is the main action; use one per screen area. Full width on phones, one height everywhere. */
 .button {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--s1);
-  min-height: var(--tap); padding: 0.65rem 1.4rem;
-  border-radius: var(--radius); border: 2px solid var(--copper);
+  min-height: var(--tap); padding: 0.65rem 1.75rem;
+  border-radius: var(--radius); border: 0;
   background: var(--copper); color: var(--ink);
   font-family: var(--font-brand); font-weight: 700; font-size: var(--small);
   text-decoration: none; cursor: pointer;
 }
-.button:hover { background: var(--copper-hover); border-color: var(--copper-hover); }
-.button--plain { background: transparent; color: var(--ink); border-color: var(--charcoal); }
-.button--plain:hover { background: var(--surface); border-color: var(--ink); }
-.button--on-dark { background: transparent; color: var(--on-dark); border-color: var(--on-dark); }
-.button--on-dark:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--on-dark); }
+.button:hover { background: var(--copper-hover); }
+.button--plain { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line-strong); }
+.button--plain:hover { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--muted); }
+.button--on-dark { background: rgba(255, 255, 255, 0.12); color: var(--on-dark); }
+.button--on-dark:hover { background: rgba(255, 255, 255, 0.2); }
+.button .icon { width: 20px; height: 20px; }
+@media (max-width: 47.99rem) { .button { width: 100%; } }
 
-/* Cards: white on the warm background, thin border, no shadow */
+/* Cards: white on the warm background, no border */
 .card {
   background: var(--surface);
-  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
   border-radius: var(--radius);
   padding: var(--s2) 1.25rem;
 }
+
+/* Panel: one white box holding a list, with thin dividers between items (fewer boxes than a card each) */
+.panel {
+  max-width: 46rem;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+}
+.panel > * + * { border-top: 1px solid var(--line); }
 
 /* Grey photo slots, labelled with the shot needed */
 .photo-slot {
@@ -164,3 +176,17 @@ img { max-width: 100%; height: auto; display: block; }
 /* Five copper stars on Google reviews (all of Ryan's reviews are five-star) */
 .stars { color: var(--copper); letter-spacing: 0.15em; font-size: var(--small); line-height: 1; }
 .grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); }
+
+/* Customer quotes: one style everywhere (rule 14). White on the warm background, warm on white sections. */
+.quote { margin: 0; padding: var(--s3); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+.quote blockquote { margin: 0; max-width: none; }
+.quote figcaption { margin-top: 0.75rem; color: var(--muted); font-size: var(--small); }
+.quote figcaption a { display: inline-flex; align-items: center; min-height: 2.75rem; margin-block: -0.75rem; color: inherit; text-decoration: none; }
+.quote figcaption a:hover { text-decoration: underline; }
+.section--white .quote { background: var(--bg); box-shadow: none; }
+.quotes { display: grid; gap: var(--s2); max-width: 46rem; }
+
+/* Standalone text links: copper, bold, no underline until hover (rule 27) */
+.link { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; color: var(--copper-deep); font-family: var(--font-brand); font-weight: 700; font-size: var(--small); text-decoration: none; }
+.link:hover { text-decoration: underline; }
+.link .icon { width: 18px; height: 18px; }

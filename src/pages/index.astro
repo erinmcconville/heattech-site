@@ -1,8 +1,8 @@
 ---
 // Homepage: each section answers one visitor question (docs/visitor-questions.md).
+// Layout approved from docs/mockups/layout-video.html (decisions.md, 28 Oct).
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import ReviewCard from '../components/ReviewCard.astro';
 import WorkCard from '../components/WorkCard.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import { getSite, getServices, getReviews, getLiveWork } from '../lib/site';
@@ -11,118 +11,231 @@ const site = await getSite();
 const { business, contact, credentials, links, safety } = site;
 const services = await getServices();
 const reviews = (await getReviews()).filter((r) => r.data.order !== undefined).slice(0, 3);
+const [featured, ...others] = reviews;
 const work = await getLiveWork();
 ---
 <Base
   title={`${business.trading_name} | Boilers, heating and plumbing in Edinburgh`}
   description={`Gas Safe registered gas, heating and plumbing in ${business.area_served}: boiler repairs, new boilers, heating upgrades, servicing and gas safety certificates.`}
+  headerOver
+  bare
 >
+  <!-- Hero: stock skyline footage (Pexels, decisions.md 28 Oct) under a charcoal wash -->
   <section slot="hero" class="hero" aria-labelledby="hero-title">
-    <!-- [PHOTO: the van on an Edinburgh street] — real photo from Ryan; alt text names the place, never a house number -->
-    <div class="hero__photo" aria-hidden="true"><span>Photo: the van on an Edinburgh street</span></div>
+    <video class="hero__video" muted playsinline preload="none" poster="/video/skyline-poster.jpg" aria-hidden="true" data-hero-video></video>
     <div class="wrap hero__text">
       <h1 id="hero-title">Gas, heating and plumbing in Edinburgh</h1>
       <p class="hero__line">{business.trading_name} · {business.area_served}</p>
       <div class="actions" data-hero-actions>
         <a class="button" href="#enquiry-form">Send an enquiry</a>
-        <a class="button button--on-dark" href={`tel:${contact.phone_link}`}>Call {contact.phone}</a>
+        <a class="button button--on-dark" href={`tel:${contact.phone_link}`}><Icon name="phone" size={20} />Call {contact.phone}</a>
       </div>
+      <ul class="proof" aria-label="Credentials">
+        <li>
+          <a href={links.google_reviews}>
+            <img class="proof__google" src="/brand/google-g.png" width="192" height="192" alt="" />
+            <span>{links.google_rating} from {links.google_review_count} Google reviews</span>
+          </a>
+        </li>
+        <li>
+          <a href={credentials.gas_safe_register_url}>
+            <img class="proof__gas-safe" src="/brand/gas-safe.png" width="106" height="120" alt="Gas Safe Register" />
+            <span>Gas Safe registered</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </section>
 
-  <ul slot="hero" class="strip" aria-label="Credentials">
-    <li>
-      <a href={links.google_reviews}>
-        <img class="badge" src="/brand/google-g.png" width="192" height="192" alt="" />
-        <span>{links.google_rating} from {links.google_review_count} Google reviews</span>
-      </a>
-    </li>
-    <li>
-      <a href={credentials.gas_safe_register_url}>
-        <img class="badge" src="/brand/gas-safe.png" width="106" height="120" alt="Gas Safe Register" />
-        <span>Gas Safe registered</span>
-      </a>
-    </li>
-  </ul>
-
   <section class="section" aria-labelledby="what-we-do">
-    <h2 id="what-we-do">What we do</h2>
-    <ul class="rows">
-      {services.map((s) => (
-        <li>
-          <a href={`/${s.id}/`}>
-            <Icon name={s.data.icon} size={24} />
-            <span class="rows__text">
-              <span class="rows__title">{s.data.title}</span>
-              <span class="rows__line">{s.data.line}</span>
-            </span>
-            <Icon name="chevron-right" size={20} />
-          </a>
-        </li>
-      ))}
-    </ul>
+    <div class="wrap">
+      <h2 id="what-we-do">What we do</h2>
+      <ul class="services">
+        {services.map((s) => (
+          <li>
+            <a href={`/${s.id}/`}>
+              <span class="services__icon"><Icon name={s.data.icon} size={22} /></span>
+              <span class="services__text">
+                <span class="services__title">{s.data.title}</span>
+                <span class="services__line">{s.data.line}</span>
+              </span>
+              <Icon name="chevron-right" size={20} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>
 
   {work.length > 0 && (
-    <section class="section" aria-labelledby="work">
-      <h2 id="work">Examples of our work</h2>
-      <div class="work-row">{work.map((w) => <WorkCard id={w.id} />)}</div>
+    <section class="section section--tight" aria-labelledby="work">
+      <div class="wrap">
+        <h2 id="work">Examples of our work</h2>
+        {work.length < 3
+          ? <div class="work-features">{work.map((w) => <WorkCard id={w.id} feature />)}</div>
+          : <div class="work-row">{work.map((w) => <WorkCard id={w.id} />)}</div>}
+      </div>
     </section>
   )}
 
-  <section class="section" aria-labelledby="reviews">
-    <h2 id="reviews">What customers say</h2>
-    <div class="review-grid">
-      {reviews.map((r) => <ReviewCard review={r.data} short />)}
+  <section class="section section--white" aria-labelledby="reviews">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 id="reviews">What customers say</h2>
+        <a class="google" href={links.google_reviews}>
+          <img src="/brand/google-g.png" width="192" height="192" alt="" />
+          {links.google_rating} from {links.google_review_count} Google reviews
+        </a>
+      </div>
+      <div class="review-layout">
+        {featured && (
+          <figure class="quote quote--big">
+            <blockquote>{featured.data.text}</blockquote>
+            <figcaption><a href={featured.data.link ?? links.google_reviews}>{featured.data.name}, review on Google</a></figcaption>
+          </figure>
+        )}
+        {others.map((r) => (
+          <figure class="quote">
+            <blockquote>{r.data.excerpt ?? r.data.text}</blockquote>
+            <figcaption><a href={r.data.link ?? links.google_reviews}>{r.data.name}, review on Google</a></figcaption>
+          </figure>
+        ))}
+      </div>
+      <p class="more"><a class="link" href="/reviews/">Read more reviews <Icon name="chevron-right" size={18} /></a></p>
     </div>
-    <p class="more"><a href="/reviews/">Read more reviews <span aria-hidden="true">→</span></a></p>
   </section>
 
-  <section class="section enquiry-section" id="enquiry-form" aria-labelledby="enquire">
-    <h2 id="enquire">Send an enquiry</h2>
-    <EnquiryForm emergencyNumber={safety.gas_emergency_number} emergencyLink={safety.gas_emergency_link} phone={contact.phone} />
+  <section class="section" id="enquiry-form" aria-labelledby="enquire">
+    <div class="wrap enquire">
+      <div class="enquire__aside">
+        <h2 id="enquire">Send an enquiry</h2>
+        <p class="enquire__area">{business.area_served}</p>
+        <a class="enquire__call" href={`tel:${contact.phone_link}`}><Icon name="phone" size={24} />{contact.phone}</a>
+        <a class="enquire__mail" href={`mailto:${contact.email}`}>{contact.email}</a>
+      </div>
+      <EnquiryForm emergencyNumber={safety.gas_emergency_number} emergencyLink={safety.gas_emergency_link} phone={contact.phone} />
+    </div>
   </section>
 </Base>
 
 <style>
-  /* Hero: a full-width photo with the heading over it */
-  .hero { position: relative; display: grid; min-height: 26rem; background: var(--charcoal); color: var(--on-dark); }
-  .hero__photo { position: absolute; inset: 0; background: #6d6f72; }
-  .hero__photo span { position: absolute; top: var(--s2); left: var(--gutter); font-size: var(--small); color: var(--on-dark-muted); }
-  .hero__text { position: relative; align-self: end; padding-block: var(--s5) var(--s4); }
-  .hero h1 { max-width: 14ch; margin: 0; color: var(--on-dark); }
-  .hero__line { margin: var(--s1) 0 var(--s3); color: var(--on-dark-muted); }
-  .hero .actions { margin: 0; }
-  .hero .button:focus-visible { outline-color: var(--on-dark); }
-
-  /* Proof strip */
-  .strip {
-    display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s1) var(--s4);
-    margin: 0; max-width: none; padding: var(--s2) var(--gutter); list-style: none;
-    background: var(--surface); border-bottom: 1px solid var(--line);
-    font-family: var(--font-brand); font-weight: 600; font-size: var(--label);
+  /* Hero: the footage sits behind the header and heading under a charcoal wash, fading to solid charcoal */
+  .hero {
+    position: relative; isolation: isolate; overflow: hidden; display: grid; align-items: end;
+    min-height: 100svh; padding-top: 4.25rem;
+    background: var(--charcoal) url('/video/skyline-poster.jpg') center / cover; color: var(--on-dark);
   }
-  .strip a { display: flex; align-items: center; gap: var(--s1); color: var(--ink); text-decoration: none; }
-  .strip a:hover span { text-decoration: underline; }
-  .badge { height: 1.75rem; width: auto; flex: none; }
+  .hero__video { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: opacity 1s ease; }
+  .hero__video.is-fading { opacity: 0; }
+  .hero::before {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, rgba(42, 42, 44, 0.72) 0%, rgba(42, 42, 44, 0.45) 28%, rgba(42, 42, 44, 0.8) 62%, var(--charcoal) 100%);
+  }
+  .hero__text { width: 100%; padding-block: var(--s5) var(--s4); }
+  .hero h1 { max-width: 14ch; margin: 0; color: var(--on-dark); }
+  .hero__line { margin: 0.875rem 0 1.75rem; color: var(--on-dark-muted); }
+  .hero .actions { margin: 0; gap: 0.625rem; }
+  .hero .button:focus-visible, .proof a:focus-visible { outline-color: var(--on-dark); }
 
-  .section { margin-top: var(--s5); }
+  .proof {
+    display: flex; flex-wrap: wrap; gap: var(--s1) 1.25rem; list-style: none;
+    margin: 1.75rem 0 0; padding: 1rem 0 0; max-width: none; border-top: 1px solid rgba(255, 255, 255, 0.14);
+    font-family: var(--font-brand); font-weight: 600; font-size: 0.8125rem; line-height: 1.3;
+  }
+  .proof a { display: flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; color: var(--on-dark); text-decoration: none; }
+  .proof a:hover span { text-decoration: underline; }
+  .proof span { max-width: 6.5rem; }
+  .proof__google { height: 2rem; width: auto; }
+  .proof__gas-safe { height: 2.25rem; width: auto; padding: 3px; background: #fff; border-radius: 4px; }
 
-  /* Service rows: one panel, one tap target per row */
-  .rows { list-style: none; padding: 0; margin: 0; max-width: 40rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
-  .rows li + li { border-top: 1px solid var(--line); }
-  .rows a { display: flex; align-items: center; gap: var(--s2); padding: var(--s2); color: var(--ink); text-decoration: none; }
-  .rows a:hover .rows__title { text-decoration: underline; }
-  .rows :global(.icon) { color: var(--copper-deep); flex: none; }
-  .rows a > :global(.icon:last-child) { color: var(--muted); }
-  .rows__text { flex: 1; display: grid; }
-  .rows__title { font-family: var(--font-brand); font-weight: 700; }
-  .rows__line { color: var(--muted); font-size: var(--small); }
+  @media (min-width: 60rem) {
+    .hero { align-items: center; min-height: 40rem; }
+    .hero::before {
+      background:
+        linear-gradient(90deg, rgba(42, 42, 44, 0.9) 0%, rgba(42, 42, 44, 0.62) 45%, rgba(42, 42, 44, 0.3) 100%),
+        linear-gradient(180deg, rgba(42, 42, 44, 0.4) 0%, transparent 25%, transparent 65%, var(--charcoal) 100%);
+    }
+    .hero__text { padding-block: var(--s5) var(--s6); }
+    .hero__text > * { max-width: 36rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .hero__video { display: none; } }
 
+  /* Sections alternate warm and white (rule 23) */
+  .section { margin: 0; padding-block: 3.5rem; }
+  .section--tight { padding-top: 0; }
+  .section--white { background: var(--surface); }
+  .section h2 { margin: 0 0 var(--s3); }
+  .section__head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 0.75rem 2rem; margin-bottom: var(--s3); }
+  .section__head h2 { margin: 0; }
+  @media (min-width: 60rem) { .section { padding-block: 5.5rem; } .section--tight { padding-top: 0; } }
+
+  /* Services: taller rows on phones, tiles on desktop (two then three across) */
+  .services { list-style: none; padding: 0; margin: 0; max-width: none; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .services li + li { border-top: 1px solid var(--line); }
+  .services a { display: flex; align-items: center; gap: var(--s2); padding: 1.25rem var(--s2); color: var(--ink); text-decoration: none; }
+  .services a:hover .services__title { text-decoration: underline; }
+  .services__icon { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; flex: none; border-radius: 50%; background: var(--copper-tint); color: var(--copper-deep); }
+  .services__text { flex: 1; display: grid; gap: 0.15rem; }
+  .services__title { font-family: var(--font-brand); font-weight: 700; font-size: 1.125rem; line-height: 1.25; }
+  .services__line { color: var(--muted); font-size: var(--small); line-height: 1.35; }
+  .services a > :global(.icon:last-child) { flex: none; color: #a9a39a; }
+  @media (min-width: 60rem) {
+    .services { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--s2); background: none; box-shadow: none; }
+    .services li { grid-column: span 2; }
+    .services li:nth-child(-n + 2) { grid-column: span 3; }
+    .services li + li { border-top: 0; }
+    .services a { flex-direction: column; align-items: flex-start; gap: 1.25rem; height: 100%; min-height: 11rem; padding: var(--s3); background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .services a > :global(.icon:last-child) { margin-top: auto; color: var(--copper-deep); }
+  }
+
+  .work-features { display: grid; gap: var(--s2); }
   .work-row { display: flex; gap: var(--s2); overflow-x: auto; padding-bottom: var(--s1); }
   .work-row > :global(*) { flex: 0 0 min(80%, 20rem); }
 
-  .review-grid { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
-  .more a { font-family: var(--font-brand); font-weight: 600; font-size: var(--small); text-decoration: none; }
-  .more a:hover { text-decoration: underline; }
+  /* Reviews: one in full, large; two shorter beside it (rule 14) */
+  .google { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; color: var(--ink); font-family: var(--font-brand); font-weight: 600; font-size: 0.9375rem; text-decoration: none; }
+  .google:hover { text-decoration: underline; }
+  .google img { height: 1.5rem; width: auto; }
+  .review-layout { display: grid; gap: var(--s2); }
+  .quote--big { background: var(--charcoal) !important; color: var(--on-dark); padding: 1.75rem var(--s3); }
+  .quote--big blockquote { font-family: var(--font-brand); font-weight: 600; font-size: 1.375rem; line-height: 1.35; letter-spacing: -0.01em; }
+  .quote--big blockquote::before { content: '\201C'; display: block; height: 2.25rem; color: var(--copper); font-size: 4rem; line-height: 1; }
+  .quote--big figcaption { color: var(--on-dark-muted); }
+  .quote--big figcaption a:focus-visible { outline-color: var(--on-dark); }
+  .more { margin: var(--s2) 0 0; }
+  @media (min-width: 60rem) {
+    .review-layout { grid-template-columns: 1.4fr 1fr; }
+    .quote--big { grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; padding: 2.5rem; }
+    .quote--big blockquote { font-size: 1.625rem; }
+  }
+
+  /* Enquiry: the form panel with the phone number beside it (rule 25) */
+  .enquire { display: grid; gap: var(--s3); }
+  .enquire__area { margin: 0; color: var(--muted); }
+  .enquire__call { display: inline-flex; align-items: center; gap: 0.6rem; min-height: 2.75rem; margin-top: var(--s2); color: var(--ink); font-family: var(--font-brand); font-weight: 700; font-size: 1.375rem; text-decoration: none; }
+  .enquire__call :global(.icon) { color: var(--copper-deep); }
+  .enquire__mail { display: flex; align-items: center; min-height: 2.75rem; color: var(--muted); text-decoration: none; }
+  .enquire__call:hover, .enquire__mail:hover { text-decoration: underline; }
+  @media (min-width: 60rem) {
+    .enquire { grid-template-columns: 1fr 1.3fr; gap: var(--s6); align-items: start; }
+  }
 </style>
+
+<script>
+  // Loads the footage only where it will be seen: not for people who prefer less motion or save data.
+  // Phones get the smaller file. Loops with a soft fade back to the first frame (the poster).
+  const video = document.querySelector('[data-hero-video]') as HTMLVideoElement | null;
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+  if (video && !saveData && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    video.src = matchMedia('(min-width: 48rem)').matches ? '/video/skyline-960.mp4' : '/video/skyline-640.mp4';
+    video.addEventListener('timeupdate', () => {
+      if (video.duration && video.duration - video.currentTime < 1.1) video.classList.add('is-fading');
+    });
+    video.addEventListener('ended', () => {
+      video.currentTime = 0;
+      video.play();
+      requestAnimationFrame(() => video.classList.remove('is-fading'));
+    });
+    video.play().catch(() => {});
+  }
+</script>

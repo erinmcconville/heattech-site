@@ -11,35 +11,44 @@ const { business, contact, promises, safety } = site;
 <Base
   title={`Contact | ${business.trading_name}, Edinburgh`}
   description={`Send an enquiry or call ${contact.phone}. Gas, heating and plumbing in ${business.area_served}.`}
+  emergencyBand={false}
 >
-  <h1>Contact</h1>
+  <div class="contact">
+    <div class="contact__aside">
+      <h1>Contact</h1>
+      <ul class="ways">
+        <li><a href={`tel:${contact.phone_link}`}><Icon name="phone" size={22} />{contact.phone}</a></li>
+        <li><a href={`mailto:${contact.email}`}><Icon name="mail" size={22} />{contact.email}</a></li>
+      </ul>
+      <p class="small area">{business.area_served}</p>
+      <p class="emergency-band">
+        <span>Smell gas? Don't send a form. Call <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>.</span>
+      </p>
+    </div>
 
-  <ul class="ways">
-    <li><a href={`tel:${contact.phone_link}`}><Icon name="phone" size={22} />{contact.phone}</a></li>
-    <li><a href={`mailto:${contact.email}`}><Icon name="mail" size={22} />{contact.email}</a></li>
-  </ul>
-
-  <section class="section" aria-labelledby="enquire">
-    <h2 id="enquire">Send an enquiry</h2>
-    <EnquiryForm full emergencyNumber={safety.gas_emergency_number} emergencyLink={safety.gas_emergency_link} phone={contact.phone} />
-    <p class="small"><Text value={promises.after_enquiry} /></p>
-    <p class="small">{business.area_served}</p>
-  </section>
-
-  <p class="emergency-band">
-    Smell gas? Don't send a form. Call <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>.
-  </p>
+    <section aria-labelledby="enquire">
+      <h2 id="enquire">Send an enquiry</h2>
+      <EnquiryForm full emergencyNumber={safety.gas_emergency_number} emergencyLink={safety.gas_emergency_link} phone={contact.phone} />
+      <p class="small after"><Text value={promises.after_enquiry} /></p>
+    </section>
+  </div>
 </Base>
 
 <style>
   .ways { list-style: none; padding: 0; margin: var(--s3) 0 0; display: grid; gap: var(--s1); max-width: 28rem; }
   .ways a {
     display: flex; align-items: center; gap: var(--s2); min-height: 3.5rem; padding: 0 var(--s2);
-    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
     color: var(--ink); font-family: var(--font-brand); font-weight: 700; text-decoration: none; word-break: break-word;
   }
   .ways :global(.icon) { color: var(--copper-deep); flex: none; }
-  .section { margin-top: var(--s5); }
-  .emergency-band { margin-top: var(--s4); padding: var(--s2); background: var(--emergency-bg); color: var(--emergency); font-weight: 700; border-radius: var(--radius); max-width: 46rem; }
-  .emergency-band a { color: inherit; }
+  .contact { display: grid; gap: var(--s5); }
+  .contact h2 { margin-top: 0; }
+  .area { margin-top: var(--s2); color: var(--muted); }
+  .after { margin-top: var(--s2); }
+  @media (min-width: 60rem) { .contact { grid-template-columns: 1fr 1.3fr; gap: var(--s6); align-items: start; } }
+  /* Same marker as the footer's gas line */
+  .emergency-band { display: flex; gap: 0.75rem; margin-top: var(--s3); padding: var(--s3); max-width: 46rem; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); color: var(--emergency); font-weight: 700; }
+  .emergency-band::before { content: ''; flex: none; width: 0.625rem; height: 0.625rem; margin-top: 0.55rem; border-radius: 50%; background: #e5484d; box-shadow: 0 0 0 4px rgba(229, 72, 77, 0.2); }
+  .emergency-band a { color: inherit; padding-block: 0.7rem; }
 </style>

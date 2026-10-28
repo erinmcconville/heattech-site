@@ -1,66 +1,82 @@
 ---
 import Text from './Text.astro';
 
-interface Props { site: Record<string, Record<string, any>> }
-const { site } = Astro.props;
+interface Props { site: Record<string, Record<string, any>>; emergencyBand?: boolean }
+const { site, emergencyBand = true } = Astro.props;
 const { business, contact, credentials, safety } = site;
 ---
 <footer class="site-footer">
-  <div class="emergency-band">
-    <p class="wrap">
-      Smell gas? Call the Gas Emergency number,{' '}
-      <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>.
-    </p>
-  </div>
+  {emergencyBand && (
+    <div class="emergency-line">
+      <p class="wrap">
+        <span>
+          Smell gas? Call the Gas Emergency number,{' '}
+          <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>.
+        </span>
+      </p>
+    </div>
+  )}
 
   <div class="wrap footer-grid">
     <div>
-      <img class="footer-logo" src="/brand/logo-header.png" width="532" height="308" alt={`${business.trading_name} Ltd`} loading="lazy" />
+      <img class="footer-logo" src="/brand/logo-cutout.png" width="532" height="308" alt={`${business.trading_name} Ltd`} loading="lazy" />
     </div>
     <div>
       <p class="footer-heading">Contact</p>
-      <p>
-        <a href={`tel:${contact.phone_link}`}>{contact.phone}</a><br />
-        <a href={`mailto:${contact.email}`}>{contact.email}</a>
-      </p>
+      <ul class="footer-links">
+        <li><a href={`tel:${contact.phone_link}`}>{contact.phone}</a></li>
+        <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
+      </ul>
       <p class="muted">{contact.address_line_1}, {contact.town} {contact.postcode}</p>
     </div>
     <div>
       <p class="footer-heading">Company</p>
       <p class="muted">
         {business.legal_name}<br />
-        Company {business.company_number}<br />
-        <a href={credentials.gas_safe_register_url}>Gas Safe</a> <Text value={credentials.gas_safe_number} />
+        Company {business.company_number}
       </p>
+      <ul class="footer-links">
+        <li><a href={credentials.gas_safe_register_url}>Gas Safe <Text value={credentials.gas_safe_number} /></a></li>
+      </ul>
       <p>
         <!-- White backing: the logo's lettering is see-through, so it needs a light background -->
         <a class="gas-safe-badge" href={credentials.gas_safe_register_url}><img src="/brand/gas-safe.png" width="106" height="120" alt="Gas Safe Register" loading="lazy" /></a>
       </p>
-      <p><a href="/privacy/">Privacy</a></p>
+      <ul class="footer-links">
+        <li><a href="/privacy/">Privacy</a></li>
+      </ul>
     </div>
   </div>
 </footer>
 
 <style>
-  .site-footer { background: var(--charcoal); color: var(--on-dark); font-size: var(--small); }
-  .site-footer a { color: var(--on-dark); }
+  .site-footer { background: var(--charcoal); color: var(--on-dark-muted); font-size: var(--small); }
+  .site-footer a { color: var(--on-dark); text-decoration: none; }
+  .site-footer a:hover { text-decoration: underline; }
   .site-footer a:focus-visible { outline-color: var(--on-dark); }
-  .emergency-band { background: var(--emergency-bg); color: var(--emergency); font-weight: 700; }
-  .emergency-band p { margin: 0 auto; padding-block: var(--s2); max-width: var(--page); }
-  .emergency-band a { color: inherit; }
+
+  /* The gas emergency line: white with a red marker, at the top of the footer */
+  .emergency-line { border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+  .emergency-line p { display: flex; gap: 0.75rem; margin-block: 0; max-width: var(--page); padding-block: 1.25rem; color: var(--on-dark); font-weight: 600; }
+  .emergency-line p::before {
+    content: ''; flex: none; width: 0.625rem; height: 0.625rem; margin-top: 0.55rem;
+    border-radius: 50%; background: #e5484d; box-shadow: 0 0 0 4px rgba(229, 72, 77, 0.2);
+  }
+  /* Bigger tap area without moving the line */
+  .emergency-line a { padding-block: 0.7rem; text-decoration: underline; text-underline-offset: 0.2em; }
+
   .footer-grid {
     display: grid; gap: var(--s3);
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
     padding-block: var(--s4) var(--s5);
   }
-  .footer-logo { height: 3.5rem; width: auto; }
-  .footer-heading {
-    margin-bottom: var(--s1);
-    font-family: var(--font-brand); font-weight: 600; font-size: var(--label);
-    letter-spacing: 0.16em; text-transform: uppercase; color: var(--on-dark-muted);
-  }
+  .footer-grid p { margin-bottom: var(--s1); }
+  .footer-logo { height: 3rem; width: auto; }
+  .footer-heading { margin-bottom: 0.25rem; font-family: var(--font-brand); font-weight: 600; color: var(--on-dark); }
+  .footer-links { list-style: none; padding: 0; margin: 0 0 var(--s1); }
+  .footer-links a { display: inline-flex; align-items: center; min-height: 2.75rem; }
   .muted { color: var(--on-dark-muted); }
-  .gas-safe-badge { display: inline-flex; padding: 0.4rem; background: #fff; border-radius: var(--radius); }
+  .gas-safe-badge { display: inline-flex; padding: 0.3rem; background: #fff; border-radius: 6px; }
   .gas-safe-badge img { height: 2.5rem; width: auto; }
   .site-footer :global(.pending) { color: var(--ink); }
 </style>

@@ -5,8 +5,11 @@ import Footer from '../components/Footer.astro';
 import MobileBar from '../components/MobileBar.astro';
 import { getSite } from '../lib/site';
 
-interface Props { title: string; description?: string; noindex?: boolean; jsonLd?: object }
-const { title, description, noindex, jsonLd } = Astro.props;
+// emergencyBand: false on pages that already carry their own gas emergency line, so it isn't shown twice
+// headerOver: the header sits transparent over the page's hero (the homepage footage)
+// bare: the page lays out its own full-width sections instead of one centred column
+interface Props { title: string; description?: string; noindex?: boolean; jsonLd?: object; emergencyBand?: boolean; headerOver?: boolean; bare?: boolean }
+const { title, description, noindex, jsonLd, emergencyBand = true, headerOver = false, bare = false } = Astro.props;
 const site = await getSite();
 const { business, contact, links } = site;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -46,7 +49,8 @@ const businessLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <link rel="preload" href="/fonts/montserrat-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
-    <meta name="theme-color" content="#4f4f51" />
+    <link rel="preload" href="/fonts/source-sans-3-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#2a2a2c" />
     {description && <meta name="description" content={description} />}
     {noindex && <meta name="robots" content="noindex" />}
     {!noindex && <link rel="canonical" href={canonical.href} />}
@@ -56,17 +60,17 @@ const businessLd = {
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Header site={site} />
+    <Header site={site} over={headerOver} />
     <main id="main">
       <slot name="hero" />
-      <div class="wrap page"><slot /></div>
+      {bare ? <slot /> : <div class="wrap page"><slot /></div>}
     </main>
-    <Footer site={site} />
+    <Footer site={site} emergencyBand={emergencyBand} />
     <MobileBar site={site} />
   </body>
 </html>
 
 <style is:global>
   /* Room for the fixed bottom bar on phones */
-  @media (max-width: 59.99rem) { body { padding-bottom: var(--bar-height); } }
+  @media (max-width: 59.99rem) { .site-footer { padding-bottom: var(--bar-height); } }
 </style>

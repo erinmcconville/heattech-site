@@ -1,15 +1,17 @@
 ---
 import Text from './Text.astro';
+import Icon from './Icon.astro';
 import { getServices } from '../lib/site';
 
-interface Props { site: Record<string, Record<string, any>> }
-const { site } = Astro.props;
+// over: sits transparent over the homepage hero footage
+interface Props { site: Record<string, Record<string, any>>; over?: boolean }
+const { site, over = false } = Astro.props;
 const { business, contact, availability } = site;
 const services = await getServices();
 
-// The menu is a <details> element, so it opens without JavaScript
-const nav = [
-  ...services.map((s) => ({ href: `/${s.id}/`, label: s.data.title })),
+// The menus are <details> elements, so they open without JavaScript
+const serviceLinks = services.map((s) => ({ href: `/${s.id}/`, label: s.data.title }));
+const pageLinks = [
   { href: '/work/', label: 'Examples of our work' },
   { href: '/reviews/', label: 'Reviews' },
   { href: '/about/', label: 'About' },
@@ -17,20 +19,44 @@ const nav = [
 ];
 const path = Astro.url.pathname;
 ---
-<header class="site-header">
+<header class:list={['site-header', { 'site-header--over': over }]}>
   <div class="wrap site-header__inner">
     <a href="/" class="logo">
-      <!-- [PLACEHOLDER: logo as PNG with transparent background, or SVG, from Ryan] -->
-      <img src="/brand/logo-header.png" width="532" height="308" alt={`${business.trading_name} Ltd, home`} />
+      <!-- Cut out from the supplied logo. [PLACEHOLDER: logo as PNG with transparent background, or SVG, from Ryan] -->
+      <img src="/brand/logo-cutout.png" width="532" height="308" alt={`${business.trading_name} Ltd, home`} />
     </a>
 
-    <a class="button button--on-dark call" href={`tel:${contact.phone_link}`}>Call</a>
+    <!-- Desktop: services in a small menu, the other pages as links -->
+    <nav class="nav-wide" aria-label="Main">
+      <details class="services-menu">
+        <summary>Services</summary>
+        <ul>
+          {serviceLinks.map((item) => (
+            <li><a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a></li>
+          ))}
+        </ul>
+      </details>
+      {pageLinks.map((item) => (
+        <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
 
+    <a class="call" href={`tel:${contact.phone_link}`}><Icon name="phone" size={18} />Call</a>
+
+    <!-- Phones: one menu with everything -->
     <details class="menu">
-      <summary>Menu</summary>
+      <summary aria-label="Menu">
+        <svg class="menu__open" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        <svg class="menu__close" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </summary>
       <nav aria-label="Main">
         <ul>
-          {nav.map((item) => (
+          {serviceLinks.map((item) => (
+            <li><a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a></li>
+          ))}
+        </ul>
+        <ul class="menu__pages">
+          {pageLinks.map((item) => (
             <li><a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a></li>
           ))}
         </ul>
@@ -44,31 +70,40 @@ const path = Astro.url.pathname;
 </header>
 
 <style>
-  .site-header { background: var(--charcoal); color: var(--on-dark); position: relative; }
-  .site-header__inner { display: flex; align-items: center; gap: var(--s2); padding-block: 0.75rem; }
+  .site-header { background: var(--charcoal); color: var(--on-dark); position: relative; z-index: 10; }
+  .site-header--over { position: absolute; top: 0; left: 0; right: 0; background: transparent; }
+  .site-header__inner { display: flex; align-items: center; gap: 0.75rem; min-height: 4.25rem; }
   .logo { display: block; flex: none; margin-right: auto; }
-  .logo img { height: 3rem; width: auto; }
-  .call { min-height: 2.5rem; padding-inline: 1rem; }
+  .logo img { height: 2.75rem; width: auto; }
+
+  .call {
+    display: inline-flex; align-items: center; gap: 0.4rem; height: 2.75rem; padding: 0 1.1rem;
+    border-radius: 999px; background: rgba(255, 255, 255, 0.12); color: var(--on-dark);
+    font-family: var(--font-brand); font-weight: 700; font-size: 0.9375rem; text-decoration: none;
+  }
+  .call:hover { background: rgba(255, 255, 255, 0.2); }
 
   .menu summary {
-    display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 0.25rem;
+    display: grid; place-items: center; width: 2.75rem; height: 2.75rem;
     cursor: pointer; list-style: none;
-    font-family: var(--font-brand); font-weight: 600; font-size: var(--small);
   }
-  .menu summary::-webkit-details-marker { display: none; }
-  .menu summary::after { content: ''; width: 0.5rem; height: 0.5rem; margin-left: 0.5rem; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg) translateY(-2px); }
-  .menu[open] summary::after { transform: rotate(-135deg) translateY(-2px); }
+  .menu summary::-webkit-details-marker, .services-menu summary::-webkit-details-marker { display: none; }
+  .menu__close, .menu[open] .menu__open { display: none; }
+  .menu[open] .menu__close { display: block; }
   .menu nav {
     position: absolute; left: 0; right: 0; top: 100%; z-index: 30;
-    background: var(--charcoal); border-top: 1px solid rgba(255, 255, 255, 0.15);
+    background: var(--charcoal); border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
-  .menu ul { list-style: none; margin: 0 auto; padding: var(--s1) var(--gutter) var(--s2); max-width: var(--page); }
+  .menu ul { list-style: none; margin: 0 auto; padding: var(--s1) var(--gutter); max-width: var(--page); }
+  .menu .menu__pages { padding-bottom: var(--s2); border-top: 1px solid rgba(255, 255, 255, 0.1); }
   .menu a {
     display: flex; align-items: center; min-height: var(--tap);
     color: var(--on-dark); text-decoration: none; font-family: var(--font-brand); font-weight: 600;
   }
-  .menu a[aria-current='page'] { color: var(--copper); }
-  .menu a:focus-visible, .call:focus-visible, .menu summary:focus-visible { outline-color: var(--on-dark); }
+  .menu a[aria-current='page'], .nav-wide a[aria-current='page'] { color: var(--copper); }
+  .site-header a:focus-visible, .site-header summary:focus-visible { outline-color: var(--on-dark); }
+
+  .nav-wide { display: none; }
 
   .availability {
     margin: 0; max-width: none; padding-block: var(--s1);
@@ -77,7 +112,22 @@ const path = Astro.url.pathname;
   .availability .wrap { display: block; }
 
   @media (min-width: 60rem) {
-    .logo img { height: 3.5rem; }
-    .call { order: 2; }
+    .menu { display: none; }
+    .nav-wide { display: flex; align-items: center; gap: 1.75rem; margin-right: 1rem; }
+    .nav-wide > a, .services-menu summary {
+      display: inline-flex; align-items: center; min-height: 2.75rem;
+      color: var(--on-dark-muted); text-decoration: none; font-family: var(--font-brand); font-weight: 600; font-size: 0.9375rem;
+    }
+    .nav-wide > a:hover, .services-menu summary:hover { color: var(--on-dark); }
+    .services-menu { position: relative; }
+    .services-menu summary { cursor: pointer; list-style: none; gap: 0.4rem; }
+    .services-menu summary::after { content: ''; width: 0.4rem; height: 0.4rem; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg) translateY(-2px); }
+    .services-menu ul {
+      position: absolute; top: 100%; left: -1rem; z-index: 30; min-width: 16rem;
+      list-style: none; margin: 0.25rem 0 0; padding: 0.5rem;
+      background: var(--surface); border-radius: var(--radius); box-shadow: 0 8px 24px rgba(42, 42, 44, 0.18);
+    }
+    .services-menu ul a { display: block; padding: 0.6rem 0.75rem; border-radius: 6px; color: var(--ink); text-decoration: none; font-family: var(--font-brand); font-weight: 600; font-size: 0.9375rem; }
+    .services-menu ul a:hover { background: var(--bg); }
   }
 </style>

@@ -38,6 +38,7 @@ const property = ['House', 'Flat, ground floor', 'Flat, first floor', 'Flat, sec
     If you smell gas now, call the Gas Emergency number first: <a href={`tel:${emergencyLink}`}>{emergencyNumber}</a>.
   </p>
 
+  <div class="pair">
   <div class="field">
     <label for="f-property">House or flat</label>
     <select id="f-property" name="property">
@@ -48,6 +49,7 @@ const property = ['House', 'Flat, ground floor', 'Flat, first floor', 'Flat, sec
   <div class="field">
     <label for="f-postcode">Postcode</label>
     <input id="f-postcode" name="postcode" type="text" autocomplete="postal-code" required />
+  </div>
   </div>
   <div class="field">
     <label for="f-boiler">Boiler make and age <span class="optional">(optional)</span></label>
@@ -70,12 +72,18 @@ const property = ['House', 'Flat, ground floor', 'Flat, first floor', 'Flat, sec
     </div>
   )}
   {full && (
-    <fieldset class="field">
-      <legend>Photos <span class="optional">(optional, up to 3)</span></legend>
-      <input name="photo1" type="file" accept="image/*" aria-label="Photo 1" />
-      <input name="photo2" type="file" accept="image/*" aria-label="Photo 2" />
-      <input name="photo3" type="file" accept="image/*" aria-label="Photo 3" />
-    </fieldset>
+    <div class="field photos">
+      <span class="photos__label">Photos <span class="optional">(optional, up to 3)</span></span>
+      <!-- Netlify keeps one file per field: the script spreads the chosen photos over photo1–photo3.
+           Without JavaScript, the first photo still sends as photo1. -->
+      <input id="f-photos" class="visually-hidden" name="photo1" type="file" accept="image/*" multiple />
+      <label for="f-photos" class="button button--plain photos__button">Add photos</label>
+      <span class="photos__status" id="f-photos-status" aria-live="polite">No photos added</span>
+      <div hidden>
+        <input name="photo2" type="file" disabled />
+        <input name="photo3" type="file" disabled />
+      </div>
+    </div>
   )}
 
   <div class="pair">
@@ -96,17 +104,31 @@ const property = ['House', 'Flat, ground floor', 'Flat, first floor', 'Flat, sec
 </form>
 
 <style>
-  .enquiry { max-width: var(--measure); }
-  .field { display: grid; gap: 0.35rem; margin: 0 0 1.25rem; padding: 0; border: 0; }
+  /* The form is its own white panel: the end point of the page (rule 25) */
+  .enquiry { max-width: 40rem; padding: var(--s3); background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow), 0 8px 24px rgba(42, 42, 44, 0.06); }
+  @media (min-width: 60rem) { .enquiry { padding: 2.25rem; } }
+  .field { display: grid; gap: 0.4rem; margin: 0 0 1.125rem; padding: 0; border: 0; }
   .field legend { padding: 0; margin-bottom: 0.35rem; font-weight: 600; }
-  label { font-weight: 600; }
+  label { font-weight: 600; font-size: var(--small); }
   .optional { font-weight: 400; color: var(--muted); }
   input, select, textarea {
     font: inherit; color: var(--ink); background: var(--surface);
-    border: 1px solid var(--muted); border-radius: var(--radius);
-    padding: 0.6rem 0.75rem; min-height: 3rem; width: 100%;
+    border: 1.5px solid var(--line-strong); border-radius: var(--radius);
+    padding: 0.6rem 1rem; min-height: var(--tap); width: 100%;
   }
-  input[type='file'] { padding: 0.5rem; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--copper); box-shadow: 0 0 0 3px rgba(204, 126, 46, 0.25); }
+  select {
+    appearance: none; padding-right: 2.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%235c5c60' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6l6 -6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 0.875rem center;
+  }
+  button[type='submit'] { width: 100%; margin-top: var(--s1); }
+  .photos { justify-items: start; }
+  .photos__label { font-weight: 600; }
+  .photos__button { font-weight: 700; }
+  .photos input:focus-visible + .photos__button { outline: 3px solid var(--copper-deep); outline-offset: 2px; }
+  .photos__status { color: var(--muted); font-size: var(--small); }
+  .small a { padding-block: 0.7rem; }
   .bot-field { position: absolute; left: -9999px; }
   .gas-warning { margin-top: -0.5rem; }
   .pair { display: grid; gap: 0 var(--s2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
@@ -133,6 +155,14 @@ const property = ['House', 'Flat, ground floor', 'Flat, first floor', 'Flat, sec
   }
   showGasWarning();
   job.addEventListener('change', showGasWarning);
+
+  const photos = form.querySelector('#f-photos') as HTMLInputElement | null;
+  const photosStatus = document.getElementById('f-photos-status');
+  photos?.addEventListener('change', () => {
+    const n = photos.files?.length ?? 0;
+    if (photosStatus) photosStatus.textContent =
+      n === 0 ? 'No photos added' : n > 3 ? 'The first 3 photos will be sent' : `${n} photo${n === 1 ? '' : 's'} added`;
+  });
 
   // Shrinks a photo to fit within MAX_SIDE. Keeps the original if the browser can't read it.
   async function shrink(file: File): Promise<File> {
@@ -174,13 +204,12 @@ const property = ['House', 'Flat, ground floor', 'Flat, first floor', 'Flat, sec
     data.set('subject', subject);
 
     let total = 0;
-    for (const field of ['photo1', 'photo2', 'photo3']) {
-      const file = data.get(field);
-      if (file instanceof File && file.size > 0) {
-        const small = await shrink(file);
-        total += small.size;
-        data.set(field, small, small.name);
-      }
+    const chosen = [...(photos?.files ?? [])].filter((f) => f.size > 0).slice(0, 3);
+    data.delete('photo1');
+    for (const [i, file] of chosen.entries()) {
+      const small = await shrink(file);
+      total += small.size;
+      data.set(`photo${i + 1}`, small, small.name);
     }
     if (total > MAX_TOTAL) {
       showError('The photos are too large to send together. Please remove one and try again.');

@@ -1,22 +1,31 @@
 ---
 import { getEntry } from 'astro:content';
 import Text from './Text.astro';
+import Icon from './Icon.astro';
 
 // One job from "Examples of our work". Renders nothing unless the job is published with permission.
-interface Props { id: string }
-const entry = await getEntry('work', Astro.props.id);
+// feature: the full-width version, used while there are fewer than three jobs (rule 24).
+interface Props { id: string; feature?: boolean }
+const { id, feature = false } = Astro.props;
+const entry = await getEntry('work', id);
 const live = entry && entry.data.published && entry.data.permission_recorded;
 ---
 {live && entry && (
-  <a class="work-card" href={`/work/${entry.id}/`}>
+  <a class:list={['work-card', { 'work-card--feature': feature }]} href={`/work/${entry.id}/`}>
     <span class="photo-slot work-card__photo">{entry.data.photos[0]}</span>
     <span class="work-card__body">
-      <span class="work-card__title">{entry.data.title}</span>
       {entry.data.summary && <span class="work-card__summary">{entry.data.summary}</span>}
+      <span class="work-card__title">{entry.data.title}</span>
       {entry.data.bills && (
-        <span class="work-card__bills">Energy bills: <Text value={entry.data.bills.before} /> → <Text value={entry.data.bills.after} /> a month</span>
+        <span class="work-card__bills">
+          <span class="work-card__bills-label">Energy bills, a month</span>
+          <span class="work-card__pair">
+            <span><span class="work-card__when">Before</span><span class="work-card__value"><Text value={entry.data.bills.before} /></span></span>
+            <span><span class="work-card__when">After</span><span class="work-card__value"><Text value={entry.data.bills.after} /></span></span>
+          </span>
+        </span>
       )}
-      <span class="work-card__more">See the job <span aria-hidden="true">→</span></span>
+      <span class="work-card__more">See the job <Icon name="chevron-right" size={18} /></span>
     </span>
   </a>
 )}
@@ -24,14 +33,28 @@ const live = entry && entry.data.published && entry.data.permission_recorded;
 <style>
   .work-card {
     display: flex; flex-direction: column; overflow: hidden; max-width: 22rem;
-    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
     color: var(--ink); text-decoration: none;
   }
-  .work-card:hover { border-color: var(--line-strong); }
-  .work-card__photo { aspect-ratio: 4 / 3; border-radius: 0; font-size: var(--small); }
-  .work-card__body { display: grid; gap: 0.25rem; padding: var(--s2); }
-  .work-card__title { font-family: var(--font-brand); font-weight: 700; line-height: 1.3; }
+  .work-card:hover .work-card__more { text-decoration: underline; }
+  .work-card__photo { aspect-ratio: 16 / 10; border-radius: 0; font-size: var(--small); }
+  .work-card__body { display: grid; align-content: center; gap: 0.4rem; padding: var(--s3); }
   .work-card__summary { color: var(--muted); font-size: var(--small); }
-  .work-card__bills { font-weight: 600; font-size: var(--small); }
-  .work-card__more { margin-top: var(--s1); color: var(--copper-deep); font-family: var(--font-brand); font-weight: 600; font-size: var(--small); }
+  .work-card__title { font-family: var(--font-brand); font-weight: 700; font-size: 1.375rem; line-height: 1.2; letter-spacing: -0.01em; }
+  .work-card__bills { display: grid; gap: 0.25rem; margin-top: 0.5rem; }
+  .work-card__bills-label { color: var(--muted); font-size: var(--small); }
+  .work-card__pair { display: grid; grid-template-columns: 1fr 1fr; border-radius: 8px; background: var(--bg); }
+  .work-card__pair > span { display: grid; padding: 0.75rem 1rem; }
+  .work-card__pair > span + span { border-left: 1px solid #e2dcd2; }
+  .work-card__when { color: var(--muted); font-size: 0.9375rem; }
+  .work-card__value { font-family: var(--font-brand); font-weight: 700; font-size: 1.25rem; line-height: 1.2; overflow-wrap: anywhere; }
+  .work-card__more { display: inline-flex; align-items: center; gap: 0.3rem; min-height: 2.75rem; margin-top: 0.25rem; color: var(--copper-deep); font-family: var(--font-brand); font-weight: 700; font-size: var(--small); }
+
+  .work-card--feature { max-width: none; }
+  @media (min-width: 60rem) {
+    .work-card--feature { display: grid; grid-template-columns: 1.2fr 1fr; }
+    .work-card--feature .work-card__photo { aspect-ratio: auto; min-height: 22rem; }
+    .work-card--feature .work-card__body { padding: 2.5rem; }
+    .work-card--feature .work-card__title { font-size: 1.75rem; }
+  }
 </style>

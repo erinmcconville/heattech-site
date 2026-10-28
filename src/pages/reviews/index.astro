@@ -16,14 +16,14 @@ const reviews = await getReviews();
     {links.google_rating} from {links.google_review_count} reviews on Google.
     {' '}<a href={links.google_reviews}>See them on Google</a>
   </p>
-  <div class="reviews">
+  <div class="quotes reviews">
     {reviews.map((r) => <ReviewCard review={r.data} />)}
   </div>
 </Base>
 
 <style>
-  /* Columns so short and long reviews sit together without gaps */
   .google { display: inline-block; height: 1.5rem; width: auto; vertical-align: -0.3rem; margin-right: 0.35rem; }
-  .reviews { columns: 20rem; column-gap: var(--s2); margin-top: var(--s4); }
+  .lede a { padding-block: 0.7rem; }
+  .reviews { margin-top: var(--s4); display: block; max-width: none; columns: 22rem 2; column-gap: var(--s2); }
   .reviews > :global(*) { break-inside: avoid; margin-bottom: var(--s2); }
 </style>

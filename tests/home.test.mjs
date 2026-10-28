@@ -58,3 +58,22 @@ test('reviews link does not overstate the count', () => {
   assert.ok(!main().includes('Read all 74 reviews'));
   assert.ok(main().includes('Read more reviews'));
 });
+
+test('hero footage: muted, inline, still frame first, and the files exist', async () => {
+  const h = home();
+  assert.match(h, /<video[^>]*\bmuted\b[^>]*\bplaysinline\b[^>]*poster="\/video\/skyline-poster\.jpg"/);
+  const { existsSync } = await import('node:fs');
+  for (const f of ['skyline-poster.jpg', 'skyline-640.mp4', 'skyline-960.mp4']) assert.ok(existsSync(`dist/video/${f}`), f);
+  assert.ok(h.includes('prefers-reduced-motion'));
+});
+
+test('first review in full, the review count said once in the section', () => {
+  const h = main();
+  const section = h.slice(h.indexOf('What customers say'), h.indexOf('Read more reviews'));
+  assert.ok(section.includes('Great Job. Had a urgent boiler issues'));
+  assert.equal((section.match(/from 74 Google reviews/g) ?? []).length, 1);
+});
+
+test('one job shows as a full-width feature', () => {
+  assert.equal((main().match(/work-card--feature/g) ?? []).length, 1);
+});

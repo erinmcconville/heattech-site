@@ -6,10 +6,6 @@ import { getReviewsByIds } from '../lib/site';
 interface Props { ids: string[]; short?: boolean }
 const reviews = await getReviewsByIds(Astro.props.ids);
 ---
-<div class="review-list">
+<div class="quotes">
   {reviews.map((r) => <ReviewCard review={r.data} short={Astro.props.short} />)}
 </div>
-
-<style>
-  .review-list { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
-</style>

@@ -22,3 +22,21 @@ test('footer facts', () => {
   assert.ok(!f.includes('Portobello'));
   assert.ok(!f.includes('/electric-to-gas/') && !f.includes('/landlords/'));
 });
+
+test('phone bar uses the page wording', () => {
+  const h = page('about/index.html');
+  const bar = h.slice(h.indexOf('data-mobile-bar'), h.indexOf('</nav>', h.indexOf('data-mobile-bar')));
+  assert.ok(bar.includes('>Send an enquiry<') && !bar.includes('>Enquire<'));
+});
+
+test('gas emergency line shown once on Contact', () => {
+  assert.equal((page('contact/index.html').match(/Smell gas\?/g) ?? []).length, 1);
+});
+
+test('no spaced-capital labels or arrows on links', () => {
+  for (const p of ['index.html', 'new-boilers/index.html', 'work/stockbridge-gas-central-heating/index.html']) {
+    const h = page(p);
+    assert.ok(!h.includes('class="eyebrow"'), p);
+    assert.ok(!/See the job[^<]*<span aria-hidden="true">→|Read more reviews <span/.test(h), p);
+  }
+});

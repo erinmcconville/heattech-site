@@ -62,10 +62,26 @@ These rules also go into the reusable skill.
 9. **Sources sit in one small line at the end** of the section that uses them, with the "Last checked" date.
 10. **Nothing dated:** no "recent", no job dates, no forecasts.
 11. **Form labels are the shortest clear wording,** with one field per question.
+12. **Never show the same thing twice on one screen.** The phone bar says "Send an enquiry" like the page, and hides while the page's top buttons, the header's Call button or the enquiry form are on screen. A page with its own gas emergency line drops the footer's.
+13. **No small labels in spaced capitals.** No label above page headings; a back link, where needed, is plain text in normal letters. Footer headings are in normal letters.
+14. **Reviews use one quote style everywhere:** a tinted block with the customer's words and first name, never a hairline-bordered card. The homepage shows one review large and two smaller; the review count is said once per section. *(Updated 28 Oct with the layout mockup.)*
+15. **Text links don't get arrows.** The chevron belongs only to list rows.
+16. **Nothing looks tappable unless it is.** Tags and other plain facts are a short grey line, not pills or chips.
+17. **Results sit side by side** (Before and After in two columns), so they read at a glance on a phone.
+18. **One left edge.** Strips, hero text and page content line up on the same edge at every width; nothing is centred on its own.
+19. **Every link has a tap area of at least 44px,** made with spacing, not bigger text.
+20. **One field per question, styled like the rest.** No bare browser controls: photos use one "Add photos" field for up to three.
+21. **Deep charcoal (#2a2a2c) at the top and bottom of every page.** On the homepage the skyline footage sits behind the header and hero under a charcoal wash and fades to solid charcoal; it is muted, loops softly and shows a still frame to anyone who prefers less motion.
+22. **Panels are plain white with no hairline border,** on the warm background, with 10px corners.
+23. **Alternate section backgrounds** (warm and white) to separate sections, instead of adding boxes.
+24. **One job example is a full-width feature;** three or more become a scrolling row.
+25. **The enquiry form is the end point:** its own white panel, with the phone number beside it.
+26. **Phones and desktops each get their own layout.** On desktop: hero text over the footage on the left, service tiles, reviews side by side, the form beside the contact details. Nothing is just the phone column stretched.
+27. **Buttons are full width on phones and the same height everywhere.** The second button is a soft filled button, not a thin outline. Standalone links aren't underlined; links inside sentences are.
 
 ## Visual direction
 
-Keep the existing brand: charcoal header and footer, copper for main buttons and small accents, Montserrat for headings, the existing body font, and the warm off-white background. Changes:
+Keep the existing brand: charcoal header and footer, copper for main buttons and small accents, Montserrat for headings and the warm background. *(28 Oct: the look in docs/mockups/layout-video.html replaces the details below: deep charcoal, Source Sans 3 for body text, borderless white panels, the skyline hero. See rules 21–27.)* Changes:
 
 - Fewer boxes: list rows inside one bordered panel, not a card per item.
 - Generous spacing between sections. Section headings around 18px on phones.
