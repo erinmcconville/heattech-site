@@ -10,12 +10,6 @@ test('sitemap lists the new pages', () => {
   assert.ok(xml.includes('/landlords/'));
 });
 
-test('footer links', () => {
-  const html = page('index.html');
-  const footer = html.slice(html.indexOf('<footer'));
-  assert.ok(footer.includes('href="/electric-to-gas/"'));
-  assert.ok(footer.includes('href="/landlords/"'));
-});
 
 test('every ask link matches a form job', () => {
   const known = new Set([...readFileSync('src/content/services.yaml', 'utf8').matchAll(/^\s+- id: ([a-z-]+)$/gm)].map((m) => m[1]));

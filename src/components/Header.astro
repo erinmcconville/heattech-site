@@ -1,12 +1,16 @@
 ---
 import Text from './Text.astro';
+import { getServices } from '../lib/site';
 
 interface Props { site: Record<string, Record<string, any>> }
 const { site } = Astro.props;
 const { business, contact, availability } = site;
+const services = await getServices();
 
+// The menu is a <details> element, so it opens without JavaScript
 const nav = [
-  { href: '/services/', label: 'Services' },
+  ...services.map((s) => ({ href: `/${s.id}/`, label: s.data.title })),
+  { href: '/work/', label: 'Examples of our work' },
   { href: '/reviews/', label: 'Reviews' },
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'Contact' },
@@ -20,18 +24,18 @@ const path = Astro.url.pathname;
       <img src="/brand/logo-header.png" width="532" height="308" alt={`${business.trading_name} Ltd, home`} />
     </a>
 
-    <nav aria-label="Main" class="nav">
-      <ul>
-        {nav.map((item) => (
-          <li><a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>{item.label}</a></li>
-        ))}
-      </ul>
-    </nav>
+    <a class="button button--on-dark call" href={`tel:${contact.phone_link}`}>Call</a>
 
-    <div class="header-actions">
-      <a class="button button--on-dark" href={`tel:${contact.phone_link}`}>Call {contact.phone}</a>
-      <a class="button" href="/contact/">Send an enquiry</a>
-    </div>
+    <details class="menu">
+      <summary>Menu</summary>
+      <nav aria-label="Main">
+        <ul>
+          {nav.map((item) => (
+            <li><a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </details>
   </div>
 
   {availability.show && availability.notice && (
@@ -40,29 +44,31 @@ const path = Astro.url.pathname;
 </header>
 
 <style>
-  .site-header { background: var(--charcoal); color: var(--on-dark); }
-  .site-header__inner {
-    display: flex; flex-wrap: wrap; align-items: center;
-    gap: var(--s1) var(--s4); padding-block: 0.75rem var(--s1);
-  }
-  .logo { display: block; flex: none; }
-  .logo img { height: 3.5rem; width: auto; }
+  .site-header { background: var(--charcoal); color: var(--on-dark); position: relative; }
+  .site-header__inner { display: flex; align-items: center; gap: var(--s2); padding-block: 0.75rem; }
+  .logo { display: block; flex: none; margin-right: auto; }
+  .logo img { height: 3rem; width: auto; }
+  .call { min-height: 2.5rem; padding-inline: 1rem; }
 
-  .nav { flex-basis: 100%; }
-  .nav ul { display: flex; gap: var(--s3); list-style: none; margin: 0; padding: 0; max-width: none; }
-  .nav li { white-space: nowrap; }
-  @media (max-width: 26rem) { .nav ul { gap: var(--s2); } .nav a { font-size: 0.9375rem; } }
-  .nav a {
-    display: inline-flex; align-items: center; min-height: var(--tap);
-    color: var(--on-dark); text-decoration: none;
+  .menu summary {
+    display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 0.25rem;
+    cursor: pointer; list-style: none;
     font-family: var(--font-brand); font-weight: 600; font-size: var(--small);
-    border-bottom: 3px solid transparent;
   }
-  .nav a:hover { border-bottom-color: var(--on-dark-muted); }
-  .nav a[aria-current='page'] { border-bottom-color: var(--copper); }
-  .nav a:focus-visible, .header-actions a:focus-visible { outline-color: var(--on-dark); }
-
-  .header-actions { display: none; }
+  .menu summary::-webkit-details-marker { display: none; }
+  .menu summary::after { content: ''; width: 0.5rem; height: 0.5rem; margin-left: 0.5rem; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg) translateY(-2px); }
+  .menu[open] summary::after { transform: rotate(-135deg) translateY(-2px); }
+  .menu nav {
+    position: absolute; left: 0; right: 0; top: 100%; z-index: 30;
+    background: var(--charcoal); border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .menu ul { list-style: none; margin: 0 auto; padding: var(--s1) var(--gutter) var(--s2); max-width: var(--page); }
+  .menu a {
+    display: flex; align-items: center; min-height: var(--tap);
+    color: var(--on-dark); text-decoration: none; font-family: var(--font-brand); font-weight: 600;
+  }
+  .menu a[aria-current='page'] { color: var(--copper); }
+  .menu a:focus-visible, .call:focus-visible, .menu summary:focus-visible { outline-color: var(--on-dark); }
 
   .availability {
     margin: 0; max-width: none; padding-block: var(--s1);
@@ -70,11 +76,8 @@ const path = Astro.url.pathname;
   }
   .availability .wrap { display: block; }
 
-  /* Wider screens: one row, with the actions on the right. Phones use the bottom bar instead. */
   @media (min-width: 60rem) {
-    .site-header__inner { flex-wrap: nowrap; padding-block: var(--s2); }
-    .logo img { height: 4rem; }
-    .nav { flex-basis: auto; }
-    .header-actions { display: flex; align-items: center; gap: 0.75rem; margin-left: auto; }
+    .logo img { height: 3.5rem; }
+    .call { order: 2; }
   }
 </style>
