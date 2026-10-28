@@ -40,3 +40,9 @@ test('has a Service record', () => {
   assert.match(html, /"@type":"Service"/);
   assert.match(html, /"name":"Electric heating to gas central heating"/);
 });
+
+test('a space sits before each source link', () => {
+  const text = page('electric-to-gas/index.html').replace(/<[^>]+>/g, '');
+  for (const s of ['free: SGN gas supply check', 'from SGN: SGN new connections', 'applies: City of Edinburgh', 'gas boilers: Home Energy', 'central heating: Warmer Homes'])
+    assert.ok(text.includes(s), s);
+});
