@@ -3,6 +3,7 @@
 # title/line: the homepage row and the page heading; line is one plain line in customers' words
 # summary:   the page description for search engines
 # includes, price_factors, notes, sources: optional blocks; leave out what doesn't apply
+# photo:     the shot needed for the page, until a real photo arrives
 # reviews:   two complete Google reviews from reviews.yaml
 # example:   a job in src/content/work/, shown only when published with permission
 # jobs:      options in the enquiry form's job list
@@ -13,6 +14,7 @@
   line: No heating, no hot water, fault codes
   icon: flame
   summary: Finding and fixing boiler faults in Edinburgh and the Lothians.
+  photo: "[PHOTO: a boiler being repaired]"
   reviews: [lena-bruning, dawid-granacki]
   jobs:
     - id: boiler-repairs
@@ -27,6 +29,7 @@
   line: Replacing an old or broken boiler
   icon: tool
   summary: Replacing old or broken boilers in Edinburgh and the Lothians.
+  photo: "[PHOTO: a finished boiler and tidy pipework]"
   includes:
     - System flush
     - Magnetic filter
@@ -52,6 +55,7 @@
   line: Electric to gas, smart controls, radiators
   icon: trending-up
   summary: Electric to gas central heating, smart controls and extra radiators in Edinburgh and the Lothians.
+  photo: "[PHOTO: the boiler fitted in a period hall]"
   price_title: What decides whether electric to gas can be done
   price_factors:
     - label: A gas supply
@@ -88,6 +92,7 @@
   line: Annual service, landlord and pre-sale checks
   icon: clipboard-check
   summary: Annual boiler services and gas safety certificates for homeowners, landlords and sellers in Edinburgh and the Lothians.
+  photo: "[PHOTO: a boiler service in progress]"
   includes:
     - Annual boiler service
     - Landlord gas safety certificate
@@ -111,6 +116,7 @@
   line: Smaller plumbing jobs
   icon: droplet
   summary: Leaks, taps, toilets and blocked drains in Edinburgh and the Lothians.
+  photo: "[PHOTO: a finished tap or pipework repair]"
   notes:
     - "[CONFIRM: which plumbing jobs you take on]"
   reviews: [jenna-mccosh, stephanie-kirkham]

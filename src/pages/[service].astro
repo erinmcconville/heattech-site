@@ -1,0 +1,99 @@
+---
+// One page per service, all from the same template (docs/superpowers/specs/2026-10-28-site-layout-design.md).
+// Blocks with no content for a service are left out.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Text from '../components/Text.astro';
+import ReviewList from '../components/ReviewList.astro';
+import WorkCard from '../components/WorkCard.astro';
+import { getServices, getSite, getLiveWork } from '../lib/site';
+
+export async function getStaticPaths() {
+  const services = await getServices();
+  return services.map((s) => ({ params: { service: s.id }, props: { service: s } }));
+}
+
+const { service } = Astro.props;
+const d = service.data;
+const { business } = await getSite();
+const example = d.example ? (await getLiveWork()).find((w) => w.id === d.example) : undefined;
+const ask = `Ask about ${d.title.charAt(0).toLowerCase()}${d.title.slice(1)}`;
+const askHref = `/contact/?job=${service.id}`;
+
+const serviceLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: d.title,
+  description: d.summary,
+  url: new URL(`/${service.id}/`, Astro.site).href,
+  provider: { '@id': new URL('/#business', Astro.site).href },
+  areaServed: business.area_served,
+};
+---
+<Base title={`${d.title} in Edinburgh | ${business.trading_name}`} description={d.summary} jsonLd={serviceLd}>
+  <p class="eyebrow">Services</p>
+  <h1>{d.title} in Edinburgh</h1>
+  <p class="lede">{d.line}</p>
+  <p data-hero-actions><a class="button" href={askHref}>{ask}</a></p>
+
+  <div class="photo-slot hero-photo">{d.photo}</div>
+
+  {d.includes && (
+    <section class="section" aria-labelledby="included">
+      <h2 id="included">What's included</h2>
+      <ul class="ticks">
+        {d.includes.map((i) => <li><Icon name="check" size={20} />{i}</li>)}
+      </ul>
+      {d.includes_check && <p class="small"><Text value={d.includes_check} /></p>}
+    </section>
+  )}
+
+  {d.price_factors && (
+    <section class="section" aria-labelledby="price">
+      <h2 id="price">{d.price_title}</h2>
+      <dl class="factors">
+        {d.price_factors.map((f) => <div><dt>{f.label}</dt><dd>{f.text}</dd></div>)}
+      </dl>
+      {d.price_check && <p class="small"><Text value={d.price_check} /></p>}
+    </section>
+  )}
+
+  {d.notes && d.notes.map((n) => <p class="note"><Text value={n} /></p>)}
+
+  {d.sources && (
+    <p class="small sources">
+      Sources: {d.sources.map((s, i) => <>{i > 0 && ' · '}<a href={s.href}>{s.text}</a></>)}. Last checked {d.last_checked}
+    </p>
+  )}
+
+  <section class="section" aria-labelledby="reviews">
+    <h2 id="reviews">What customers say</h2>
+    <ReviewList ids={d.reviews} />
+  </section>
+
+  {example && (
+    <section class="section" aria-labelledby="example">
+      <h2 id="example">Example of our work</h2>
+      <WorkCard id={example.id} />
+    </section>
+  )}
+
+  <p class="section"><a class="button" href={askHref}>{ask}</a></p>
+</Base>
+
+<style>
+  .eyebrow { margin: 0 0 0.25rem; color: var(--muted); font-size: var(--small); }
+  h1 { margin-top: 0; }
+  .lede { margin-bottom: var(--s3); }
+  .hero-photo { margin-top: var(--s3); max-width: 46rem; aspect-ratio: 16 / 10; }
+  .section { margin-top: var(--s5); max-width: 46rem; }
+  .ticks { list-style: none; padding: 0; display: grid; gap: var(--s1); grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  .ticks li { display: flex; align-items: center; gap: var(--s1); }
+  .ticks :global(.icon) { color: var(--copper-deep); flex: none; }
+  .factors { display: grid; gap: var(--s2); margin: 0; }
+  .factors dt { font-weight: 600; }
+  .factors dd { margin: 0; color: var(--muted); }
+  .note, .sources { max-width: 46rem; }
+  .note { margin-top: var(--s3); }
+  .sources { margin-top: var(--s2); color: var(--muted); }
+</style>
