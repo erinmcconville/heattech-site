@@ -1,0 +1,44 @@
+---
+import { getEntry } from 'astro:content';
+import Text from './Text.astro';
+
+// One real job, told the same way every time. Undated on purpose (decisions.md, 28 Oct 2026).
+// Renders nothing until the entry is both published and has permission recorded.
+interface Props { id: string }
+const entry = await getEntry('work', Astro.props.id);
+const live = entry && entry.data.published && entry.data.permission_recorded;
+const d = entry?.data;
+---
+{live && d && (
+  <section id="example" class="example card" aria-labelledby="example-title">
+    <h2 id="example-title">{d.title}</h2>
+    <dl class="example__facts">
+      <dt>Before</dt><dd>{d.problem}</dd>
+      {d.usual_approach && <><dt>What others suggested</dt><dd>{d.usual_approach}</dd></>}
+      <dt>What was done</dt><dd><Text value={d.what_ryan_did} /></dd>
+      {d.gas_supply_already_there && <><dt>Gas supply</dt><dd><Text value={d.gas_supply_already_there} /></dd></>}
+    </dl>
+    {d.quotes.map((q) => (
+      <figure class="example__quote">
+        <blockquote><Text value={q.text} /></blockquote>
+        <figcaption><Text value={q.who} /></figcaption>
+      </figure>
+    ))}
+    <div class="example__photos">
+      {d.photos.map((p) => <div class="photo-slot">{p}</div>)}
+    </div>
+    {d.ryan_check && <p class="small"><Text value={d.ryan_check} /></p>}
+  </section>
+)}
+
+<style>
+  .example { margin-top: var(--s4); max-width: 46rem; }
+  .example h2 { margin-top: 0; }
+  .example__facts { display: grid; gap: 0.25rem; margin: 0 0 var(--s2); }
+  .example__facts dt { font-family: var(--font-brand); font-weight: 600; font-size: var(--label); color: var(--muted); margin-top: var(--s1); }
+  .example__facts dd { margin: 0; }
+  .example__quote { margin: var(--s2) 0 0; }
+  .example__quote blockquote { margin: 0; padding-left: var(--s2); border-left: 3px solid var(--copper); }
+  .example__quote figcaption { font-size: var(--small); color: var(--muted); }
+  .example__photos { display: grid; gap: var(--s1); grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); margin-top: var(--s2); }
+</style>
