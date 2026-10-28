@@ -70,6 +70,8 @@ const work = defineCollection({
     usual_approach: z.string().optional(),
     what_ryan_did: z.string(),
     result: z.string().optional(),
+    // Real monthly bills before and after, shown as a featured result. Never a forecast.
+    bills: z.object({ before: z.string(), after: z.string(), note: z.string() }).optional(),
     quotes: z.array(z.object({ text: z.string(), who: z.string() })).default([]),
     photos: z.array(z.string()),
     published: z.boolean().default(false),

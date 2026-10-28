@@ -1,5 +1,6 @@
 ---
 import { getEntry } from 'astro:content';
+import Text from './Text.astro';
 
 // One job from "Examples of our work". Renders nothing unless the job is published with permission.
 interface Props { id: string }
@@ -12,6 +13,9 @@ const live = entry && entry.data.published && entry.data.permission_recorded;
     <span class="work-card__body">
       <span class="work-card__title">{entry.data.title}</span>
       {entry.data.summary && <span class="work-card__summary">{entry.data.summary}</span>}
+      {entry.data.bills && (
+        <span class="work-card__bills">Energy bills: <Text value={entry.data.bills.before} /> → <Text value={entry.data.bills.after} /> a month</span>
+      )}
       <span class="work-card__more">See the job <span aria-hidden="true">→</span></span>
     </span>
   </a>
@@ -28,5 +32,6 @@ const live = entry && entry.data.published && entry.data.permission_recorded;
   .work-card__body { display: grid; gap: 0.25rem; padding: var(--s2); }
   .work-card__title { font-family: var(--font-brand); font-weight: 700; line-height: 1.3; }
   .work-card__summary { color: var(--muted); font-size: var(--small); }
+  .work-card__bills { font-weight: 600; font-size: var(--small); }
   .work-card__more { margin-top: var(--s1); color: var(--copper-deep); font-family: var(--font-brand); font-weight: 600; font-size: var(--small); }
 </style>

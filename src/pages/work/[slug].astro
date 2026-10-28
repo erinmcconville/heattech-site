@@ -28,6 +28,18 @@ const [mainPhoto, ...otherPhotos] = d.photos;
     {otherPhotos.slice(0, 2).map((p) => <div class="photo-slot">{p}</div>)}
   </div>
 
+  {d.bills && (
+    <section class="bills" aria-labelledby="bills-title">
+      <h2 id="bills-title">Energy bills</h2>
+      <div class="bills__pair">
+        <div><span class="bills__label">Before</span><span class="bills__value"><Text value={d.bills.before} /></span><span class="bills__unit">a month</span></div>
+        <span class="bills__arrow" aria-hidden="true">→</span>
+        <div><span class="bills__label">After</span><span class="bills__value"><Text value={d.bills.after} /></span><span class="bills__unit">a month</span></div>
+      </div>
+      <p class="small">{d.bills.note}</p>
+    </section>
+  )}
+
   <dl class="story">
     <dt>Before</dt><dd>{d.problem}</dd>
     {d.challenge && <><dt>The challenge</dt><dd>{d.challenge}</dd></>}
@@ -58,6 +70,15 @@ const [mainPhoto, ...otherPhotos] = d.photos;
   .photos { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s1); margin-top: var(--s3); max-width: 46rem; }
   .photos .photo-slot { aspect-ratio: 1; }
   .photos__main { grid-column: 1 / -1; aspect-ratio: 4 / 3 !important; }
+  .bills { margin-top: var(--s4); max-width: 46rem; padding: var(--s3); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .bills h2 { margin: 0 0 var(--s2); font-size: var(--step-1); }
+  .bills__pair { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s3); }
+  .bills__pair > div { display: grid; }
+  .bills__label { font-family: var(--font-brand); font-weight: 600; font-size: var(--small); color: var(--muted); }
+  .bills__value { font-family: var(--font-brand); font-weight: 700; font-size: 2rem; line-height: 1.1; }
+  .bills__unit { color: var(--muted); font-size: var(--small); }
+  .bills__arrow { font-size: 1.5rem; color: var(--copper-deep); }
+  .bills .small { margin: var(--s2) 0 0; color: var(--muted); }
   .story { max-width: 46rem; margin: var(--s4) 0 0; display: grid; gap: 0.25rem; }
   .story dt { margin-top: var(--s2); font-family: var(--font-brand); font-weight: 600; font-size: var(--small); color: var(--copper-deep); }
   .story dd { margin: 0; }

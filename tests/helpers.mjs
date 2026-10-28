@@ -8,7 +8,9 @@ const build = () => execSync('npx astro build', { stdio: 'ignore' });
 // Edits a content file, rebuilds, runs fn, then always puts the file back and rebuilds
 export async function withEdit(file, from, to, fn) {
   const original = readFileSync(file, 'utf8');
-  if (!original.includes(from)) throw new Error(`${file}: "${from}" not found`);
+  // from: exact text, or a RegExp
+  const found = typeof from === 'string' ? original.includes(from) : from.test(original);
+  if (!found) throw new Error(`${file}: "${from}" not found`);
   try {
     writeFileSync(file, original.replace(from, to));
     build();
