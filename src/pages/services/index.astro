@@ -3,6 +3,7 @@ import { getEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Text from '../../components/Text.astro';
 import ReviewCard from '../../components/ReviewCard.astro';
+import WorkedExample from '../../components/WorkedExample.astro';
 import { getSite, getServices } from '../../lib/site';
 
 const site = await getSite();
@@ -70,6 +71,8 @@ const servicesLd = {
             {s.data.includes.check && <p class="small"><Text value={s.data.includes.check} /></p>}
           </div>
         )}
+
+        {s.id === 'replacing-upgrading' && <WorkedExample id="boiler-replacement-flat" />}
 
         {proof && proof.data.complete && <div class="proof"><ReviewCard review={proof.data} /></div>}
 

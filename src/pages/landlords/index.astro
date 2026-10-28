@@ -1,0 +1,108 @@
+---
+import { getEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Text from '../../components/Text.astro';
+import ReviewCard from '../../components/ReviewCard.astro';
+import WorkedExample from '../../components/WorkedExample.astro';
+import { getSite } from '../../lib/site';
+
+const { business } = await getSite();
+
+// Each line links to the enquiry form with the job already chosen (ids from services.yaml)
+const jobs = [
+  {
+    id: 'landlord-certificate',
+    label: 'Landlord gas safety certificate',
+    source: { text: 'HSE on landlord gas safety checks', href: 'https://www.hse.gov.uk/gas/landlords/safetycheckswhocan.htm' },
+  },
+  { id: 'boiler-service', label: 'Boiler servicing' },
+  {
+    id: 'no-heating',
+    label: 'Repairs and gas emergencies at let properties',
+    note: '[CONFIRM: emergency cover for let properties, and whether you deal with guests or tenants directly]',
+  },
+  { id: 'controls', label: 'Heating controls you can manage between stays' },
+  {
+    id: 'several-properties',
+    label: 'Several properties and letting agents',
+    note: "[CONFIRM: how certificates are sent, and whether you send reminders when they're due]",
+  },
+];
+
+// Gregor's review, then the cut-off ones as soon as their full text is pasted in
+const reviewIds = ['gregor-fortune', 'anya-bell', 'ailsa-rollo', 'atelier-twenty-three'];
+const reviews = (await Promise.all(reviewIds.map((id) => getEntry('reviews', id)))).filter((r) => r && r.data.complete);
+
+const stockbridge = await getEntry('work', 'stockbridge-gas-central-heating');
+const ownerQuote = stockbridge?.data.quotes.find((q) => q.text.startsWith('I feel so much more in control'));
+
+const serviceLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Gas safety and heating for landlords and short-lets',
+  serviceType: 'Landlord gas safety certificates, servicing and repairs',
+  url: new URL('/landlords/', Astro.site).href,
+  provider: { '@id': new URL('/#business', Astro.site).href },
+  areaServed: business.area_served,
+};
+---
+<Base
+  title={`Gas safety and heating for landlords and short-lets in Edinburgh | ${business.trading_name}`}
+  description="Landlord gas safety certificates, servicing, repairs and heating controls for let and short-let properties in Edinburgh and the Lothians."
+  jsonLd={serviceLd}
+>
+  <h1>Landlords, letting agents and short-let hosts</h1>
+
+  <section class="section" aria-labelledby="what-we-do">
+    <h2 id="what-we-do">What we do for let properties</h2>
+    <ul class="plain-list jobs">
+      {jobs.map((j) => (
+        <li>
+          <span class="job">{j.label}</span>
+          <a class="ask" href={`/contact/?job=${j.id}`}>Ask about this<span class="visually-hidden">: {j.label}</span> <span aria-hidden="true">→</span></a>
+          {j.source && (
+            <p class="small">What the law requires: <a href={j.source.href}>{j.source.text}</a>. Last checked 27 October 2026</p>
+          )}
+          {j.note && <p class="small"><Text value={j.note} /></p>}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="section" aria-labelledby="proof">
+    <h2 id="proof">What landlords say</h2>
+    <div class="reviews">
+      {reviews.map((r) => <ReviewCard review={r.data} />)}
+      {ownerQuote && (
+        <figure class="review card">
+          <blockquote>{ownerQuote.text}</blockquote>
+          <figcaption><a href="/electric-to-gas/#example">The owner of a Stockbridge short-let flat</a></figcaption>
+        </figure>
+      )}
+    </div>
+  </section>
+
+  <WorkedExample id="emergency-gas-leak-short-let" />
+
+  <p class="section"><a class="button" href="/contact/?job=several-properties">Send an enquiry</a></p>
+</Base>
+
+<style>
+  .jobs { max-width: 46rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .jobs li {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: var(--s1) var(--s2); min-height: 3.5rem; padding: 0.75rem var(--s2);
+  }
+  .jobs li p { flex-basis: 100%; margin: 0; }
+  .job { flex: 1 1 16rem; font-weight: 500; }
+  .ask {
+    display: inline-flex; align-items: center; min-height: var(--tap); white-space: nowrap;
+    font-family: var(--font-brand); font-weight: 600; font-size: var(--label); text-decoration: none;
+  }
+  .ask:hover { text-decoration: underline; }
+  .reviews { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+  .review { margin: 0; display: flex; flex-direction: column; gap: var(--s1); }
+  .review blockquote { margin: 0; }
+  .review figcaption { font-size: var(--small); }
+  .review figcaption a { color: var(--muted); }
+</style>
