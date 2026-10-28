@@ -4,8 +4,10 @@
 
 business:
   legal_name: Heattech Gas Services Ltd
+  trading_name: Heattech Gas Services
   # The logo says "HeatTech", the company record says "Heattech". Ryan picks one (01-plumber).
-  trading_name: "[PLACEHOLDER: Heattech or HeatTech, one spelling everywhere]"
+  # Set to true once he has; the live site won't build until then.
+  trading_name_confirmed: false
   engineer: Ryan Duncan
   colleague_name: Brett
   colleague_role: "[CONFIRM: Brett's role and how to name him]"
