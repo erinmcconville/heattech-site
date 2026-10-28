@@ -54,6 +54,15 @@ const property = ['House', 'Flat, ground floor', 'Flat, first floor', 'Flat, sec
     <input id="f-boiler" name="boiler" type="text" />
   </div>
 
+  {!full && (
+    <div hidden>
+      <!-- Netlify reads one field list per form name: the short form declares the Contact form's extra fields, disabled so they never send -->
+      <textarea name="message" disabled></textarea>
+      <input name="photo1" type="file" disabled />
+      <input name="photo2" type="file" disabled />
+      <input name="photo3" type="file" disabled />
+    </div>
+  )}
   {full && (
     <div class="field">
       <label for="f-message">What's happening <span class="optional">(optional)</span></label>

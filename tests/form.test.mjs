@@ -31,10 +31,18 @@ test('full only on contact', () => {
 test('short form on the homepage', () => {
   const f = form('index.html');
   assert.ok(f.includes('name="postcode"'));
-  assert.ok(!f.includes('name="message"') && !f.includes('name="photo1"'));
+  // The extra fields exist only as a hidden, disabled declaration for Netlify
+  const visible = f.replace(/<div hidden[\s\S]*?<\/div>/, '');
+  assert.ok(!visible.includes('name="message"') && !visible.includes('name="photo1"'));
+  assert.match(f, /<div hidden[\s\S]*name="message" disabled/);
 });
 
 test('netlify', () => {
   const f = form('contact/index.html');
   assert.ok(f.includes('data-netlify="true"') && f.includes('netlify-honeypot="bot-field"'));
+});
+
+test('both enquiry forms declare the same fields for Netlify', () => {
+  const names = (f) => [...new Set([...f.matchAll(/ name="([^"]+)"/g)].map((m) => m[1]))].sort();
+  assert.deepEqual(names(form('index.html')), names(form('contact/index.html')));
 });

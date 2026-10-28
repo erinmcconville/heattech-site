@@ -47,9 +47,14 @@ test('reviews', () => {
   assert.ok(h.includes('What customers say'));
   const names = [...h.matchAll(/>([^<>]+), review on Google</g)].map((m) => m[1]);
   assert.deepEqual(names, ['Mayur', 'Stephen', 'Steve']);
-  assert.ok(h.includes('Read all 74 reviews') && h.includes('href="/reviews/"'));
+  assert.ok(h.includes('Read more reviews') && h.includes('href="/reviews/"'));
 });
 
 test('enquiry heading', () => {
   assert.ok(main().includes('>Send an enquiry<'));
+});
+
+test('reviews link does not overstate the count', () => {
+  assert.ok(!main().includes('Read all 74 reviews'));
+  assert.ok(main().includes('Read more reviews'));
 });

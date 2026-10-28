@@ -32,3 +32,9 @@ test('thanks', () => {
   assert.ok(!/urgent/i.test(h));
   assert.ok(h.includes('07506 042175'));
 });
+
+test('privacy lists the fields the form asks for', () => {
+  const h = main('privacy/index.html');
+  for (const s of ['house or flat', 'postcode', 'boiler make and age', 'name', 'phone']) assert.ok(h.toLowerCase().includes(s), s);
+  assert.ok(!/email address/i.test(h.split('What the form collects')[1]?.split('</ul>')[0] ?? ''));
+});
