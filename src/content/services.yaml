@@ -65,6 +65,19 @@
       label: Gas hobs and cookers
     - id: gas-fires
       label: Gas fires serviced or safely disconnected
+  # What every replacement includes, from Ryan's own Facebook posts (research/04). No warranty lengths.
+  includes:
+    title: Every new boiler includes
+    items:
+      - System flush
+      - Magnetic filter
+      - Smart heating controls
+      - The manufacturer's warranty (the length depends on the boiler)
+    extra_title: What can add cost
+    extra:
+      - A gas pipe too small for the new boiler
+      - A condensate (drain) pipe that needs changing
+    check: "[CONFIRM: this is what every replacement includes, and these are the two things that add cost]"
 
 - id: servicing-safety
   order: 4
@@ -73,6 +86,7 @@
   tile: Servicing and gas safety
   keywords: Annual service, landlord certificates
   review: r
+  section_note: "Servicing keeps most manufacturer warranties valid. [CONFIRM: wording]"
   jobs:
     - id: boiler-service
       label: Annual boiler service
@@ -85,3 +99,4 @@
       home: true
     - id: several-properties
       label: "Several properties: letting agents and short-let hosts"
+      page: /landlords/

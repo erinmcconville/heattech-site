@@ -59,6 +59,18 @@ const servicesLd = {
           ))}
         </ul>
 
+        {s.data.section_note && <p class="small note"><Text value={s.data.section_note} /></p>}
+
+        {s.data.includes && (
+          <div class="includes card">
+            <h3>{s.data.includes.title}</h3>
+            <ul>{s.data.includes.items.map((i) => <li>{i}</li>)}</ul>
+            <h3>{s.data.includes.extra_title}</h3>
+            <ul>{s.data.includes.extra.map((i) => <li>{i}</li>)}</ul>
+            {s.data.includes.check && <p class="small"><Text value={s.data.includes.check} /></p>}
+          </div>
+        )}
+
         {proof && proof.data.complete && <div class="proof"><ReviewCard review={proof.data} /></div>}
 
       </section>
@@ -99,5 +111,10 @@ const servicesLd = {
   .ask:hover { text-decoration: underline; }
 
   .keywords { margin: -0.25rem 0 var(--s2); color: var(--muted); font-size: var(--small); }
+  .note { max-width: 46rem; margin: var(--s2) 0 0; }
+  .includes { margin-top: var(--s2); max-width: 46rem; }
+  .includes h3 { margin: 0 0 var(--s1); }
+  .includes ul + h3 { margin-top: var(--s2); }
+  .includes ul { margin: 0; }
   .proof { margin-top: var(--s2); max-width: 46rem; }
 </style>

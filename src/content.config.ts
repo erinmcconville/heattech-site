@@ -29,6 +29,18 @@ const services = defineCollection({
     keywords: z.string(),
     review: z.string().optional(),
     jobs: z.array(job),
+    // A short note under the job list, e.g. on servicing and warranties
+    section_note: z.string().optional(),
+    // What every job of this kind includes, and what can add cost
+    includes: z
+      .object({
+        title: z.string(),
+        items: z.array(z.string()),
+        extra_title: z.string(),
+        extra: z.array(z.string()),
+        check: z.string().optional(),
+      })
+      .optional(),
   }),
 });
 
