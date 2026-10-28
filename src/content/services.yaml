@@ -57,6 +57,7 @@
       home: true
     - id: electric-to-gas
       label: Electric or storage heaters to gas central heating
+      page: /electric-to-gas/
       home: true
     - id: controls
       label: Thermostats and smart controls
@@ -64,25 +65,6 @@
       label: Gas hobs and cookers
     - id: gas-fires
       label: Gas fires serviced or safely disconnected
-  # Short expanding block on the Services page. Links only, no figures restated.
-  explainer:
-    title: Electric heating to gas central heating
-    intro: Three things decide whether it can be done. Each links to the official source.
-    points:
-      - label: An existing gas supply
-        text: SGN can check for free whether your building already has a gas supply.
-        link: https://www.sgn.co.uk/gas-connections/household-customers/find-out-if-you-have-gas-supply
-        link_text: SGN's free gas supply check
-      - label: Pipe routes and flue position
-        text: If your building is listed, check the Council's guidance on where a flue can go.
-        link: https://www.edinburgh.gov.uk/conservation-2/listed-buildings
-        link_text: City of Edinburgh Council on listed buildings
-      - label: Funding
-        text: Check what funding you might get before you decide.
-        link: https://www.homeenergyscotland.org/find-funding
-        link_text: Home Energy Scotland funding
-    last_checked: 27 October 2026
-    story: stockbridge-gas-central-heating
 
 - id: servicing-safety
   order: 4

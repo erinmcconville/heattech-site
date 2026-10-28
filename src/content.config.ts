@@ -13,6 +13,8 @@ const job = z.object({
   id: z.string(),
   label: z.string(),
   note: z.string().optional(),
+  // A page that covers this job in depth; the job label links to it
+  page: z.string().optional(),
   emergency: z.boolean().default(false),
   home: z.boolean().default(false),
 });
@@ -27,17 +29,6 @@ const services = defineCollection({
     keywords: z.string(),
     review: z.string().optional(),
     jobs: z.array(job),
-    explainer: z
-      .object({
-        title: z.string(),
-        intro: z.string(),
-        points: z.array(
-          z.object({ label: z.string(), text: z.string(), link: z.url(), link_text: z.string() }),
-        ),
-        last_checked: z.string(),
-        story: z.string(),
-      })
-      .optional(),
   }),
 });
 
