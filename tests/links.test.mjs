@@ -4,10 +4,11 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { page } from './helpers.mjs';
 
-test('sitemap lists the new pages', () => {
+test('sitemap', () => {
   const xml = page('sitemap.xml');
-  assert.ok(xml.includes('/electric-to-gas/'));
-  assert.ok(xml.includes('/landlords/'));
+  for (const p of ['/', '/boiler-repairs/', '/new-boilers/', '/heating-upgrades/', '/servicing-and-certificates/', '/leaks-taps-and-drains/', '/work/', '/work/stockbridge-gas-central-heating/', '/reviews/', '/about/', '/contact/', '/privacy/'])
+    assert.ok(xml.includes(`heattechgas.co.uk${p}</loc>`), p);
+  for (const p of ['/services/', '/electric-to-gas/', '/landlords/']) assert.ok(!xml.includes(p), p);
 });
 
 
