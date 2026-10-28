@@ -9,14 +9,19 @@ business:
   # Set to true once he has; the live site won't build until then.
   trading_name_confirmed: false
   engineer: Ryan Duncan
-  colleague_name: Brett
+  colleague_name: Brett Duncan
   colleague_role: "[CONFIRM: Brett's role and how to name him]"
   description: Gas Safe heating and plumbing in Edinburgh and the Lothians.
-  based_in: Portobello
+  based_in: Edinburgh
   area_served: Edinburgh and the Lothians
   company_number: SC690576
   incorporated: 2021   # for structured data only, not shown in copy
-  community: Sponsors a local youth football group.
+  # The football section on About. Photos only with the club's permission, and no identifiable children.
+  football:
+    line: We sponsor a local youth football group.
+    photos:
+      - "[PHOTO: club photo, with the club's permission, no identifiable children]"
+      - "[PHOTO: club photo, with the club's permission, no identifiable children]"
 
 contact:
   address_line_1: 6 Hoffmann Place

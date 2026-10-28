@@ -6,8 +6,15 @@ export async function getSite() {
   return Object.fromEntries(entries.map((e) => [e.id, e.data])) as Record<string, Record<string, any>>;
 }
 
-export async function getPublishedWork() {
+// Jobs shown on the site: published, with the customer's permission recorded
+export async function getLiveWork() {
   return getCollection('work', ({ data }) => data.published && data.permission_recorded);
+}
+
+// Complete reviews by id, in the order given. Unknown or cut-off reviews are skipped.
+export async function getReviewsByIds(ids: string[]) {
+  const reviews = await getReviews();
+  return ids.map((id) => reviews.find((r) => r.id === id)).filter((r) => r !== undefined);
 }
 
 // The four Services sections, in the order set in services.yaml

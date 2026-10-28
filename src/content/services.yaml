@@ -1,102 +1,119 @@
-# The four Services sections and their job lines. Source: docs/build-plan.md.
-# Each job's "id" is used for the "Ask about this" link (/contact/?job=id)
-# and for the enquiry form dropdown. "home: true" shows the job on the homepage.
-# "order" sets the order of the four sections.
-# "title" is the Services heading, "tile" and "keywords" the homepage tile.
-# "review" is the id of a Google review in reviews.yaml shown as proof under the section.
+# One record per service page (docs/superpowers/specs/2026-10-28-site-layout-design.md).
+# id:        the page URL (/boiler-repairs/) and the form's job id
+# title/line: the homepage row and the page heading; line is one plain line in customers' words
+# summary:   the page description for search engines
+# includes, price_factors, notes, sources: optional blocks; leave out what doesn't apply
+# reviews:   two complete Google reviews from reviews.yaml
+# example:   a job in src/content/work/, shown only when published with permission
+# jobs:      options in the enquiry form's job list
 
-- id: not-working
+- id: boiler-repairs
   order: 1
+  title: Boiler repairs
+  line: No heating, no hot water, fault codes
   icon: flame
-  title: Heating or hot water not working
-  tile: No heating or hot water
-  keywords: Boiler repairs and faults
-  review: lena-bruning
+  summary: Finding and fixing boiler faults in Edinburgh and the Lothians.
+  reviews: [lena-bruning, dawid-granacki]
   jobs:
-    - id: no-heating
-      label: No heating or hot water
-      home: true
-    - id: boiler-fault
-      label: Boiler cutting out or showing a fault code
-      home: true
-    - id: radiators
-      label: Radiators cold, noisy or won't switch off
-      home: true
+    - id: boiler-repairs
+      label: Boiler repairs
     - id: gas-smell
       label: Smell of gas or carbon monoxide alarm
-      note: "Call the Gas Emergency number, 0800 111 999, first. [CONFIRM: follow-up once the emergency service has made it safe]"
       emergency: true
-      home: true
 
-- id: everyday-plumbing
+- id: new-boilers
   order: 2
-  icon: droplet
-  title: Leaks, taps and drains
-  tile: A leak or a blocked drain
-  keywords: Plumbing
-  review: jenna-mccosh
-  jobs:
-    - id: plumbing
-      label: Leaks, taps, toilets and pipework
-      note: "[CONFIRM: scope of everyday plumbing]"
-      home: true
-
-- id: replacing-upgrading
-  order: 3
+  title: New boilers
+  line: Replacing an old or broken boiler
   icon: tool
-  title: New boilers and upgrades
-  tile: A new boiler
-  keywords: Replacements, controls and electric to gas
-  review: stewart-hunter
-  jobs:
-    - id: repair-or-replace
-      label: "Repair or replace: advice on which makes sense"
-      home: true
-    - id: new-boiler
-      label: New boiler
-      home: true
-    - id: electric-to-gas
-      label: Electric or storage heaters to gas central heating
-      page: /electric-to-gas/
-      home: true
-    - id: controls
-      label: Thermostats and smart controls
-    - id: hobs-cookers
-      label: Gas hobs and cookers
-    - id: gas-fires
-      label: Gas fires serviced or safely disconnected
-  # What every replacement includes, from Ryan's own Facebook posts (research/04). No warranty lengths.
+  summary: Replacing old or broken boilers in Edinburgh and the Lothians.
   includes:
-    title: Every new boiler includes
-    items:
-      - System flush
-      - Magnetic filter
-      - Smart heating controls
-      - The manufacturer's warranty (the length depends on the boiler)
-    extra_title: What can add cost
-    extra:
-      - A gas pipe too small for the new boiler
-      - A condensate (drain) pipe that needs changing
-    check: "[CONFIRM: this is what every replacement includes, and these are the two things that add cost]"
-
-- id: servicing-safety
-  order: 4
-  icon: clipboard-check
-  title: Servicing and gas safety
-  tile: Servicing and gas safety
-  keywords: Annual service, landlord certificates
-  review: r
-  section_note: "Servicing keeps most manufacturer warranties valid. [CONFIRM: wording]"
+    - System flush
+    - Magnetic filter
+    - Smart controls
+    - The manufacturer's warranty
+  includes_check: "[CONFIRM: this is what every replacement includes]"
+  price_title: What can change the price
+  price_factors:
+    - label: The gas pipe
+      text: Older pipes can be too small for a new boiler.
+    - label: The drain pipe
+      text: It sometimes needs changing to suit the new boiler.
+  price_check: "[CONFIRM: these are the two things that add cost]"
+  reviews: [matt-inglis, stewart-hunter]
+  example: boiler-replacement-flat
   jobs:
-    - id: boiler-service
-      label: Annual boiler service
-      home: true
-    - id: landlord-certificate
-      label: Landlord gas safety certificate
-      home: true
-    - id: sale-check
-      label: Gas safety check before selling
-      home: true
-    - id: several-properties
-      label: "Several properties: letting agents and short-let hosts"
-      page: /landlords/
+    - id: new-boilers
+      label: New boilers
+
+- id: heating-upgrades
+  order: 3
+  title: Heating upgrades
+  line: Electric to gas, smart controls, radiators
+  icon: trending-up
+  summary: Electric to gas central heating, smart controls and extra radiators in Edinburgh and the Lothians.
+  price_title: What decides whether electric to gas can be done
+  price_factors:
+    - label: A gas supply
+      text: SGN checks for free whether the building has one. Flats on the second floor or above can need a separate connection quote.
+    - label: The flue
+      text: Where it can leave the building. Listed buildings and conservation areas have extra rules.
+    - label: Pipe routes
+      text: Through the roof space or under the floors.
+    - label: Where the boiler goes
+      text: A cupboard, the hall or the kitchen.
+  notes:
+    - Home Energy Scotland's standard grant and loan doesn't cover gas boilers. Warmer Homes Scotland can help some households with central heating.
+  sources:
+    - text: SGN gas supply check
+      href: https://www.sgn.co.uk/gas-connections/household-customers/find-out-if-you-have-gas-supply
+    - text: SGN new connections
+      href: https://www.sgn.co.uk/gas-connections/household-customers/apply-new-gas-connection0
+    - text: City of Edinburgh Council on listed buildings
+      href: https://www.edinburgh.gov.uk/conservation-2/listed-buildings
+    - text: Home Energy Scotland funding
+      href: https://www.homeenergyscotland.org/find-funding
+    - text: Warmer Homes Scotland
+      href: https://www.mygov.scot/energy-saving-funding/warmer-homes-scotland-scheme
+  last_checked: 27 October 2026
+  reviews: [stephen-wotherspoon, kyrsta-macdonald-scott]
+  example: stockbridge-gas-central-heating
+  jobs:
+    - id: heating-upgrades
+      label: Heating upgrades
+
+- id: servicing-and-certificates
+  order: 4
+  title: Servicing and certificates
+  line: Annual service, landlord and pre-sale checks
+  icon: clipboard-check
+  summary: Annual boiler services and gas safety certificates for homeowners, landlords and sellers in Edinburgh and the Lothians.
+  includes:
+    - Annual boiler service
+    - Landlord gas safety certificate
+    - Gas safety check before selling
+    - Several properties and letting agents
+  notes:
+    - "Servicing keeps most manufacturer warranties valid. [CONFIRM: wording]"
+    - "[CONFIRM: how certificates are sent, and whether you send reminders when they're due]"
+  sources:
+    - text: HSE on landlord gas safety checks
+      href: https://www.hse.gov.uk/gas/landlords/safetycheckswhocan.htm
+  last_checked: 27 October 2026
+  reviews: [r, gregor-fortune]
+  jobs:
+    - id: servicing-and-certificates
+      label: Servicing and certificates
+
+- id: leaks-taps-and-drains
+  order: 5
+  title: Leaks, taps and drains
+  line: Smaller plumbing jobs
+  icon: droplet
+  summary: Leaks, taps, toilets and blocked drains in Edinburgh and the Lothians.
+  notes:
+    - "[CONFIRM: which plumbing jobs you take on]"
+  reviews: [jenna-mccosh, stephanie-kirkham]
+  jobs:
+    - id: leaks-taps-and-drains
+      label: Leaks, taps and drains

@@ -12,35 +12,29 @@ const site = defineCollection({
 const job = z.object({
   id: z.string(),
   label: z.string(),
-  note: z.string().optional(),
-  // A page that covers this job in depth; the job label links to it
-  page: z.string().optional(),
   emergency: z.boolean().default(false),
-  home: z.boolean().default(false),
 });
 
+// One record per service page. Optional blocks are left out when they don't apply.
 const services = defineCollection({
   loader: file('src/content/services.yaml'),
   schema: z.object({
     order: z.number(),
     title: z.string(),
-    tile: z.string(),
+    line: z.string(),
     icon: z.string(),
-    keywords: z.string(),
-    review: z.string().optional(),
+    summary: z.string(),
+    includes: z.array(z.string()).optional(),
+    includes_check: z.string().optional(),
+    price_title: z.string().optional(),
+    price_factors: z.array(z.object({ label: z.string(), text: z.string() })).optional(),
+    price_check: z.string().optional(),
+    notes: z.array(z.string()).optional(),
+    sources: z.array(z.object({ text: z.string(), href: z.url() })).optional(),
+    last_checked: z.string().optional(),
+    reviews: z.array(z.string()),
+    example: z.string().optional(),
     jobs: z.array(job),
-    // A short note under the job list, e.g. on servicing and warranties
-    section_note: z.string().optional(),
-    // What every job of this kind includes, and what can add cost
-    includes: z
-      .object({
-        title: z.string(),
-        items: z.array(z.string()),
-        extra_title: z.string(),
-        extra: z.array(z.string()),
-        check: z.string().optional(),
-      })
-      .optional(),
   }),
 });
 
