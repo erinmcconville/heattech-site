@@ -45,3 +45,17 @@ test('a completed review appears without code changes', { timeout: 180000 }, asy
 test('has a Service record', () => {
   assert.match(landlords(), /"@type":"Service"/);
 });
+
+test('owner quote hides when permission is withdrawn', { timeout: 180000 }, async () => {
+  await withEdit('src/content/work/stockbridge-gas-central-heating.md', 'permission_recorded: true', 'permission_recorded: false', () => {
+    const html = landlords();
+    assert.ok(!html.includes('I feel so much more in control'));
+    assert.ok(!html.includes('/electric-to-gas/#example'));
+  });
+});
+
+test('gas emergency line shows the emergency number', () => {
+  const html = landlords();
+  const list = html.slice(html.indexOf('id="what-we-do"'), html.indexOf('</ul>', html.indexOf('id="what-we-do"')));
+  assert.ok(list.includes('0800 111 999'));
+});

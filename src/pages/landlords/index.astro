@@ -6,7 +6,7 @@ import ReviewCard from '../../components/ReviewCard.astro';
 import WorkedExample from '../../components/WorkedExample.astro';
 import { getSite } from '../../lib/site';
 
-const { business } = await getSite();
+const { business, safety } = await getSite();
 
 // Each line links to the enquiry form with the job already chosen (ids from services.yaml)
 const jobs = [
@@ -20,6 +20,7 @@ const jobs = [
     id: 'no-heating',
     label: 'Repairs and gas emergencies at let properties',
     note: '[CONFIRM: emergency cover for let properties, and whether you deal with guests or tenants directly]',
+    emergency: true,
   },
   { id: 'controls', label: 'Heating controls you can manage between stays' },
   {
@@ -34,7 +35,9 @@ const reviewIds = ['gregor-fortune', 'anya-bell', 'ailsa-rollo', 'atelier-twenty
 const reviews = (await Promise.all(reviewIds.map((id) => getEntry('reviews', id)))).filter((r) => r && r.data.complete);
 
 const stockbridge = await getEntry('work', 'stockbridge-gas-central-heating');
-const ownerQuote = stockbridge?.data.quotes.find((q) => q.text.startsWith('I feel so much more in control'));
+// Only while the Stockbridge story itself is live (same rule as WorkedExample)
+const stockbridgeLive = stockbridge && stockbridge.data.published && stockbridge.data.permission_recorded;
+const ownerQuote = stockbridgeLive && stockbridge.data.quotes.find((q) => q.text.startsWith('I feel so much more in control'));
 
 const serviceLd = {
   '@context': 'https://schema.org',
@@ -62,6 +65,11 @@ const serviceLd = {
           <a class="ask" href={`/contact/?job=${j.id}`}>Ask about this<span class="visually-hidden">: {j.label}</span> <span aria-hidden="true">→</span></a>
           {j.source && (
             <p class="small">What the law requires: <a href={j.source.href}>{j.source.text}</a>. Last checked 27 October 2026</p>
+          )}
+          {j.emergency && (
+            <p class="emergency-note">
+              If you smell gas, call the Gas Emergency number, <a href={`tel:${safety.gas_emergency_link}`}>{safety.gas_emergency_number}</a>, first.
+            </p>
           )}
           {j.note && <p class="small"><Text value={j.note} /></p>}
         </li>
