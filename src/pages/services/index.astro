@@ -6,7 +6,7 @@ import ReviewCard from '../../components/ReviewCard.astro';
 import { getSite, getServices } from '../../lib/site';
 
 const site = await getSite();
-const { call_out_fee, safety } = site;
+const { business, call_out_fee, safety } = site;
 const services = await getServices();
 
 // One Service record per section, provided by the business record in Base.astro
@@ -23,7 +23,7 @@ const servicesLd = {
 };
 ---
 <Base
-  title="Boiler repair, replacement and servicing in Edinburgh | Heattech Gas Services"
+  title={`Boiler repair, replacement and servicing in Edinburgh | ${business.trading_name}`}
   description="Boiler repairs, new boilers, plumbing, servicing and landlord gas safety certificates in Edinburgh and the Lothians."
   jsonLd={servicesLd}
 >

@@ -10,7 +10,7 @@ const services = await getServices();
 const reviews = (await getReviews()).slice(0, 6);
 ---
 <Base
-  title="Heattech Gas Services | Boilers, heating and plumbing in Edinburgh"
+  title={`${business.trading_name} | Boilers, heating and plumbing in Edinburgh`}
   description={`Gas Safe registered gas, heating and plumbing in Edinburgh and the Lothians, based in ${business.based_in}. Boiler repairs, new boilers, servicing and gas safety checks.`}
 >
   <section slot="hero" class="hero" aria-labelledby="hero-title">

@@ -8,7 +8,7 @@ const site = await getSite();
 const { business, contact, promises, safety } = site;
 ---
 <Base
-  title="Contact | Heattech Gas Services, Edinburgh"
+  title={`Contact | ${business.trading_name}, Edinburgh`}
   description={`Send an enquiry or call ${contact.phone}. ${business.area_served}, based in ${business.based_in}.`}
 >
   <h1>Contact</h1>

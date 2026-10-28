@@ -3,7 +3,7 @@ import Text from './Text.astro';
 
 interface Props { site: Record<string, Record<string, any>> }
 const { site } = Astro.props;
-const { contact, availability } = site;
+const { business, contact, availability } = site;
 
 const nav = [
   { href: '/services/', label: 'Services' },
@@ -17,7 +17,7 @@ const path = Astro.url.pathname;
   <div class="wrap site-header__inner">
     <a href="/" class="logo">
       <!-- [PLACEHOLDER: logo as PNG with transparent background, or SVG, from Ryan] -->
-      <img src="/brand/logo-header.png" width="532" height="308" alt="HeatTech Gas Services Ltd, home" />
+      <img src="/brand/logo-header.png" width="532" height="308" alt={`${business.trading_name} Ltd, home`} />
     </a>
 
     <nav aria-label="Main" class="nav">

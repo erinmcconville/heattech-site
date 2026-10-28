@@ -6,7 +6,7 @@ import { getSite } from '../../lib/site';
 const site = await getSite();
 const { business, contact } = site;
 ---
-<Base title="Privacy | Heattech Gas Services">
+<Base title={`Privacy | ${business.trading_name}`}>
   <h1>Privacy</h1>
   <p class="lede">What the enquiry form collects and where it goes.</p>
 

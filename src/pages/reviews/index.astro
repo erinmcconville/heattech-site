@@ -3,12 +3,12 @@ import Base from '../../layouts/Base.astro';
 import ReviewCard from '../../components/ReviewCard.astro';
 import { getSite, getReviews } from '../../lib/site';
 
-const { links } = await getSite();
+const { business, links } = await getSite();
 const reviews = await getReviews();
 ---
 <Base
-  title="Reviews | Heattech Gas Services, Edinburgh"
-  description={`Reviews of Heattech Gas Services from customers in Edinburgh and the Lothians: boiler repairs, new boilers, servicing and plumbing.`}
+  title={`Reviews | ${business.trading_name}, Edinburgh`}
+  description={`Reviews of ${business.trading_name} from customers in Edinburgh and the Lothians: boiler repairs, new boilers, servicing and plumbing.`}
 >
   <h1>Reviews</h1>
   <p class="lede">

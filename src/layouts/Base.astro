@@ -17,7 +17,7 @@ const businessLd = {
   '@context': 'https://schema.org',
   '@type': ['Plumber', 'HVACBusiness'],
   '@id': new URL('/#business', Astro.site).href,
-  name: 'Heattech Gas Services',
+  name: business.trading_name,
   legalName: business.legal_name,
   description: business.description,
   url: new URL('/', Astro.site).href,
