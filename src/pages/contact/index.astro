@@ -19,7 +19,7 @@ const { business, contact, promises, safety } = site;
   </p>
 
   <h2>Send an enquiry</h2>
-  <EnquiryForm emergencyNumber={safety.gas_emergency_number} emergencyLink={safety.gas_emergency_link} phone={contact.phone} />
+  <EnquiryForm full emergencyNumber={safety.gas_emergency_number} emergencyLink={safety.gas_emergency_link} phone={contact.phone} />
 
   <h2>What happens next</h2>
   <p><Text value={promises.after_enquiry} /></p>

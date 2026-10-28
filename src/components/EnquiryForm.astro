@@ -1,11 +1,13 @@
 ---
 import { getServices } from '../lib/site';
 
-// Netlify Forms reads this form from the built HTML (build plan, "Enquiry form").
+// Netlify Forms reads this form from the built HTML.
 // Works without JavaScript; with it, photos are shrunk and the email subject is filled in.
-interface Props { emergencyNumber: string; emergencyLink: string; phone: string }
-const { emergencyNumber, emergencyLink, phone } = Astro.props;
-const services = await getServices();
+// full: the Contact page version, which adds "What's happening" and photos.
+interface Props { emergencyNumber: string; emergencyLink: string; phone: string; full?: boolean }
+const { emergencyNumber, emergencyLink, phone, full = false } = Astro.props;
+const jobs = (await getServices()).flatMap((s) => s.data.jobs);
+const property = ['House', 'Flat, ground floor', 'Flat, first floor', 'Flat, second floor', 'Flat, third floor or higher'];
 ---
 <form
   name="enquiry"
@@ -25,33 +27,11 @@ const services = await getServices();
   </p>
 
   <div class="field">
-    <label for="f-name">Name</label>
-    <input id="f-name" name="name" type="text" autocomplete="name" required />
-  </div>
-  <div class="field">
-    <label for="f-email">Email</label>
-    <input id="f-email" name="email" type="email" autocomplete="email" required />
-  </div>
-  <div class="field">
-    <label for="f-phone">Phone</label>
-    <input id="f-phone" name="phone" type="tel" autocomplete="tel" required />
-  </div>
-  <div class="field">
-    <label for="f-area">Postcode or area</label>
-    <input id="f-area" name="area" type="text" autocomplete="postal-code" required />
-  </div>
-
-  <div class="field">
-    <label for="f-job">The job <span class="optional">(optional)</span></label>
+    <label for="f-job">Job</label>
     <select id="f-job" name="job">
       <option value="">Choose a job</option>
+      {jobs.map((j) => <option value={j.label} data-id={j.id}>{j.label}</option>)}
       <option value="Not sure" data-id="not-sure">Not sure</option>
-      {services.map((s) => (
-        <optgroup label={s.data.title}>
-          {s.data.jobs.map((j) => <option value={j.label} data-id={j.id}>{j.label}</option>)}
-        </optgroup>
-      ))}
-      <option value="Something else" data-id="other">Something else</option>
     </select>
   </div>
   <p class="emergency-note gas-warning" id="gas-warning" hidden>
@@ -59,16 +39,46 @@ const services = await getServices();
   </p>
 
   <div class="field">
-    <label for="f-message">Describe the problem <span class="optional">(optional)</span></label>
-    <textarea id="f-message" name="message" rows="5" placeholder="e.g. the boiler's making a banging noise and the radiators are cold"></textarea>
+    <label for="f-property">House or flat</label>
+    <select id="f-property" name="property">
+      <option value="">Choose one</option>
+      {property.map((p) => <option value={p}>{p}</option>)}
+    </select>
+  </div>
+  <div class="field">
+    <label for="f-postcode">Postcode</label>
+    <input id="f-postcode" name="postcode" type="text" autocomplete="postal-code" required />
+  </div>
+  <div class="field">
+    <label for="f-boiler">Boiler make and age <span class="optional">(optional)</span></label>
+    <input id="f-boiler" name="boiler" type="text" />
   </div>
 
-  <fieldset class="field">
-    <legend>Photos <span class="optional">(optional, up to 3)</span></legend>
-    <input name="photo1" type="file" accept="image/*" aria-label="Photo 1" />
-    <input name="photo2" type="file" accept="image/*" aria-label="Photo 2" />
-    <input name="photo3" type="file" accept="image/*" aria-label="Photo 3" />
-  </fieldset>
+  {full && (
+    <div class="field">
+      <label for="f-message">What's happening <span class="optional">(optional)</span></label>
+      <textarea id="f-message" name="message" rows="4"></textarea>
+    </div>
+  )}
+  {full && (
+    <fieldset class="field">
+      <legend>Photos <span class="optional">(optional, up to 3)</span></legend>
+      <input name="photo1" type="file" accept="image/*" aria-label="Photo 1" />
+      <input name="photo2" type="file" accept="image/*" aria-label="Photo 2" />
+      <input name="photo3" type="file" accept="image/*" aria-label="Photo 3" />
+    </fieldset>
+  )}
+
+  <div class="pair">
+    <div class="field">
+      <label for="f-name">Name</label>
+      <input id="f-name" name="name" type="text" autocomplete="name" required />
+    </div>
+    <div class="field">
+      <label for="f-phone">Phone</label>
+      <input id="f-phone" name="phone" type="tel" autocomplete="tel" required />
+    </div>
+  </div>
 
   <p class="small">Your details are used to reply to this enquiry. See the <a href="/privacy/">privacy page</a>.</p>
 
@@ -90,6 +100,7 @@ const services = await getServices();
   input[type='file'] { padding: 0.5rem; }
   .bot-field { position: absolute; left: -9999px; }
   .gas-warning { margin-top: -0.5rem; }
+  .pair { display: grid; gap: 0 var(--s2); grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
 </style>
 
 <script>
@@ -105,7 +116,7 @@ const services = await getServices();
   const selectedId = () => job.selectedOptions[0]?.dataset.id ?? '';
   const showGasWarning = () => { gasWarning.hidden = selectedId() !== 'gas-smell'; };
 
-  // "Ask about this" links arrive as /contact/?job=new-boiler
+  // "Ask about" links arrive as /contact/?job=new-boilers
   const fromLink = new URLSearchParams(location.search).get('job');
   if (fromLink) {
     const match = [...job.options].find((o) => o.dataset.id === fromLink);
@@ -147,7 +158,7 @@ const services = await getServices();
     const data = new FormData(form);
 
     // Subject Ryan can triage from his inbox: "No heating – EH6 – Sarah"
-    const subject = [data.get('job') || 'Enquiry', data.get('area'), data.get('name')]
+    const subject = [data.get('job') || 'Enquiry', data.get('postcode'), data.get('name')]
       .map((v) => String(v ?? '').trim())
       .filter(Boolean)
       .join(' – ');
