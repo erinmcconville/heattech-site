@@ -51,7 +51,7 @@ const reviews = defineCollection({
   }),
 });
 
-// Recent work: every entry uses the same fields.
+// Examples of our work: every entry uses the same fields. No dates.
 // An entry only shows when published AND permission_recorded are both true.
 const work = defineCollection({
   loader: glob({ pattern: '*.md', base: 'src/content/work' }),
@@ -61,7 +61,12 @@ const work = defineCollection({
     area: z.string(),
     property: z.string(),
     job_type: z.string(),
+    // Three short facts shown as tags on the job page
+    tags: z.array(z.string()).default([]),
     problem: z.string(),
+    challenge: z.string().optional(),
+    // The service page this job belongs to (an id in services.yaml)
+    service: z.string().optional(),
     usual_approach: z.string().optional(),
     what_ryan_did: z.string(),
     result: z.string().optional(),

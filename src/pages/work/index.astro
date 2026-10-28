@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import WorkCard from '../../components/WorkCard.astro';
+import { getSite, getLiveWork } from '../../lib/site';
+
+const { business } = await getSite();
+const work = await getLiveWork();
+---
+<Base
+  title={`Examples of our work in Edinburgh | ${business.trading_name}`}
+  description="Real gas, heating and plumbing jobs in Edinburgh: what the problem was, what made it tricky and what we did."
+>
+  <h1>Examples of our work</h1>
+  <div class="cards">
+    {work.map((w) => <WorkCard id={w.id} />)}
+  </div>
+</Base>
+
+<style>
+  .cards { display: grid; gap: var(--s3); grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); margin-top: var(--s3); }
+</style>

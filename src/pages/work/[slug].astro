@@ -1,0 +1,68 @@
+---
+// One page per job: title, tags, photos, Before / The challenge / What we did, one quote.
+// Only published jobs with permission recorded get a page.
+import Base from '../../layouts/Base.astro';
+import Text from '../../components/Text.astro';
+import { getEntry } from 'astro:content';
+import { getSite, getLiveWork } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const work = await getLiveWork();
+  return work.map((w) => ({ params: { slug: w.id }, props: { job: w } }));
+}
+
+const { job } = Astro.props;
+const d = job.data;
+const { business } = await getSite();
+const service = d.service ? await getEntry('services', d.service) : undefined;
+const quote = d.quotes[0];
+const [mainPhoto, ...otherPhotos] = d.photos;
+---
+<Base title={`${d.title} | ${business.trading_name}`} description={d.summary ?? d.title}>
+  <p class="eyebrow"><a href="/work/">Examples of our work</a></p>
+  <h1>{d.title}</h1>
+  {d.tags.length > 0 && <ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul>}
+
+  <div class="photos">
+    {mainPhoto && <div class="photo-slot photos__main">{mainPhoto}</div>}
+    {otherPhotos.slice(0, 2).map((p) => <div class="photo-slot">{p}</div>)}
+  </div>
+
+  <dl class="story">
+    <dt>Before</dt><dd>{d.problem}</dd>
+    {d.challenge && <><dt>The challenge</dt><dd>{d.challenge}</dd></>}
+    <dt>What we did</dt><dd><Text value={d.what_ryan_did} /></dd>
+  </dl>
+  {d.gas_supply_already_there && <p class="small"><Text value={d.gas_supply_already_there} /></p>}
+  {d.ryan_check && <p class="small"><Text value={d.ryan_check} /></p>}
+
+  {quote && (
+    <figure class="quote">
+      <blockquote>{quote.text}</blockquote>
+      <figcaption>{quote.who}</figcaption>
+    </figure>
+  )}
+
+  <div class="section next">
+    {service && <p>More about <a href={`/${service.id}/`}>{service.data.title.toLowerCase()}</a></p>}
+    <a class="button" href={`/contact/?job=${d.service ?? 'not-sure'}`}>Ask about a job like this</a>
+  </div>
+</Base>
+
+<style>
+  .eyebrow { margin: 0 0 0.25rem; font-size: var(--small); }
+  .eyebrow a { color: var(--muted); }
+  h1 { margin-top: 0; max-width: 24ch; }
+  .tags { display: flex; flex-wrap: wrap; gap: var(--s1); list-style: none; padding: 0; margin: var(--s2) 0 0; }
+  .tags li { padding: 0.25rem 0.75rem; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: var(--small); }
+  .photos { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s1); margin-top: var(--s3); max-width: 46rem; }
+  .photos .photo-slot { aspect-ratio: 1; }
+  .photos__main { grid-column: 1 / -1; aspect-ratio: 4 / 3 !important; }
+  .story { max-width: 46rem; margin: var(--s4) 0 0; display: grid; gap: 0.25rem; }
+  .story dt { margin-top: var(--s2); font-family: var(--font-brand); font-weight: 600; font-size: var(--small); color: var(--copper-deep); }
+  .story dd { margin: 0; }
+  .quote { margin: var(--s4) 0 0; max-width: 46rem; }
+  .quote blockquote { margin: 0; padding-left: var(--s2); border-left: 3px solid var(--copper); font-size: var(--step-1); }
+  .quote figcaption { margin-top: 0.25rem; color: var(--muted); font-size: var(--small); }
+  .next { margin-top: var(--s5); }
+</style>
