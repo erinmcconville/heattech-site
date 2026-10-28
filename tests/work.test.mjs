@@ -31,7 +31,7 @@ const bills = (html) => html.match(/<section class="bills[\s\S]*?<\/section>/)?.
 
 test('bills feature on the job page', () => {
   const b = bills(job());
-  for (const s of ['Energy bills', 'Before', 'After', 'a month', 'monthly bill before', 'monthly bill after']) assert.ok(b.includes(s), s);
+  for (const s of ['Energy bills', 'Before', 'After', 'a month', '£ before', '£ after']) assert.ok(b.includes(s), s);
 });
 
 test('bills shown on the heating upgrades card', () => {

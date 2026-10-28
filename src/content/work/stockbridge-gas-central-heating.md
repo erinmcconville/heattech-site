@@ -10,9 +10,10 @@ problem: The flat had electric heating and an old hot water cylinder. Bills were
 usual_approach: Lift the original floors and put the boiler on show, in a flat with no cupboards.
 challenge: Original wooden floors, no cupboards, and no wish to have the boiler on show.
 what_ryan_did: "A flue through the roof, pipes brought down from the roof space, and the boiler fitted in the hall. Smart controls [PLACEHOLDER: thermostat model] so the heating can be run between guests."
+# Monthly figures from real bills (before: about £240; after: from bills since the install). Never a forecast.
 bills:
-  before: "[PLACEHOLDER: monthly bill before, from real bills, e.g. £240]"
-  after: "[PLACEHOLDER: monthly bill after, from real bills since the install]"
+  before: "[PLACEHOLDER: £ before]"
+  after: "[PLACEHOLDER: £ after]"
   note: The owner's energy bills for a one-bedroom flat.
 quotes:
   - text: "…he knows how Edinburgh flats work."
