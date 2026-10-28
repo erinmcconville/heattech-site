@@ -40,3 +40,20 @@ test('no spaced-capital labels or arrows on links', () => {
     assert.ok(!/See the job[^<]*<span aria-hidden="true">→|Read more reviews <span/.test(h), p);
   }
 });
+
+test('Netlify preview builds ask search engines to stay away', { timeout: 180000 }, async () => {
+  const { execSync } = await import('node:child_process');
+  const { mkdtempSync, readFileSync, rmSync } = await import('node:fs');
+  const { tmpdir } = await import('node:os');
+  const { join } = await import('node:path');
+  const out = mkdtempSync(join(tmpdir(), 'preview-'));
+  try {
+    execSync(`npx astro build --outDir ${out}`, { env: { ...process.env, CONTEXT: 'branch-deploy' }, stdio: 'ignore' });
+    assert.match(readFileSync(join(out, 'index.html'), 'utf8'), /<meta name="robots" content="noindex"/);
+    assert.match(readFileSync(join(out, 'robots.txt'), 'utf8'), /Disallow: \//);
+  } finally {
+    rmSync(out, { recursive: true, force: true });
+  }
+  // The normal build stays indexable
+  assert.doesNotMatch(page('index.html'), /content="noindex"/);
+});
